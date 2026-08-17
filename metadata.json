@@ -1,0 +1,6 @@
+{
+  "name": "VAELYRION — Luxury Hair & Editorial Commerce",
+  "description": "A luxury international e-commerce platform and Android app experience for premium wigs, bundles, and lifestyle beauty.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
