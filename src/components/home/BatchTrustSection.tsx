@@ -48,8 +48,8 @@ export const BatchTrustSection: React.FC = () => {
         {/* Pillars grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {pillars.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-white rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow duration-300 group">
-              <div className="w-12 h-12 rounded-2xl bg-[#F3ECDF] border border-[#E4D9C1] flex items-center justify-center mb-5 group-hover:bg-[#9C7C43]/10 transition-colors">
+            <div key={title} className="bg-white rounded-md p-7 shadow-sm hover:shadow-md transition-shadow duration-300 group">
+              <div className="w-12 h-12 rounded-md bg-[#F3ECDF] border border-[#E4D9C1] flex items-center justify-center mb-5 group-hover:bg-[#9C7C43]/10 transition-colors">
                 <Icon className="w-5 h-5 text-[#9C7C43]" />
               </div>
               <h3 className="font-serif text-lg font-medium text-[#16150F] mb-2">{title}</h3>
@@ -59,7 +59,7 @@ export const BatchTrustSection: React.FC = () => {
         </div>
 
         {/* Batch process timeline */}
-        <div className="mt-16 bg-white rounded-3xl p-8 sm:p-12 shadow-sm">
+        <div className="mt-16 bg-white rounded-lg p-8 sm:p-12 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
             <div>
               <p className="text-xs uppercase tracking-widest text-[#9C7C43] font-semibold mb-1">How It Works</p>

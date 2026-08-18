@@ -28,7 +28,7 @@ export const PackagingUnboxingShowcase: React.FC = () => {
             </div>
             
             {/* Floating card */}
-            <div className="absolute -bottom-4 right-2 sm:-right-6 glass-dark rounded-2xl p-4 shadow-2xl border border-white/10 max-w-[200px]">
+            <div className="absolute -bottom-4 right-2 sm:-right-6 glass-dark rounded-md p-4 shadow-2xl border border-white/10 max-w-[200px]">
               <div className="flex items-center gap-2 text-[#9C7C43] mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span className="text-[10px] uppercase font-bold tracking-widest">Included Free</span>
@@ -53,7 +53,7 @@ export const PackagingUnboxingShowcase: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {inclusions.map((item, idx) => (
-                <div key={idx} className="card-float bg-white p-5 rounded-2xl space-y-2">
+                <div key={idx} className="card-float bg-white p-5 rounded-md space-y-2">
                   <div className="flex items-center gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-[#F3ECDF] border border-[#E4D9C1] flex items-center justify-center shrink-0">
                       <Check className="w-3 h-3 text-[#9C7C43]" />
