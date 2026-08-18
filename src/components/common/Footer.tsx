@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowRight, ShieldCheck, Truck, RefreshCw, Sparkles } from 'lucide-react';
-import { useStore, ViewType } from '../../context/StoreContext';
+import { ArrowRight } from 'lucide-react';
+import { useStore } from '../../context/StoreContext';
 
 export const Footer: React.FC = () => {
   const { setCurrentView, setFilters, showToast } = useStore();
@@ -11,274 +11,144 @@ export const Footer: React.FC = () => {
     e.preventDefault();
     if (email) {
       setSubscribed(true);
-      showToast('Welcome to the Circle', 'You have been granted priority access to Batch #004 allocations.', 'gold');
+      showToast('Welcome to the Circle', 'You have been granted priority access to Batch №004 allocations.', 'gold');
       setEmail('');
     }
   };
 
+  const pillars = [
+    { title: 'Single-donor raw hair', desc: 'Cuticle-aligned temple hair, zero chemical baths.' },
+    { title: 'Curated weekly batches', desc: 'Consolidated, handcrafted, air-freighted fresh.' },
+    { title: 'Oslo 3PL inspection', desc: 'Individually checked, conditioned, boxed by hand.' },
+    { title: '14-day lace guarantee', desc: 'Full refund while lace remains uncut and sealed.' },
+  ];
+
+  const columns: { heading: string; links: { label: string; onClick: () => void; email?: boolean }[] }[] = [
+    {
+      heading: 'Collections',
+      links: [
+        { label: 'HD Melt Swiss Wigs', onClick: () => { setFilters(p => ({ ...p, category: 'wigs' })); setCurrentView('shop'); } },
+        { label: 'Raw Virgin Bundles', onClick: () => { setFilters(p => ({ ...p, category: 'bundles' })); setCurrentView('shop'); } },
+        { label: '13×6 HD Frontals', onClick: () => { setFilters(p => ({ ...p, category: 'frontals' })); setCurrentView('shop'); } },
+        { label: '5×5 Skin Closures', onClick: () => { setFilters(p => ({ ...p, category: 'closures' })); setCurrentView('shop'); } },
+        { label: 'Seamless Clip-Ins', onClick: () => { setFilters(p => ({ ...p, category: 'extensions' })); setCurrentView('shop'); } },
+        { label: 'Mulberry Silk & Care', onClick: () => { setFilters(p => ({ ...p, category: 'accessories' })); setCurrentView('shop'); } },
+      ],
+    },
+    {
+      heading: 'Experience',
+      links: [
+        { label: 'Find This Hair', onClick: () => setCurrentView('find-hair') },
+        { label: 'Editorial & Masterclasses', onClick: () => setCurrentView('discover') },
+        { label: 'The Unboxing Ritual', onClick: () => setCurrentView('home') },
+        { label: 'Weekly Batch Schedule', onClick: () => setCurrentView('shipping-policy') },
+        { label: 'Live Batch Tracking', onClick: () => setCurrentView('tracking') },
+      ],
+    },
+    {
+      heading: 'Client Services',
+      links: [
+        { label: 'Frequently Asked Questions', onClick: () => setCurrentView('faq') },
+        { label: 'Shipping & Norway 3PL', onClick: () => setCurrentView('shipping-policy') },
+        { label: 'Returns & Authenticity', onClick: () => setCurrentView('returns-policy') },
+        { label: 'Stylist Concierge', onClick: () => { window.location.href = 'mailto:concierge@vaelyrion.com'; }, email: true },
+      ],
+    },
+  ];
+
   return (
-    <footer className="bg-[#141414] text-[#FAF8F5] pt-16 pb-32 lg:pb-12 border-t border-[#262626]">
-      {/* Brand Value Pillars */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 border-b border-[#2A2A2A]">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
-          
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">100% Single-Donor Raw Hair</h4>
-            <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              Cuticle-aligned temple hair with zero chemical baths. Retains natural vitality and movement for 2+ years.
-            </p>
-          </div>
+    <footer className="bg-[#F5F3EF] text-[#141414] pt-20 pb-32 lg:pb-16 border-t border-[#141414]/12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
-              <Truck className="w-5 h-5" />
-            </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Curated Weekly Batches</h4>
-            <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              Orders consolidated weekly for fresh handcrafting in China, followed by air freight to our Oslo fulfillment hub.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Bespoke Oslo 3PL QC</h4>
-            <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              Every unit is meticulously inspected, botanical-conditioned, and nestled into signature magnetic unboxing.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
-              <RefreshCw className="w-5 h-5" />
-            </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Uncompromised Guarantee</h4>
-            <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              14-day lace inspection guarantee. Full refund or exchange if lace remains uncut and security seal intact.
-            </p>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          
-          {/* Brand Manifesto & Newsletter */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-2">
-              <span className="font-display text-2xl tracking-[0.25em] font-semibold text-[#FAF8F5]">
-                VAELYRION
+        {/* Value pillars */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 pb-16 border-b border-[#141414]/12">
+          {pillars.map((p, i) => (
+            <div key={p.title} className="space-y-2">
+              <span className="font-display text-xs font-semibold text-[#9A968F] tabular-nums">
+                {String(i + 1).padStart(2, '0')}
               </span>
-              <p className="text-xs tracking-widest text-[#B5935A] uppercase">Beyond What You Expect.</p>
+              <h4 className="font-display text-sm font-semibold text-[#141414] leading-snug">{p.title}</h4>
+              <p className="text-xs text-[#6E6B65] font-light leading-relaxed">{p.desc}</p>
             </div>
-            
-            <p className="text-stone-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
-              Vaelyrion is an international luxury house dedicated to single-origin raw temple hair, undetectable HD Swiss lace engineering, and sensory unboxing ceremonies.
+          ))}
+        </div>
+
+        {/* Main content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 py-16">
+
+          {/* Brand + newsletter */}
+          <div className="lg:col-span-5 space-y-6">
+            <span className="font-display text-3xl tracking-[0.3em] font-bold text-[#141414] pl-[0.3em] block">
+              VAELYRION
+            </span>
+            <p className="text-sm text-[#6E6B65] font-light leading-relaxed max-w-md">
+              An international house devoted to single-origin raw temple hair,
+              undetectable HD Swiss lace engineering, and a sensory unboxing ceremony.
             </p>
 
-            {/* Newsletter */}
-            <div className="pt-2">
-              <p className="text-xs uppercase tracking-wider font-semibold text-[#FAF8F5] mb-2">
-                Join the Private Pre-Order Circle
-              </p>
-              <p className="text-xs text-stone-400 mb-3 font-light">
-                Receive weekly batch drop alerts, private atelier lookbooks, and invitations to new hair drops.
-              </p>
-              
-              <form onSubmit={handleSubscribe} className="flex max-w-md">
+            <div className="pt-4 max-w-md">
+              <p className="eyebrow mb-3">Join the Private Pre-Order Circle</p>
+              <form onSubmit={handleSubscribe} className="flex items-center border-b border-[#141414]/30 focus-within:border-[#141414] transition-colors">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
+                  placeholder="Email address"
                   required
-                  className="bg-[#222222] border border-stone-700 text-[#FAF8F5] text-xs px-4 py-3 w-full rounded-l-sm focus:outline-none focus:border-[#B5935A] placeholder-stone-500 font-light"
+                  className="bg-transparent text-sm py-3 w-full focus:outline-none placeholder-[#9A968F] font-light"
                 />
                 <button
                   type="submit"
-                  className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs font-semibold uppercase tracking-wider px-5 py-3 rounded-r-sm transition-colors flex items-center justify-center shrink-0 cursor-pointer"
+                  aria-label="Subscribe"
+                  className="shrink-0 p-2 text-[#141414] hover:translate-x-0.5 transition-transform cursor-pointer"
                 >
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                 </button>
               </form>
               {subscribed && (
-                <p className="text-[11px] text-[#B5935A] mt-2">✓ Priority invitation confirmed.</p>
+                <p className="text-[11px] text-[#141414] mt-2 uppercase tracking-widest">Priority invitation confirmed</p>
               )}
             </div>
           </div>
 
-          {/* Links Column 1: Collections */}
-          <div className="lg:col-span-2 space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#B5935A]">Collections</h5>
-            <ul className="space-y-2.5 text-xs text-stone-400 font-light">
-              <li>
-                <button 
-                  onClick={() => { setFilters(prev => ({ ...prev, category: 'wigs' })); setCurrentView('shop'); }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  HD Melt Swiss Wigs
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setFilters(prev => ({ ...prev, category: 'bundles' })); setCurrentView('shop'); }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Raw Virgin Bundles
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setFilters(prev => ({ ...prev, category: 'frontals' })); setCurrentView('shop'); }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  13x6 HD Frontals
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setFilters(prev => ({ ...prev, category: 'closures' })); setCurrentView('shop'); }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  5x5 Skin Closures
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setFilters(prev => ({ ...prev, category: 'extensions' })); setCurrentView('shop'); }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Seamless Clip-Ins
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => { setFilters(prev => ({ ...prev, category: 'accessories' })); setCurrentView('shop'); }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Mulberry Silk & Care
-                </button>
-              </li>
-            </ul>
+          {/* Link columns */}
+          {columns.map((col) => (
+            <div key={col.heading} className="lg:col-span-2 space-y-4 lg:col-start-auto">
+              <h5 className="eyebrow">{col.heading}</h5>
+              <ul className="space-y-3 text-[13px] text-[#6E6B65] font-light">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <button onClick={link.onClick} className="link-underline text-left hover:text-[#141414] transition-colors cursor-pointer">
+                      {link.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Contact */}
+          <div className="lg:col-span-1 space-y-4">
+            <h5 className="eyebrow">Oslo HQ</h5>
+            <div className="text-[13px] text-[#6E6B65] font-light leading-relaxed">
+              <p>Karenslyst Allé 16</p>
+              <p>0278 Oslo, Norway</p>
+              <p className="mt-2 text-[#141414]">concierge@vaelyrion.com</p>
+            </div>
           </div>
-
-          {/* Links Column 2: Experience & Model */}
-          <div className="lg:col-span-2 space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#B5935A]">Experience</h5>
-            <ul className="space-y-2.5 text-xs text-stone-400 font-light">
-              <li>
-                <button 
-                  onClick={() => setCurrentView('find-hair')}
-                  className="hover:text-white transition-colors cursor-pointer text-[#E8DFC8]"
-                >
-                  Find This Hair (AI Match)
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setCurrentView('discover')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Editorial & Masterclasses
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setCurrentView('home')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  The Unboxing Experience
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setCurrentView('shipping-policy')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Weekly Batch Schedule
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setCurrentView('tracking')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Live Batch Tracking
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Links Column 3: Concierge & Trust */}
-          <div className="lg:col-span-3 space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#B5935A]">Client Services</h5>
-            <ul className="space-y-2.5 text-xs text-stone-400 font-light">
-              <li>
-                <button 
-                  onClick={() => setCurrentView('faq')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Frequently Asked Questions
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setCurrentView('shipping-policy')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Shipping & Norway 3PL Transit
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setCurrentView('returns-policy')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Returns & Authenticity Policy
-                </button>
-              </li>
-              <li>
-                <a 
-                  href="mailto:concierge@vaelyrion.com"
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Bespoke Stylist Concierge
-                </a>
-              </li>
-              <li>
-                <div className="pt-2 text-[11px] text-stone-400">
-                  <p className="text-stone-300 font-medium">Oslo Fulfillment HQ:</p>
-                  <p>Vaelyrion Nordic Logistics Hub</p>
-                  <p>Karenslyst Allé 16, 0278 Oslo, Norway</p>
-                  <p className="mt-1 text-[#B5935A]">concierge@vaelyrion.com</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Bottom Legal & Payment Row */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-[#222222] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-500 font-light">
-        <div>
-          © {new Date().getFullYear()} VAELYRION AS. All rights reserved. Registered in Norway (Org. nr 932 401 882).
         </div>
 
-        <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2 text-[11px]">
-          <span className="text-stone-400">Stripe Encrypted</span>
-          <span>•</span>
-          <span className="text-stone-400">Apple Pay</span>
-          <span>•</span>
-          <span className="text-stone-400">Klarna Verified</span>
-          <span>•</span>
-          <span className="text-stone-400">Posten / Bring</span>
+        {/* Legal */}
+        <div className="pt-8 border-t border-[#141414]/12 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-[#9A968F] font-light">
+          <span className="uppercase tracking-[0.12em]">
+            © {new Date().getFullYear()} Vaelyrion AS — Registered in Norway (Org. 932 401 882)
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 uppercase tracking-[0.12em]">
+            <span>Stripe</span>
+            <span>Apple Pay</span>
+            <span>Klarna</span>
+            <span>Posten / Bring</span>
+          </div>
         </div>
       </div>
     </footer>

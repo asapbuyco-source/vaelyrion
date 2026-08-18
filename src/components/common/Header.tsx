@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ShoppingBag, Heart, User, Search, 
-  X, Menu, ChevronDown, Globe
+  X, Menu, ChevronDown
 } from 'lucide-react';
 import { useStore, Currency, ViewType } from '../../context/StoreContext';
 
@@ -40,142 +40,134 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className={`sticky top-0 z-40 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-[#FAF8F5]/95 backdrop-blur-xl shadow-sm border-b border-[#141414]/8'
-        : 'bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#141414]/6'
+    <header className={`sticky top-0 z-40 bg-[#F5F3EF] transition-shadow duration-300 ${
+      isScrolled ? 'border-b border-[#141414]/12' : 'border-b border-transparent'
     }`}>
       {/* Announcement bar */}
-      <div className="bg-[#141414] text-[#FAF8F5] px-4 py-2 text-[11px] uppercase tracking-widest flex items-center justify-between">
-        <div className="hidden md:flex items-center gap-2 text-[#B5935A]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#B5935A] animate-pulse" />
-          <span className="text-[#E8DFC8] font-medium">BATCH #003 OPEN · CLOSES SUN 23:59 CET</span>
-        </div>
-        <div className="w-full md:w-auto text-center font-light flex items-center justify-center gap-2">
-          <span>FREE INSURED SHIPPING OVER €250 · EUROPE & NORWAY</span>
+      <div className="bg-[#141414] text-[#F5F3EF] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-center sm:justify-between gap-4">
+          <span className="hidden sm:inline text-[10px] uppercase tracking-[0.28em] text-[#F5F3EF]/60">
+            Batch №003 — Open through Sunday 23:59 CET
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.28em]">
+            Complimentary insured shipping over €250
+          </span>
+          <span className="hidden sm:inline text-[10px] uppercase tracking-[0.28em] text-[#F5F3EF]/60">
+            Europe &amp; Norway
+          </span>
         </div>
       </div>
 
       {/* Main header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 py-4">
-          
-          {/* Logo */}
+        <div className="flex items-center justify-between h-20">
+
+          {/* Left: mobile menu + desktop nav */}
+          <div className="flex items-center gap-7 flex-1">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Menu"
+              className="lg:hidden -ml-2 p-2 text-[#141414] cursor-pointer"
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+            <nav className="hidden lg:flex items-center gap-8">
+              {navItems.map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    if (item.category) setFilters(p => ({ ...p, category: item.category as any, searchQuery: '' }));
+                    setCurrentView(item.view);
+                  }}
+                  className={`link-underline text-[11px] tracking-[0.18em] uppercase transition-colors whitespace-nowrap cursor-pointer ${
+                    currentView === item.view ? 'text-[#141414] font-semibold' : 'text-[#6E6B65] hover:text-[#141414] font-medium'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Center: Wordmark */}
           <button 
             onClick={() => { setCurrentView('home'); setFilters(p => ({ ...p, category: 'all', searchQuery: '' })); }}
-            className="text-left cursor-pointer focus-visible:outline-none group"
+            className="cursor-pointer focus-visible:outline-none shrink-0"
+            aria-label="Vaelyrion — Home"
           >
-            <span className="font-display text-2xl sm:text-3xl tracking-[0.22em] font-semibold text-[#141414] group-hover:text-[#8E7348] transition-colors duration-300">
+            <span className="font-display text-xl sm:text-2xl tracking-[0.42em] font-bold text-[#141414] pl-[0.42em]">
               VAELYRION
             </span>
           </button>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-7">
-            {navItems.map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  if (item.category) setFilters(p => ({ ...p, category: item.category as any, searchQuery: '' }));
-                  setCurrentView(item.view);
-                }}
-                className={`text-[13px] tracking-[0.12em] uppercase font-medium transition-colors whitespace-nowrap cursor-pointer py-1 relative group ${
-                  currentView === item.view ? 'text-[#141414] font-semibold' : 'text-stone-500 hover:text-[#141414]'
-                }`}
-              >
-                {item.label}
-                <span className={`absolute bottom-0 left-0 h-[1.5px] bg-[#B5935A] transition-all duration-300 ${
-                  currentView === item.view ? 'w-full' : 'w-0 group-hover:w-full'
-                }`} />
-              </button>
-            ))}
-          </nav>
-
-          {/* Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
-
-            {/* Search */}
-            <button
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              aria-label="Search"
-              className="p-2.5 text-stone-600 hover:text-[#141414] hover:bg-[#EFEAE4]/70 transition-all duration-200 cursor-pointer rounded-xl"
-            >
-              <Search className="w-5 h-5" />
-            </button>
+          {/* Right: actions */}
+          <div className="flex items-center gap-1 sm:gap-2 flex-1 justify-end">
 
             {/* Currency */}
             <div className="relative hidden sm:block">
               <button
                 onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
-                className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-stone-600 hover:text-[#141414] py-2 px-3 rounded-xl hover:bg-[#EFEAE4]/70 transition-all duration-200 cursor-pointer border border-[#141414]/8"
+                className="flex items-center gap-1.5 text-[11px] font-medium tracking-[0.12em] uppercase text-[#6E6B65] hover:text-[#141414] py-2 px-2 transition-colors cursor-pointer"
               >
-                <Globe className="w-3.5 h-3.5 text-[#B5935A]" />
                 <span>{currency}</span>
-                <ChevronDown className={`w-3 h-3 text-stone-400 transition-transform duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isCurrencyDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isCurrencyDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-32 glass border border-[#141414]/10 shadow-xl py-1.5 rounded-2xl z-50 animate-fade-in">
+                <div className="absolute right-0 mt-2 w-32 bg-white border border-[#141414]/12 shadow-[0_16px_40px_rgba(20,20,20,0.10)] py-1 z-50 animate-fade-in">
                   {(['EUR', 'USD', 'NOK', 'GBP'] as Currency[]).map((curr) => (
                     <button
                       key={curr}
                       onClick={() => { setCurrency(curr); setIsCurrencyDropdownOpen(false); }}
-                      className={`w-full text-left px-4 py-2 text-xs flex items-center justify-between hover:bg-[#EFEAE4]/60 transition-colors rounded-xl mx-auto ${
-                        currency === curr ? 'font-bold text-[#B5935A]' : 'text-stone-700'
+                      className={`w-full text-left px-4 py-2 text-[11px] tracking-widest uppercase flex items-center justify-between hover:bg-[#F5F3EF] transition-colors ${
+                        currency === curr ? 'font-semibold text-[#141414]' : 'text-[#6E6B65]'
                       }`}
                     >
                       <span>{curr}</span>
-                      <span className="text-stone-400">{curr === 'EUR' ? '€' : curr === 'USD' ? '$' : curr === 'NOK' ? 'kr' : '£'}</span>
+                      <span className="text-[#9A968F]">{curr === 'EUR' ? '€' : curr === 'USD' ? '$' : curr === 'NOK' ? 'kr' : '£'}</span>
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Wishlist */}
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              aria-label="Search"
+              className="p-2.5 text-[#141414] hover:text-[#6E6B65] transition-colors cursor-pointer"
+            >
+              <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
+            </button>
+
             <button
               onClick={() => setCurrentView('wishlist')}
               aria-label="Wishlist"
-              className="relative p-2.5 text-stone-600 hover:text-[#141414] hover:bg-[#EFEAE4]/70 transition-all duration-200 cursor-pointer rounded-xl"
+              className="relative p-2.5 text-[#141414] hover:text-[#6E6B65] transition-colors cursor-pointer"
             >
-              <Heart className="w-5 h-5" />
+              <Heart className="w-[18px] h-[18px]" strokeWidth={1.5} />
               {wishlist.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-[#B5935A] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none">
-                  {wishlist.length}
-                </span>
+                <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#141414]" />
               )}
             </button>
 
-            {/* Account */}
             <button
               onClick={() => setCurrentView('account')}
               aria-label="Account"
-              className="p-2.5 text-stone-600 hover:text-[#141414] hover:bg-[#EFEAE4]/70 transition-all duration-200 cursor-pointer rounded-xl"
+              className="hidden sm:block p-2.5 text-[#141414] hover:text-[#6E6B65] transition-colors cursor-pointer"
             >
-              <User className="w-5 h-5" />
+              <User className="w-[18px] h-[18px]" strokeWidth={1.5} />
             </button>
 
-            {/* Cart button */}
             <button
               onClick={() => setIsCartDrawerOpen(true)}
               aria-label="Shopping Bag"
-              className="flex items-center gap-2 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] px-4 py-2.5 rounded-2xl transition-all duration-300 cursor-pointer shadow-sm active:scale-[0.97] group"
+              className="flex items-center gap-2 pl-3 pr-1 py-2 text-[#141414] cursor-pointer group"
             >
-              <ShoppingBag className="w-4 h-4 text-[#E8DFC8]" />
-              <span className="text-xs font-semibold uppercase tracking-wider hidden sm:inline">Bag</span>
-              <span className={`text-xs font-bold min-w-5 text-center px-1.5 py-0.5 rounded-full ${
-                cartCount > 0 ? 'bg-[#B5935A] text-black' : 'bg-stone-700 text-stone-300'
-              }`}>
+              <ShoppingBag className="w-[18px] h-[18px]" strokeWidth={1.5} />
+              <span className="text-[11px] font-semibold tabular-nums min-w-4 text-center">
                 {cartCount}
               </span>
-            </button>
-
-            {/* Mobile hamburger */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2.5 text-stone-600 hover:text-[#141414] transition-colors cursor-pointer rounded-xl hover:bg-[#EFEAE4]/70"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -183,32 +175,32 @@ export const Header: React.FC = () => {
 
       {/* Search overlay */}
       {isSearchOpen && (
-        <div className="absolute top-full left-0 right-0 bg-[#FAF8F5]/98 backdrop-blur-xl border-t border-[#141414]/8 py-5 px-4 sm:px-6 animate-fade-in shadow-lg">
+        <div className="absolute top-full left-0 right-0 bg-[#F5F3EF] border-t border-[#141414]/12 py-6 px-4 sm:px-6 animate-fade-in shadow-[0_24px_48px_rgba(20,20,20,0.08)]">
           <div className="max-w-3xl mx-auto">
-            <form onSubmit={handleSearchSubmit} className="relative flex items-center">
-              <Search className="w-5 h-5 text-stone-400 absolute left-4" />
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center border-b border-[#141414]/25 focus-within:border-[#141414] transition-colors">
+              <Search className="w-5 h-5 text-[#9A968F] shrink-0" strokeWidth={1.5} />
               <input
                 type="text"
                 value={filters.searchQuery}
                 onChange={(e) => setFilters(p => ({ ...p, searchQuery: e.target.value }))}
-                placeholder="Search HD wigs, raw bundles, deep wave, 613 blonde..."
-                className="w-full glass border border-[#141414]/12 py-3.5 pl-12 pr-28 text-sm text-[#141414] placeholder-stone-400 rounded-2xl focus:outline-none focus:border-[#B5935A]/50 transition-colors"
+                placeholder="Search HD wigs, raw bundles, deep wave, 613 blonde…"
+                className="w-full bg-transparent py-3.5 pl-4 pr-24 text-base text-[#141414] placeholder-[#9A968F] focus:outline-none font-light"
                 autoFocus
               />
               <button
                 type="submit"
-                className="absolute right-2 bg-[#141414] text-[#FAF8F5] text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl hover:bg-[#333] transition-colors cursor-pointer"
+                className="absolute right-0 text-[11px] uppercase tracking-[0.2em] font-semibold text-[#141414] hover:text-[#6E6B65] transition-colors cursor-pointer"
               >
                 Search
               </button>
             </form>
-            <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">Popular:</span>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4">
+              <span className="eyebrow">Popular</span>
               {['HD Lace Wig', 'Deep Wave', 'Raw Cambodian', '613 Blonde', 'Silk Bonnet'].map((term) => (
                 <button
                   key={term}
                   onClick={() => { setFilters(p => ({ ...p, searchQuery: term })); setCurrentView('shop'); setIsSearchOpen(false); }}
-                  className="glass border border-[#141414]/8 px-3 py-1 rounded-full text-[11px] text-stone-600 hover:text-[#B5935A] hover:border-[#B5935A]/30 transition-all"
+                  className="link-underline text-xs text-[#6E6B65] hover:text-[#141414] transition-colors"
                 >
                   {term}
                 </button>
@@ -220,8 +212,8 @@ export const Header: React.FC = () => {
 
       {/* Mobile drawer */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 h-[calc(100vh-73px)] bg-[#FAF8F5]/98 backdrop-blur-xl border-t border-[#141414]/8 px-6 py-6 space-y-5 shadow-xl overflow-y-auto pb-32">
-          <div className="space-y-1">
+        <div className="lg:hidden absolute top-full left-0 right-0 h-[calc(100vh-112px)] bg-[#F5F3EF] border-t border-[#141414]/12 px-6 py-8 space-y-8 overflow-y-auto pb-32">
+          <nav className="space-y-1">
             {navItems.map((item, idx) => (
               <button
                 key={idx}
@@ -230,23 +222,23 @@ export const Header: React.FC = () => {
                   setCurrentView(item.view);
                   setIsMobileMenuOpen(false);
                 }}
-                className="block w-full text-left py-3 px-4 text-sm font-medium text-stone-700 hover:text-[#141414] hover:bg-[#EFEAE4]/60 rounded-xl transition-all uppercase tracking-widest"
+                className="block w-full text-left py-3 font-display text-2xl font-semibold text-[#141414] tracking-tight"
               >
                 {item.label}
               </button>
             ))}
-          </div>
+          </nav>
 
-          <div className="pt-4 border-t border-[#141414]/8 space-y-3">
-            <div className="flex items-center justify-between py-3 px-4 bg-[#EFEAE4]/50 rounded-xl">
-              <span className="text-xs text-stone-500 uppercase tracking-wider font-medium">Currency</span>
-              <div className="flex gap-1.5">
+          <div className="pt-6 border-t border-[#141414]/12 space-y-5">
+            <div className="flex items-center justify-between">
+              <span className="eyebrow">Currency</span>
+              <div className="flex gap-4">
                 {(['EUR', 'USD', 'NOK', 'GBP'] as Currency[]).map((c) => (
                   <button
                     key={c}
                     onClick={() => setCurrency(c)}
-                    className={`px-2.5 py-1 text-xs rounded-xl border transition-all ${
-                      currency === c ? 'bg-[#141414] text-white border-transparent' : 'border-[#141414]/12 text-stone-600'
+                    className={`text-xs tracking-widest uppercase transition-colors ${
+                      currency === c ? 'text-[#141414] font-semibold' : 'text-[#9A968F]'
                     }`}
                   >
                     {c}
@@ -256,13 +248,13 @@ export const Header: React.FC = () => {
             </div>
             <button
               onClick={() => { setCurrentView('account'); setIsMobileMenuOpen(false); }}
-              className="w-full text-left py-3 px-4 text-sm font-medium text-stone-700 hover:text-[#141414] hover:bg-[#EFEAE4]/60 rounded-xl transition-all uppercase tracking-widest"
+              className="block w-full text-left text-xs uppercase tracking-[0.2em] font-medium text-[#6E6B65]"
             >
               My Account
             </button>
             <button
               onClick={() => { setCurrentView('tracking'); setIsMobileMenuOpen(false); }}
-              className="w-full text-left py-3 px-4 text-sm font-medium text-stone-700 hover:text-[#141414] hover:bg-[#EFEAE4]/60 rounded-xl transition-all uppercase tracking-widest"
+              className="block w-full text-left text-xs uppercase tracking-[0.2em] font-medium text-[#6E6B65]"
             >
               Track My Order
             </button>
