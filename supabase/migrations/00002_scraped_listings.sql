@@ -1,5 +1,5 @@
 -- 00002_scraped_listings.sql
--- Staging table for catalog scraper results (api/scrape/). Raw scraped listings land here;
+-- Staging table for catalog scraper results (server/scrape/). Raw scraped listings land here;
 -- `npm run promote` moves them into products / product_variants / product_images with markup.
 
 CREATE TABLE IF NOT EXISTS scraped_listings (

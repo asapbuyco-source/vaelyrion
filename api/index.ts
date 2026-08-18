@@ -6,11 +6,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Route imports
-import authRoutes from './routes/auth.routes';
-import productRoutes from './routes/product.routes';
-import cartRoutes from './routes/cart.routes';
-import checkoutRoutes from './routes/checkout.routes';
-import orderRoutes from './routes/order.routes';
+import authRoutes from '../server/routes/auth.routes';
+import productRoutes from '../server/routes/product.routes';
+import cartRoutes from '../server/routes/cart.routes';
+import checkoutRoutes from '../server/routes/checkout.routes';
+import orderRoutes from '../server/routes/order.routes';
 
 const app = express();
 const port = process.env.PORT || 3001;

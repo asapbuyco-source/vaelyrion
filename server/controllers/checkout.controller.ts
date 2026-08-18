@@ -1,4 +1,4 @@
-// api/controllers/checkout.controller.ts
+// server/controllers/checkout.controller.ts
 import { Response } from 'express';
 import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
