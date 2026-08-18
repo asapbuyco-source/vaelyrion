@@ -54,24 +54,24 @@ export const CartDrawer: React.FC = () => {
       {/* Backdrop */}
       <div 
         onClick={() => setIsCartDrawerOpen(false)}
-        className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity animate-fade-in"
       />
 
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[#FAF8F5] text-[#141414] shadow-2xl flex flex-col border-l border-[#141414]/10">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
+        <div className="w-screen max-w-md bg-[#FAF8F5] text-[#141414] shadow-2xl flex flex-col rounded-l-3xl overflow-hidden border-l border-[#141414]/8">
           
           {/* Drawer Header */}
-          <div className="p-6 border-b border-[#141414]/10 flex items-center justify-between bg-[#FAF8F5]">
-            <div className="flex items-center gap-2">
+          <div className="p-6 border-b border-[#141414]/8 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
               <ShoppingBag className="w-5 h-5 text-[#B5935A]" />
-              <h3 className="font-serif text-xl tracking-wide uppercase font-medium">Your Shopping Bag</h3>
-              <span className="text-xs font-semibold text-stone-500">
-                ({cart.reduce((s, i) => s + i.quantity, 0)})
+              <h3 className="font-serif text-xl font-medium">Shopping Bag</h3>
+              <span className="text-xs font-semibold text-stone-400 bg-[#EFEAE4] px-2 py-0.5 rounded-full">
+                {cart.reduce((s, i) => s + i.quantity, 0)}
               </span>
             </div>
             <button
               onClick={() => setIsCartDrawerOpen(false)}
-              className="p-1.5 text-stone-500 hover:text-black rounded-full hover:bg-[#EFEAE4] transition-colors cursor-pointer"
+              className="p-2 text-stone-500 hover:text-black rounded-xl hover:bg-[#EFEAE4] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -270,7 +270,7 @@ export const CartDrawer: React.FC = () => {
                   setIsCartDrawerOpen(false);
                   setCurrentView('checkout');
                 }}
-                className="w-full bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] py-4 rounded-sm text-xs sm:text-sm uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xl active:scale-98 border border-stone-800"
+                className="w-full bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] py-4 rounded-2xl text-xs sm:text-sm uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg active:scale-[0.98]"
               >
                 <span>Checkout Securely</span>
                 <ArrowRight className="w-4 h-4 text-[#E8DFC8]" />

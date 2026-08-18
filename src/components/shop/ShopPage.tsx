@@ -55,39 +55,39 @@ export const ShopPage: React.FC = () => {
     (filters.searchQuery ? 1 : 0);
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-20">
+    <div className="bg-[#FAF8F5] min-h-screen pb-28">
       
-      {/* Editorial Category Header Banner */}
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+      {/* Editorial Category Header */}
+      <div className="bg-gradient-to-b from-[#F4EFEA] to-[#FAF8F5] border-b border-[#141414]/8 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center space-y-4">
+          <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold inline-block">
             Atelier Haute Coiffure
-          </span>
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-[#141414]">
-            {filters.category === 'all' && 'The Complete Hair Curation'}
+          </p>
+          <h1 className="font-serif text-3xl sm:text-5xl font-medium text-[#141414]">
+            {filters.category === 'all' && 'The Complete Collection'}
             {filters.category === 'wigs' && 'HD Swiss Lace Wigs'}
-            {filters.category === 'bundles' && 'Raw Virgin Hair Bundles'}
-            {filters.category === 'frontals' && '13x6 HD Illusion Frontals'}
-            {filters.category === 'closures' && '5x5 Skin Melt Closures'}
-            {filters.category === 'extensions' && 'Seamless Clip-In Extensions'}
-            {filters.category === 'accessories' && 'Mulberry Silk & Care Protocol'}
-            {filters.category === 'new-arrivals' && 'New Atelier Drops'}
-            {filters.category === 'best-sellers' && 'Vaelyrion Best Sellers'}
+            {filters.category === 'bundles' && 'Raw Virgin Bundles'}
+            {filters.category === 'frontals' && '13x6 HD Frontals'}
+            {filters.category === 'closures' && '5x5 Closures'}
+            {filters.category === 'extensions' && 'Clip-In Extensions'}
+            {filters.category === 'accessories' && 'Silk & Care Kits'}
+            {filters.category === 'new-arrivals' && 'New Arrivals'}
+            {filters.category === 'best-sellers' && 'Best Sellers'}
           </h1>
-          <p className="text-xs sm:text-sm text-stone-600 font-light max-w-xl mx-auto">
-            Ethically sourced single-donor temple hair, micro-ventilated Swiss HD lace, and custom luxury unboxing.
+          <p className="text-sm text-stone-500 font-light max-w-md mx-auto">
+            Ethically sourced single-donor temple hair, Swiss HD lace, luxury unboxing.
           </p>
 
-          {/* Category Horizontal Scroll Pills */}
-          <div className="pt-6 flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          {/* Category pills */}
+          <div className="pt-6 flex items-center justify-center gap-2 flex-wrap pb-2">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setFilters(prev => ({ ...prev, category: cat.id }))}
-                className={`py-2 px-4 text-xs tracking-wider uppercase font-medium rounded-full transition-all whitespace-nowrap cursor-pointer shrink-0 ${
+                className={`py-2 px-5 text-xs tracking-wider uppercase font-semibold rounded-full transition-all duration-200 whitespace-nowrap cursor-pointer ${
                   filters.category === cat.id
-                    ? 'bg-[#141414] text-[#FAF8F5] shadow-xs'
-                    : 'bg-white/80 hover:bg-white text-stone-700 border border-[#141414]/10'
+                    ? 'bg-[#141414] text-white shadow-sm'
+                    : 'glass border border-[#141414]/10 text-stone-600 hover:text-stone-900 hover:border-[#141414]/20'
                 }`}
               >
                 {cat.label}
@@ -305,25 +305,25 @@ export const ShopPage: React.FC = () => {
           {/* Product Grid (9 cols on lg) */}
           <main className="lg:col-span-9">
             {filteredProducts.length === 0 ? (
-              <div className="bg-white border border-[#141414]/10 rounded-sm p-12 text-center space-y-4">
-                <div className="w-14 h-14 rounded-full bg-[#FAF5ED] flex items-center justify-center mx-auto text-[#B5935A]">
-                  <Search className="w-6 h-6" />
+              <div className="bg-white rounded-3xl p-16 text-center space-y-4 shadow-sm">
+                <div className="w-16 h-16 rounded-2xl bg-[#FAF5ED] flex items-center justify-center mx-auto">
+                  <Search className="w-7 h-7 text-[#B5935A]" />
                 </div>
-                <h3 className="font-serif text-xl text-stone-900">No matching creations found</h3>
-                <p className="text-xs text-stone-500 font-light max-w-sm mx-auto">
-                  Try adjusting your filters, selecting a different hair length or density, or resetting your search parameters.
+                <h3 className="font-serif text-xl text-stone-900">No matching pieces found</h3>
+                <p className="text-sm text-stone-400 font-light max-w-xs mx-auto">
+                  Try adjusting your filters or resetting your search.
                 </p>
                 <button
                   onClick={resetFilters}
-                  className="bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold px-6 py-2.5 rounded-xs hover:bg-[#333333] transition-colors cursor-pointer"
+                  className="bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold px-8 py-3 rounded-2xl hover:bg-[#2A2A2A] transition-colors cursor-pointer"
                 >
                   Reset All Filters
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                {filteredProducts.map((product, i) => (
+                  <ProductCard key={product.id} product={product} animationDelay={i * 50} />
                 ))}
               </div>
             )}
@@ -397,13 +397,13 @@ export const ShopPage: React.FC = () => {
               <div className="pt-6 border-t border-[#141414]/10 flex gap-3">
                 <button
                   onClick={resetFilters}
-                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold border border-[#141414]/20 rounded-xs"
+                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold border border-[#141414]/20 rounded-2xl"
                 >
                   Reset
                 </button>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
-                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold bg-[#141414] text-white rounded-xs"
+                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold bg-[#141414] text-white rounded-2xl"
                 >
                   View ({filteredProducts.length})
                 </button>

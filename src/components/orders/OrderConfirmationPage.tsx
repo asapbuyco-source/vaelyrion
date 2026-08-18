@@ -43,7 +43,7 @@ export const OrderConfirmationPage: React.FC = () => {
         </span>
 
         <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight">
-          THANK YOU, {order.customer.name.split(' ')[0].toUpperCase()}
+          THANK YOU, {(order.customer.name || 'Valued Client').split(' ')[0].toUpperCase()}
         </h1>
 
         <p className="text-xs sm:text-sm text-stone-300 font-light max-w-md mx-auto leading-relaxed">
@@ -139,7 +139,7 @@ export const OrderConfirmationPage: React.FC = () => {
                     </div>
 
                     <span className="text-[10px] text-[#8E7348] font-mono">
-                      Tracking Barcode: {order.trackingNumber}
+                      Tracking Barcode: {order.trackingNumber || 'Allocated on dispatch'}
                     </span>
                   </div>
                 </div>

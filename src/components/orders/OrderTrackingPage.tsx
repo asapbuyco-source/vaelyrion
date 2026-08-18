@@ -1,34 +1,20 @@
 import React, { useState } from 'react';
 import { 
   CheckCircle2, 
-  Clock, 
   Truck, 
-  Plane, 
-  Package, 
-  Sparkles, 
-  MapPin, 
-  ShieldCheck, 
-  ArrowLeft,
-  ChevronDown,
-  RefreshCw,
-  Info,
-  Sliders
+  MapPin
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { OrderStatusStep } from '../../types';
 
 export const OrderTrackingPage: React.FC = () => {
   const { 
     selectedOrder, 
     orders, 
     setSelectedOrder, 
-    updateOrderStatus, 
-    setCurrentView,
-    formatPrice
+    setCurrentView
   } = useStore();
 
   const [trackingInput, setTrackingInput] = useState('');
-  const [showSimulator, setShowSimulator] = useState(false);
 
   const order = selectedOrder || orders[0];
 
@@ -36,27 +22,12 @@ export const OrderTrackingPage: React.FC = () => {
     e.preventDefault();
     const found = orders.find(o => 
       o.orderNumber.toLowerCase() === trackingInput.trim().toLowerCase() ||
-      o.trackingNumber.toLowerCase() === trackingInput.trim().toLowerCase()
+      (o.trackingNumber && o.trackingNumber.toLowerCase() === trackingInput.trim().toLowerCase())
     );
     if (found) {
       setSelectedOrder(found);
     }
   };
-
-  const allStatusSteps: { step: OrderStatusStep; label: string }[] = [
-    { step: 'payment_confirmed', label: '1. Payment Confirmed' },
-    { step: 'order_received', label: '2. Queued in Weekly Batch' },
-    { step: 'weekly_batch_created', label: '3. PO Transmitted to Atelier' },
-    { step: 'supplier_processing', label: '4. Artisan Crafting & Ventilation' },
-    { step: 'shipped_china', label: '5. Dispatched from China Airport' },
-    { step: 'international_transit', label: '6. International Air Transit ✈' },
-    { step: 'arrived_norway', label: '7. Arrived in Norway 🇳🇴' },
-    { step: 'fulfillment_center', label: '8. Received by Oslo 3PL Facility' },
-    { step: 'preparing_shipment', label: '9. Luxury Magnetic Box Packaging' },
-    { step: 'shipped_customer', label: '10. Dispatched with Posten Courier' },
-    { step: 'out_for_delivery', label: '11. Out for Local Delivery 🚚' },
-    { step: 'delivered', label: '12. Delivered to Recipient ✓' },
-  ];
 
   if (!order) {
     return (
@@ -93,11 +64,11 @@ export const OrderTrackingPage: React.FC = () => {
               value={trackingInput}
               onChange={(e) => setTrackingInput(e.target.value)}
               placeholder="Search Order (e.g. VA10245 or VAE-NO-99482103)"
-              className="bg-[#222222] border border-stone-700 text-white text-xs px-4 py-2.5 rounded-xs flex-1 focus:outline-none focus:border-[#B5935A] font-mono placeholder-stone-500 font-light"
+              className="bg-[#222222] border border-stone-700 text-white text-xs px-4 py-3 rounded-xs flex-1 focus:outline-none focus:border-[#B5935A] font-mono placeholder-stone-500 font-light"
             />
             <button
               type="submit"
-              className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-xs transition-colors cursor-pointer"
+              className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs font-semibold uppercase tracking-wider px-5 py-3 rounded-xs transition-colors cursor-pointer"
             >
               Track
             </button>
@@ -107,65 +78,31 @@ export const OrderTrackingPage: React.FC = () => {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
         
-        {/* Order Details Header Card */}
-        <div className="bg-white border border-[#141414]/10 rounded-sm shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#141414]/8 pb-6">
-            <div>
-              <div className="flex items-center gap-3">
-                <h2 className="font-serif text-2xl font-semibold text-stone-900">
-                  ORDER #{order.orderNumber}
-                </h2>
-                <span className="bg-[#FAF5ED] text-[#8E7348] text-xs font-mono font-semibold px-2.5 py-0.5 rounded-xs border border-[#E8DFC8]">
-                  {order.batchId.toUpperCase()}
-                </span>
+          {/* Order Details Header Card */}
+          <div className="bg-white border border-[#141414]/10 rounded-sm shadow-sm p-6 sm:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#141414]/8 pb-6">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                    ORDER #{order.orderNumber}
+                  </h2>
+                  <span className="bg-[#FAF5ED] text-[#8E7348] text-xs font-mono font-semibold px-2.5 py-0.5 rounded-xs border border-[#E8DFC8]">
+                    {order.batchId ? order.batchId.toUpperCase() : 'BATCH #003'}
+                  </span>
+                </div>
+                <p className="text-xs text-stone-500 font-light mt-1">
+                  Placed on {order.date} · Destination: <strong>{order.customer.city}, {order.customer.country}</strong>
+                </p>
               </div>
-              <p className="text-xs text-stone-500 font-light mt-1">
-                Placed on {order.date} · Destination: <strong>{order.customer.city}, {order.customer.country}</strong>
-              </p>
-            </div>
 
-            <div className="text-left sm:text-right">
-              <span className="text-[11px] text-stone-400 block font-light">Air & Courier Waybill</span>
-              <span className="font-mono text-sm font-semibold text-stone-900">{order.trackingNumber}</span>
-              <p className="text-xs text-stone-600 font-light mt-0.5">
-                Carrier: <strong>Air Freight + Posten Bring</strong>
-              </p>
-            </div>
-          </div>
-
-          {/* Quick Simulation Bar (Allows testing all 12 pipeline steps) */}
-          <div className="p-4 bg-[#FAF8F5] rounded-xs border border-[#141414]/8 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-stone-800 flex items-center gap-1.5">
-                <Sliders className="w-3.5 h-3.5 text-[#B5935A]" />
-                <span>Simulation Controller (Preview 12 Pipeline States)</span>
-              </span>
-              <button
-                onClick={() => setShowSimulator(!showSimulator)}
-                className="text-[11px] text-[#8E7348] hover:text-black transition-colors underline cursor-pointer"
-              >
-                {showSimulator ? 'Hide Selector' : 'Change Pipeline Step'}
-              </button>
-            </div>
-
-            {showSimulator && (
-              <div className="pt-2 grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs">
-                {allStatusSteps.map((s) => (
-                  <button
-                    key={s.step}
-                    onClick={() => updateOrderStatus(order.id, s.step)}
-                    className={`p-2 rounded-xs border text-left text-[11px] transition-colors cursor-pointer ${
-                      order.orderStatus === s.step
-                        ? 'bg-[#141414] text-white border-black font-semibold'
-                        : 'bg-white text-stone-700 border-stone-200 hover:border-stone-400'
-                    }`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
+              <div className="text-left sm:text-right">
+                <span className="text-[11px] text-stone-400 block font-light">Air & Courier Waybill</span>
+                <span className="font-mono text-sm font-semibold text-stone-900">{order.trackingNumber || 'Pending allocation'}</span>
+                <p className="text-xs text-stone-600 font-light mt-0.5">
+                  Carrier: <strong>Air Freight + Posten Bring</strong>
+                </p>
               </div>
-            )}
-          </div>
+            </div>
 
           {/* Visual Tracking Timeline (12 Stages) */}
           <div className="space-y-6 pt-4">

@@ -263,7 +263,7 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Batch / Fulfillment Status Box */}
-            <div className={`p-4 rounded-sm border ${product.isPreOrder ? 'bg-[#FAF5ED] border-[#E5DAC8]' : 'bg-emerald-50/50 border-emerald-200'}`}>
+            <div className={`p-4 rounded-2xl border ${product.isPreOrder ? 'bg-[#FAF5ED] border-[#E5DAC8]' : 'bg-emerald-50/50 border-emerald-200'} shadow-sm`}>
               <div className="flex items-start gap-3">
                 {product.isPreOrder ? (
                   <Clock className="w-4 h-4 text-[#8E7348] shrink-0 mt-0.5" />
@@ -287,11 +287,11 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Variant Selectors */}
-            <div className="space-y-5 pt-2">
+            <div className="space-y-6 pt-2">
               
               {/* Length Selector */}
               <div>
-                <div className="flex items-center justify-between text-xs mb-2">
+                <div className="flex items-center justify-between text-xs mb-2.5">
                   <span className="font-semibold uppercase tracking-wider text-stone-800">
                     Hair Length: <span className="text-[#8E7348] font-mono">{selectedLength}</span>
                   </span>
@@ -312,10 +312,10 @@ export const ProductDetailPage: React.FC = () => {
                       <button
                         key={len}
                         onClick={() => setSelectedLength(len)}
-                        className={`py-2 px-3 text-xs font-mono rounded-xs border transition-all cursor-pointer ${
+                        className={`py-2 px-4 text-xs font-mono rounded-xl border transition-all duration-200 cursor-pointer ${
                           isSelected 
-                            ? 'bg-[#141414] text-[#FAF8F5] border-[#141414] font-semibold' 
-                            : 'bg-white text-stone-700 border-[#141414]/15 hover:border-black'
+                            ? 'bg-[#141414] text-[#FAF8F5] border-[#141414] font-semibold shadow-md' 
+                            : 'bg-white text-stone-700 border-[#141414]/10 hover:border-black/30 hover:shadow-sm'
                         }`}
                       >
                         <span>{len}</span>
@@ -328,7 +328,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Density Selector */}
               <div>
-                <div className="text-xs mb-2">
+                <div className="text-xs mb-2.5">
                   <span className="font-semibold uppercase tracking-wider text-stone-800">
                     Hair Density: <span className="text-[#8E7348] font-mono">{selectedDensity}</span>
                   </span>
@@ -338,10 +338,10 @@ export const ProductDetailPage: React.FC = () => {
                     <button
                       key={den}
                       onClick={() => setSelectedDensity(den)}
-                      className={`py-2 px-2 text-xs text-center rounded-xs border transition-all cursor-pointer ${
+                      className={`py-2 px-2 text-xs text-center rounded-xl border transition-all duration-200 cursor-pointer ${
                         selectedDensity === den
-                          ? 'bg-[#141414] text-[#FAF8F5] border-[#141414] font-semibold'
-                          : 'bg-white text-stone-700 border-[#141414]/15 hover:border-black'
+                          ? 'bg-[#141414] text-[#FAF8F5] border-[#141414] font-semibold shadow-md'
+                          : 'bg-white text-stone-700 border-[#141414]/10 hover:border-black/30 hover:shadow-sm'
                       }`}
                     >
                       {den}
@@ -352,20 +352,20 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Lace Type Selector */}
               <div>
-                <div className="text-xs mb-2">
+                <div className="text-xs mb-2.5">
                   <span className="font-semibold uppercase tracking-wider text-stone-800">
                     Lace Architecture: <span className="text-[#8E7348]">{selectedLace}</span>
                   </span>
                 </div>
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-2">
                   {product.laceTypes.map((lace) => (
                     <button
                       key={lace}
                       onClick={() => setSelectedLace(lace)}
-                      className={`py-2.5 px-3.5 text-xs text-left rounded-xs border flex items-center justify-between transition-all cursor-pointer ${
+                      className={`py-3 px-4 text-xs text-left rounded-xl border flex items-center justify-between transition-all duration-200 cursor-pointer ${
                         selectedLace === lace
-                          ? 'bg-[#FAF5ED] border-[#B5935A] text-stone-900 font-medium'
-                          : 'bg-white border-[#141414]/12 text-stone-700 hover:border-stone-400'
+                          ? 'bg-[#FAF5ED] border-[#B5935A] text-stone-900 font-medium shadow-sm'
+                          : 'bg-white border-[#141414]/10 text-stone-700 hover:border-[#141414]/30 hover:shadow-sm'
                       }`}
                     >
                       <span>{lace}</span>
@@ -377,7 +377,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Color Selector */}
               <div>
-                <div className="text-xs mb-2">
+                <div className="text-xs mb-2.5">
                   <span className="font-semibold uppercase tracking-wider text-stone-800">
                     Color Shade: <span className="text-[#8E7348]">{selectedColor}</span>
                   </span>
@@ -387,10 +387,10 @@ export const ProductDetailPage: React.FC = () => {
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`py-2 px-3 text-xs rounded-xs border transition-all cursor-pointer ${
+                      className={`py-2 px-4 text-xs rounded-xl border transition-all duration-200 cursor-pointer ${
                         selectedColor === color
-                          ? 'bg-[#141414] text-white border-black font-medium'
-                          : 'bg-white text-stone-700 border-[#141414]/15 hover:border-stone-400'
+                          ? 'bg-[#141414] text-white border-[#141414] font-medium shadow-md'
+                          : 'bg-white text-stone-700 border-[#141414]/10 hover:border-[#141414]/30 hover:shadow-sm'
                       }`}
                     >
                       {color}
@@ -401,19 +401,19 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Quantity & CTAs */}
               <div className="pt-4 space-y-3">
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   {/* Quantity Counter */}
-                  <div className="flex items-center border border-[#141414]/20 rounded-xs bg-white">
+                  <div className="flex items-center justify-between sm:justify-start border border-[#141414]/15 rounded-2xl bg-white shadow-sm p-1">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="p-2.5 hover:bg-[#EFEAE4] transition-colors cursor-pointer text-stone-600"
+                      className="p-3.5 hover:bg-[#EFEAE4] rounded-xl transition-colors cursor-pointer text-stone-600"
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span className="px-3.5 text-xs font-mono font-semibold">{quantity}</span>
+                    <span className="px-4 text-xs font-mono font-semibold">{quantity}</span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="p-2.5 hover:bg-[#EFEAE4] transition-colors cursor-pointer text-stone-600"
+                      className="p-3.5 hover:bg-[#EFEAE4] rounded-xl transition-colors cursor-pointer text-stone-600"
                     >
                       <Plus className="w-3.5 h-3.5" />
                     </button>
@@ -422,7 +422,7 @@ export const ProductDetailPage: React.FC = () => {
                   {/* Add to Bag CTA */}
                   <button
                     onClick={handleAddToBag}
-                    className="flex-1 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] py-3 px-6 rounded-xs text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md active:scale-98"
+                    className="flex-1 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] py-4 px-6 rounded-2xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg active:scale-[0.98]"
                   >
                     <span>Add to Bag</span>
                     <span>•</span>
@@ -433,7 +433,7 @@ export const ProductDetailPage: React.FC = () => {
                 {/* Buy Now Express */}
                 <button
                   onClick={handleBuyNow}
-                  className="w-full bg-[#B5935A] hover:bg-[#C5A880] text-black py-3 px-6 rounded-xs text-xs uppercase tracking-widest font-bold transition-all cursor-pointer shadow-sm active:scale-98"
+                  className="w-full bg-[#B5935A] hover:bg-[#C5A880] text-black py-4 px-6 rounded-2xl text-xs uppercase tracking-widest font-bold transition-all cursor-pointer shadow-sm active:scale-[0.98]"
                 >
                   Buy Now — Express Allocation
                 </button>
@@ -638,7 +638,7 @@ export const ProductDetailPage: React.FC = () => {
       </div>
 
       {/* Sticky Mobile Purchase Bar (Sitting neatly above mobile bottom nav) */}
-      <div className="lg:hidden fixed bottom-[58px] inset-x-0 bg-[#FAF8F5]/98 backdrop-blur-md border-t border-[#141414]/10 px-4 py-2.5 z-30 shadow-2xl flex items-center justify-between gap-3">
+      <div className="lg:hidden fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] inset-x-0 bg-[#FAF8F5]/98 backdrop-blur-md border-t border-[#141414]/10 px-4 py-2.5 z-40 shadow-2xl flex items-center justify-between gap-3">
         <div className="min-w-0">
           <span className="font-mono text-sm font-semibold text-stone-900">{formatPrice(currentUnitPrice)}</span>
           <p className="text-[10px] text-stone-500 truncate max-w-[120px]">{selectedLength} · {selectedDensity}</p>

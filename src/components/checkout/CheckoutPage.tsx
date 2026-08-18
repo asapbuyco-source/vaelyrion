@@ -9,36 +9,43 @@ import {
   ArrowLeft, 
   Sparkles,
   ShoppingBag,
-  Building,
   UserCheck,
-  CheckCircle2,
   AlertCircle
 } from 'lucide-react';
-import { useStore } from '../../context/StoreContext';
-import { Order } from '../../types';
+import { CardElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { useStore, buildOrderFromServer } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
+import { api } from '../../lib/api';
 
-export const CheckoutPage: React.FC = () => {
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+
+const CheckoutContent: React.FC = () => {
+  const { isAuthenticated, authUser } = useAuth();
   const { 
     cart, 
     cartSubtotal, 
     formatPrice, 
     setCurrentView, 
-    createOrder,
+    clearCart,
+    setSelectedOrder,
     savedAddresses,
-    user,
-    currency
+    showToast
   } = useStore();
+
+  const stripe = useStripe();
+  const elements = useElements();
 
   const [selectedAddressId, setSelectedAddressId] = useState<string>(savedAddresses[0]?.id || '');
   
   // Shipping Form State
   const [formData, setFormData] = useState({
-    name: user.name || 'Astrid Holmsen',
-    email: user.email || 'astrid.holmsen@example.no',
-    phone: user.phone || '+47 982 45 102',
-    address: 'Bygdøy Allé 14B',
-    city: 'Oslo',
-    postalCode: '0262',
+    name: authUser?.profile?.first_name ? `${authUser.profile.first_name} ${authUser.profile.last_name || ''}`.trim() : '',
+    email: authUser?.email || '',
+    phone: authUser?.profile?.phone || '',
+    address: '',
+    city: '',
+    postalCode: '',
     country: 'Norway',
     notes: ''
   });
@@ -47,15 +54,10 @@ export const CheckoutPage: React.FC = () => {
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
   
   // Payment Method
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'apple_pay' | 'klarna' | 'test_mode'>('card');
-  const [cardDetails, setCardDetails] = useState({
-    number: '•••• •••• •••• 4242',
-    expiry: '12/28',
-    cvc: '888',
-    nameOnCard: user.name
-  });
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'apple_pay' | 'klarna'>('card');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   // Address preset selector handler
   const handleAddressSelect = (addrId: string) => {
@@ -81,14 +83,29 @@ export const CheckoutPage: React.FC = () => {
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (cart.length === 0) return;
+    if (cart.length === 0 || !stripe || !elements) return;
 
+    setPaymentError(null);
     setIsSubmitting(true);
-    // Simulate secure payment gateway execution (Stripe PaymentIntent confirmation)
-    await new Promise(res => setTimeout(res, 1400));
+    try {
+      // 1. Sync cart to backend
+      await api.cart.clear(); // Clear existing
+      for (const item of cart) {
+        await api.cart.addItem({
+          productId: item.product.id,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          options: {
+            length: item.selectedLength,
+            density: item.selectedDensity,
+            lace: item.selectedLace,
+            color: item.selectedColor
+          }
+        });
+      }
 
-    const newOrder = createOrder({
-      customer: {
+      // 2. Create Payment Intent
+      const res = await api.checkout.createPaymentIntent('current', {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -96,20 +113,55 @@ export const CheckoutPage: React.FC = () => {
         city: formData.city,
         postalCode: formData.postalCode,
         country: formData.country
-      },
-      items: cart,
-      subtotal: cartSubtotal,
-      shippingFee: shippingCost,
-      discount: 0,
-      total: totalAmount,
-      currency,
-      paymentMethod,
-      paymentStatus: 'paid',
-      orderStatus: 'payment_confirmed'
-    });
+      });
 
-    setIsSubmitting(false);
-    setCurrentView('order-confirmation');
+      // 3. Confirm the card payment with Stripe
+      const result = await stripe.confirmCardPayment(res.clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement)!,
+          billing_details: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            address: {
+              line1: formData.address,
+              city: formData.city,
+              postal_code: formData.postalCode,
+              country: formData.country === 'United States' ? 'US' : 'NO'
+            }
+          }
+        }
+      });
+
+      if (result.error) {
+        setPaymentError(result.error.message || 'Payment failed. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (result.paymentIntent?.status !== 'succeeded') {
+        setPaymentError('Payment is still processing. Please check your order in a moment.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 4. Load the confirmed order from the server (poll briefly for webhook confirmation)
+      let serverOrder: any = null;
+      for (let attempt = 0; attempt < 4; attempt++) {
+        serverOrder = await api.orders.getById(res.orderId);
+        if (serverOrder.payment_status === 'paid') break;
+        await new Promise(r => setTimeout(r, 1200));
+      }
+      setSelectedOrder(buildOrderFromServer(serverOrder));
+      clearCart();
+      setCurrentView('order-confirmation');
+      
+    } catch (err: any) {
+      console.error('Checkout failed', err);
+      setPaymentError(err.message || 'Checkout failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (cart.length === 0) {
@@ -125,6 +177,24 @@ export const CheckoutPage: React.FC = () => {
           className="bg-[#141414] text-white text-xs uppercase tracking-widest px-6 py-3 rounded-xs"
         >
           Return to Shop
+        </button>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <Lock className="w-12 h-12 text-[#B5935A]" />
+        <h2 className="font-serif text-2xl text-stone-900">Sign in to Checkout</h2>
+        <p className="text-xs text-stone-500 font-light max-w-xs mb-4">
+          A Vaelyrion Society account is required to securely process your payment and track your luxury batch delivery.
+        </p>
+        <button
+          onClick={() => setCurrentView('account')}
+          className="bg-[#141414] text-white text-xs uppercase tracking-widest px-8 py-3.5 rounded-xs font-semibold"
+        >
+          Sign In or Register
         </button>
       </div>
     );
@@ -378,7 +448,7 @@ export const CheckoutPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Step 3: Payment Abstraction (Stripe, Apple Pay, Klarna, Test Mode) */}
+            {/* Step 3: Payment (Stripe) */}
             <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-6 shadow-xs">
               <div className="flex items-center justify-between border-b border-[#141414]/8 pb-4">
                 <div className="flex items-center gap-2.5">
@@ -406,11 +476,19 @@ export const CheckoutPage: React.FC = () => {
                   <button
                     type="button"
                     key={pm.id}
-                    onClick={() => setPaymentMethod(pm.id as any)}
+                    onClick={() => {
+                      if (pm.id !== 'card') {
+                        showToast('Payment Method', `${pm.label} will be available soon. Please use a credit or debit card.`, 'info');
+                        return;
+                      }
+                      setPaymentMethod(pm.id as any);
+                    }}
                     className={`py-3 px-2 text-center rounded-xs border transition-all cursor-pointer ${
                       paymentMethod === pm.id
                         ? 'bg-[#141414] text-white border-black font-medium'
-                        : 'bg-[#FAF8F5] text-stone-700 border-stone-200 hover:border-stone-400'
+                        : pm.id !== 'card'
+                          ? 'bg-[#FAF8F5] text-stone-400 border-stone-200 cursor-not-allowed'
+                          : 'bg-[#FAF8F5] text-stone-700 border-stone-200 hover:border-stone-400'
                     }`}
                   >
                     {pm.label}
@@ -418,69 +496,51 @@ export const CheckoutPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* Card Element Simulation */}
+              {/* Stripe Card Element */}
               {paymentMethod === 'card' && (
                 <div className="p-4 bg-[#FAF8F5] border border-[#141414]/10 rounded-xs space-y-4">
                   <div>
                     <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
-                      Card Number
+                      Card Details
                     </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={cardDetails.number}
-                        onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
-                        className="w-full bg-white border border-[#141414]/15 px-3.5 py-2.5 text-[16px] sm:text-xs font-mono rounded-xs focus:outline-none focus:border-[#B5935A]"
-                      />
-                      <CreditCard className="w-4 h-4 text-stone-400 absolute right-3 top-3" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
-                        Expiry Date
-                      </label>
-                      <input
-                        type="text"
-                        value={cardDetails.expiry}
-                        onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
-                        className="w-full bg-white border border-[#141414]/15 px-3.5 py-2.5 text-[16px] sm:text-xs font-mono rounded-xs focus:outline-none focus:border-[#B5935A]"
+                    <div className="bg-white border border-[#141414]/15 px-3.5 py-3.5 rounded-xs focus-within:border-[#B5935A] transition-colors">
+                      <CardElement
+                        options={{
+                          style: {
+                            base: {
+                              fontSize: '14px',
+                              fontFamily: '"Plus Jakarta Sans", sans-serif',
+                              color: '#141414',
+                              '::placeholder': { color: '#A8A29E' },
+                            },
+                            invalid: { color: '#B91C1C' },
+                          },
+                        }}
                       />
                     </div>
-                    <div>
-                      <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
-                        CVC / Security Code
-                      </label>
-                      <input
-                        type="text"
-                        value={cardDetails.cvc}
-                        onChange={(e) => setCardDetails({ ...cardDetails, cvc: e.target.value })}
-                        className="w-full bg-white border border-[#141414]/15 px-3.5 py-2.5 text-[16px] sm:text-xs font-mono rounded-xs focus:outline-none focus:border-[#B5935A]"
-                      />
-                    </div>
+                    <p className="text-[11px] text-stone-400 font-light mt-2 flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      256-bit encrypted by Stripe. Card details never touch our servers.
+                    </p>
                   </div>
                 </div>
               )}
 
-              {paymentMethod === 'apple_pay' && (
-                <div className="p-6 bg-stone-900 text-white rounded-xs text-center space-y-2">
-                  <span className="font-semibold text-sm">Apple Pay Express Active</span>
-                  <p className="text-xs text-stone-400 font-light">Biometric touch/face authentication will trigger upon confirming order.</p>
-                </div>
-              )}
+              {paymentMethod === 'apple_pay' && null}
 
-              {paymentMethod === 'klarna' && (
-                <div className="p-6 bg-[#FAF0ED] text-[#E03A6A] rounded-xs text-center space-y-1">
-                  <span className="font-semibold text-sm">Klarna · Pay in 30 Days or 3 Interest-Free Installments</span>
-                  <p className="text-xs text-stone-700 font-light">Pay after your Vaelyrion luxury box arrives and passes inspection.</p>
+              {paymentMethod === 'klarna' && null}
+
+              {paymentError && (
+                <div className="p-3.5 bg-red-50 border border-red-200 rounded-xs text-xs text-red-700 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span>{paymentError}</span>
                 </div>
               )}
 
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !stripe}
                 className="w-full bg-[#141414] hover:bg-[#2A2A2A] text-white py-4 sm:py-5 px-6 rounded-xs text-xs sm:text-sm uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xl active:scale-98 disabled:opacity-75 sticky bottom-4 z-20 border border-[#B5935A]/20"
               >
                 {isSubmitting ? (
@@ -578,3 +638,9 @@ export const CheckoutPage: React.FC = () => {
     </div>
   );
 };
+
+export const CheckoutPage: React.FC = () => (
+  <Elements stripe={stripePromise}>
+    <CheckoutContent />
+  </Elements>
+);

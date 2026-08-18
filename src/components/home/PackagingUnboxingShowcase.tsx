@@ -1,69 +1,68 @@
 import React from 'react';
-import { Sparkles, Gift, Check, ShieldCheck } from 'lucide-react';
+import { Sparkles, Check } from 'lucide-react';
 
 export const PackagingUnboxingShowcase: React.FC = () => {
-  const packagingInclusions = [
-    { title: 'Matte Black Magnetic Box', desc: 'Heavyweight rigid construction with hot-stamped champagne gold foil branding.' },
-    { title: '100% Pure Mulberry Silk Bag', desc: 'Protects natural hair cuticles from humidity, friction, and environmental tangling.' },
-    { title: 'Dual-Tone Velvet Hair Clips', desc: 'Salon-grade alligator sectioning clips for flawless home styling and installation.' },
-    { title: 'Atelier Certificate & Care Manual', desc: 'Includes single-donor temple origin verification and washing protocol.' }
+  const inclusions = [
+    { title: 'Matte Magnetic Box', desc: 'Heavyweight rigid, hot-stamped champagne gold foil branding.' },
+    { title: 'Pure Mulberry Silk Bag', desc: 'Protects cuticles from humidity, friction, and tangling.' },
+    { title: 'Velvet Hair Clips', desc: 'Salon-grade alligator clips for flawless home styling.' },
+    { title: 'Atelier Certificate', desc: 'Single-donor temple origin verification + care manual.' },
   ];
 
   return (
-    <section className="bg-[#FAF8F5] py-16 sm:py-24 overflow-hidden border-b border-[#141414]/10">
+    <section className="py-16 sm:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           
-          {/* Left Visual Presentation */}
-          <div className="lg:col-span-6 relative">
-            <div className="aspect-4/3 rounded-sm overflow-hidden border border-[#141414]/10 shadow-xl bg-stone-900">
+          {/* Left: Image with floating tag */}
+          <div className="relative">
+            <div className="rounded-3xl overflow-hidden shadow-xl bg-stone-900 aspect-[4/3]">
               <img
                 src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85"
-                alt="Vaelyrion Luxury Packaging & Unboxing"
+                alt="Vaelyrion Luxury Packaging"
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
             
-            {/* Floating Luxury Tag */}
-            <div className="absolute -bottom-6 -right-4 sm:right-6 bg-[#141414] text-white p-4 rounded-xs border border-[#B5935A]/50 shadow-2xl space-y-1 max-w-xs">
-              <div className="flex items-center gap-2 text-[#B5935A] text-xs">
+            {/* Floating card */}
+            <div className="absolute -bottom-4 right-2 sm:-right-6 glass-dark rounded-2xl p-4 shadow-2xl border border-white/10 max-w-[200px]">
+              <div className="flex items-center gap-2 text-[#B5935A] mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span className="uppercase font-semibold tracking-wider text-[10px]">Complimentary With Every Order</span>
+                <span className="text-[10px] uppercase font-bold tracking-widest">Included Free</span>
               </div>
-              <p className="text-xs font-light text-stone-300">
-                Packaged at our Oslo 3PL facility under sterile white-glove inspection.
+              <p className="text-xs font-light text-stone-300 leading-relaxed">
+                White-glove packaged at our Oslo 3PL facility.
               </p>
             </div>
           </div>
 
-          {/* Right Editorial Copy & Inclusions */}
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+          {/* Right: Editorial copy */}
+          <div className="space-y-6">
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold">
               The Unboxing Ritual
-            </span>
-
+            </p>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium leading-tight">
-              An Elevated Unboxing Experience From The First Touch
+              An Elevated Experience<br />From the First Touch
             </h2>
-
-            <p className="text-xs sm:text-sm text-stone-600 font-light leading-relaxed">
-              We believe luxury hair deserves an uncompromising presentation. From our custom magnetic keepsake box to the organic argan oil conditioning performed before dispatch, every parcel is prepared as a personal gift.
+            <p className="text-sm text-stone-500 font-light leading-relaxed">
+              We believe luxury hair deserves an uncompromising presentation. Every parcel is prepared as a personal gift — from our magnetic keepsake box to the organic argan oil conditioning performed before dispatch.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              {packagingInclusions.map((item, idx) => (
-                <div key={idx} className="p-4 bg-white border border-[#141414]/8 rounded-xs space-y-1.5 shadow-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-[#FAF5ED] text-[#8E7348] text-[10px] font-bold flex items-center justify-center">
-                      ✓
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {inclusions.map((item, idx) => (
+                <div key={idx} className="card-float bg-white p-5 rounded-2xl space-y-2">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-[#FAF5ED] border border-[#E8DFC8] flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 text-[#B5935A]" />
                     </span>
-                    <h4 className="font-serif text-xs font-semibold text-stone-900">{item.title}</h4>
+                    <h4 className="font-serif text-sm font-semibold text-stone-900">{item.title}</h4>
                   </div>
-                  <p className="text-[11px] text-stone-500 font-light leading-relaxed pl-6">{item.desc}</p>
+                  <p className="text-[11px] text-stone-400 font-light leading-relaxed pl-7">{item.desc}</p>
                 </div>
               ))}
             </div>
-
           </div>
 
         </div>

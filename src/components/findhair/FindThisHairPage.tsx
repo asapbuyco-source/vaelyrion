@@ -308,7 +308,7 @@ export const FindThisHairPage: React.FC = () => {
                           </div>
 
                           {/* Detected attributes */}
-                          <div className="text-xs text-stone-600 grid grid-cols-3 gap-2 pt-1 font-light">
+                          <div className="text-xs text-stone-600 grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-light">
                             <div><strong className="font-medium text-stone-800">Texture:</strong> {match.detectedTexture}</div>
                             <div><strong className="font-medium text-stone-800">Length:</strong> {match.detectedLength}</div>
                             <div><strong className="font-medium text-stone-800">Color:</strong> {match.detectedColor}</div>

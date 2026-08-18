@@ -3,8 +3,8 @@ import {
   Product, 
   CartItem, 
   Order, 
-  WeeklyBatch, 
-  Supplier, 
+  OrderStatusStep,
+  TrackingEvent,
   DiscoverArticle, 
   CategoryType,
   HairTexture,
@@ -16,12 +16,10 @@ import {
   UserAddress
 } from '../types';
 import { 
-  MOCK_PRODUCTS, 
-  MOCK_BATCHES, 
-  MOCK_SUPPLIERS, 
   MOCK_ARTICLES, 
   INITIAL_ORDER_SAMPLE 
 } from '../data/mockData';
+import { api } from '../lib/api';
 
 export type Currency = 'EUR' | 'USD' | 'NOK' | 'GBP';
 
@@ -30,6 +28,159 @@ interface CurrencyRate {
   rate: number;
   label: string;
 }
+
+const TRACKING_STEPS: OrderStatusStep[] = [
+  'payment_confirmed',
+  'order_received',
+  'weekly_batch_created',
+  'supplier_processing',
+  'shipped_china',
+  'international_transit',
+  'arrived_norway',
+  'fulfillment_center',
+  'preparing_shipment',
+  'shipped_customer',
+  'out_for_delivery',
+  'delivered'
+];
+
+const TRACKING_TEMPLATE: Array<{ step: OrderStatusStep; title: string; description: string; location: string }> = [
+  { step: 'payment_confirmed', title: 'Payment Confirmed', description: 'Secure transaction processed via Stripe Gateway.', location: 'Vaelyrion Commerce Engine' },
+  { step: 'order_received', title: 'Order Allocated to Weekly Batch', description: 'Order registered into this week\'s supplier batch pool.', location: 'Vaelyrion Operations Hub' },
+  { step: 'weekly_batch_created', title: 'Weekly Batch PO Generated', description: 'Consolidated purchase order transmitted to Qingdao atelier.', location: 'Operations · Oslo' },
+  { step: 'supplier_processing', title: 'Artisan Custom Handcrafting', description: 'Single-knot ventilation & cuticle alignment inspection in progress.', location: 'Qingdao Atelier, China' },
+  { step: 'shipped_china', title: 'Dispatched from Supplier Atelier', description: 'Handed over to International Air Freight.', location: 'Qingdao Airport (TAO), China' },
+  { step: 'international_transit', title: 'International Air Transit', description: 'Flight in transit toward Scandinavian Hub.', location: 'In Flight · International Air Corridor' },
+  { step: 'arrived_norway', title: 'Customs Clearance & Arrival in Norway', description: 'Batch arrives at Gardermoen Cargo & enters bonded transfer.', location: 'Oslo Gardermoen (OSL), Norway' },
+  { step: 'fulfillment_center', title: 'Received by Oslo 3PL Center', description: 'Quality QC, argan conditioning & placement into luxury box.', location: 'Vaelyrion 3PL Center, Oslo' },
+  { step: 'preparing_shipment', title: 'Branded Luxury Packaging Sealed', description: 'Silk bonnet, brass comb, authenticity card & ribbon secured.', location: 'Fulfillment Logistics, Oslo' },
+  { step: 'shipped_customer', title: 'Dispatched with Posten / Bring Norway', description: 'Local tracking number assigned.', location: 'Posten Hub, Oslo' },
+  { step: 'out_for_delivery', title: 'Out for Courier Delivery', description: 'Courier on route to your specified address.', location: 'Destination Route' },
+  { step: 'delivered', title: 'Delivered', description: 'Package handed to recipient.', location: 'Recipient Address' }
+];
+
+const buildTrackingEvents = (customer: { city: string; address: string }, paymentPaid: boolean, status: string): TrackingEvent[] => {
+  // status can be an uppercase server status; map to a step index
+  const statusToIdx: Record<string, number> = {
+    PENDING_PAYMENT: 0,
+    PAID: 0,
+    PROCESSING: 1,
+    SHIPPED: 9,
+    DELIVERED: 11
+  };
+  const currentIdx = paymentPaid ? Math.min(statusToIdx[status] ?? 0, 11) : 0;
+
+  return TRACKING_TEMPLATE.map((tpl, idx) => ({
+    ...tpl,
+    timestamp: idx <= currentIdx ? 'Confirmed' : 'Pending',
+    completed: idx <= currentIdx,
+    current: idx === currentIdx,
+    location: idx >= 10 && idx <= 11 ? (idx === 11 ? `${customer.address}, ${customer.city}` : customer.city) : tpl.location
+  }));
+};
+
+export const buildOrderFromServer = (serverOrder: any): Order => {
+  const snapshot = serverOrder.shipping_address_snapshot || {};
+  const items: CartItem[] = (serverOrder.order_items || []).map((item: any) => {
+    const variant = item.variant_snapshot || item.product_variants || {};
+    const images: string[] = item.products?.product_images
+      ?.sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+      .map((img: any) => img.image_url) || [];
+    return {
+      id: item.id,
+      product: {
+        id: item.product_id,
+        title: item.product_name_snapshot || item.products?.name || 'Vaelyrion Creation',
+        slug: item.products?.slug || '',
+        subtitle: '',
+        category: 'wigs',
+        price: item.unit_price,
+        originalPrice: item.unit_price,
+        supplierCost: 0,
+        rating: 5,
+        reviewCount: 0,
+        images,
+        isPreOrder: false,
+        estimatedDelivery: '10–18 business days',
+        stockCount: 0,
+        textures: [],
+        lengths: [],
+        densities: [],
+        laceTypes: [],
+        colors: [],
+        description: '',
+        hairOrigin: '',
+        details: [],
+        careInstructions: [],
+        supplierId: ''
+      },
+      selectedLength: variant?.lengths?.[0] || variant?.length || 'Standard',
+      selectedDensity: variant?.densities?.[0] || variant?.density || '180%',
+      selectedLace: variant?.laceTypes?.[0] || variant?.lace || '13x4 HD Swiss Lace',
+      selectedColor: variant?.colors?.[0] || variant?.color || 'Natural Black (#1B)',
+      unitPrice: item.unit_price,
+      quantity: item.quantity,
+      isPreOrder: false
+    };
+  });
+
+  const serverEvents = (serverOrder.tracking_events || []).map((evt: any, idx: number, arr: any[]) => {
+    const step = TRACKING_STEPS.includes(evt.step) ? evt.step : (idx < TRACKING_STEPS.length ? TRACKING_STEPS[idx] : 'payment_confirmed');
+    return {
+      step,
+      title: evt.title || step.replace(/_/g, ' '),
+      description: evt.description || '',
+      location: evt.location || '',
+      timestamp: evt.event_time ? new Date(evt.event_time).toLocaleDateString() : 'Pending',
+      completed: !!evt.completed,
+      current: idx === arr.length - 1 && !!evt.completed
+    } as TrackingEvent;
+  });
+
+  const trackingEvents: TrackingEvent[] = serverEvents.length > 0
+    ? serverEvents
+    : buildTrackingEvents(
+        { city: snapshot.city || '', address: snapshot.address || '' },
+        serverOrder.payment_status === 'paid',
+        serverOrder.status || 'PENDING_PAYMENT'
+      );
+
+  return {
+    id: serverOrder.id,
+    orderNumber: serverOrder.order_number,
+    date: serverOrder.created_at ? serverOrder.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+    customer: {
+      name: snapshot.name || '',
+      email: snapshot.email || '',
+      phone: snapshot.phone || '',
+      address: snapshot.address || '',
+      city: snapshot.city || '',
+      country: snapshot.country || '',
+      postalCode: snapshot.postalCode || ''
+    },
+    items,
+    subtotal: serverOrder.subtotal || 0,
+    shippingFee: serverOrder.shipping_cost || 0,
+    discount: serverOrder.discount || 0,
+    total: serverOrder.total || 0,
+    currency: serverOrder.currency || 'EUR',
+    paymentMethod: 'card',
+    paymentStatus: serverOrder.payment_status === 'paid' ? 'paid' : serverOrder.payment_status === 'refunded' ? 'refunded' : 'pending',
+    orderStatus: ({
+      PENDING_PAYMENT: 'payment_confirmed',
+      PAID: 'payment_confirmed',
+      PROCESSING: 'order_received',
+      SHIPPED: 'shipped_customer',
+      DELIVERED: 'delivered',
+      CANCELLED: 'payment_confirmed',
+      REFUNDED: 'payment_confirmed'
+    } as Record<string, OrderStatusStep>)[serverOrder.status || 'PENDING_PAYMENT'] || 'payment_confirmed',
+    batchId: serverOrder.batch_id || '',
+    trackingNumber: serverOrder.tracking_number || '',
+    trackingEvents,
+    estimatedDeliveryRange: '10–18 business days'
+  };
+};
 
 const CURRENCY_MAP: Record<Currency, CurrencyRate> = {
   EUR: { symbol: '€', rate: 1.0, label: 'EUR (€)' },
@@ -46,17 +197,14 @@ export type ViewType =
   | 'discover-article'
   | 'find-hair'
   | 'wishlist'
-  | 'cart'
   | 'checkout'
   | 'order-confirmation'
   | 'tracking'
   | 'account'
-  | 'admin'
+  | 'about'
   | 'faq'
   | 'shipping-policy'
-  | 'returns-policy'
-  | 'contact'
-  | 'unboxing';
+  | 'returns-policy';
 
 interface Toast {
   id: string;
@@ -86,12 +234,6 @@ interface StoreContextType {
   setSelectedArticleId: (id: string | null) => void;
   selectedOrder: Order | null;
   setSelectedOrder: (order: Order | null) => void;
-  
-  // App mode (Android app simulator vs Web)
-  isAppMode: boolean;
-  setIsAppMode: (val: boolean) => void;
-  appActiveTab: 'home' | 'shop' | 'discover' | 'orders' | 'profile';
-  setAppActiveTab: (tab: 'home' | 'shop' | 'discover' | 'orders' | 'profile') => void;
 
   // Currency
   currency: Currency;
@@ -133,17 +275,6 @@ interface StoreContextType {
 
   // Orders & Tracking
   orders: Order[];
-  createOrder: (orderData: Omit<Order, 'id' | 'orderNumber' | 'date' | 'trackingEvents' | 'batchId' | 'trackingNumber'>) => Order;
-  updateOrderStatus: (orderId: string, newStatus: Order['orderStatus']) => void;
-
-  // Batches (Admin & Logistics)
-  batches: WeeklyBatch[];
-  approveBatch: (batchId: string) => void;
-  generateSupplierPO: (batchId: string) => void;
-  
-  // Suppliers (Admin)
-  suppliers: Supplier[];
-  updateSupplier: (supplier: Supplier) => void;
 
   // Visual Search / Find This Hair
   visualSearchResults: VisualMatchResult[] | null;
@@ -151,13 +282,7 @@ interface StoreContextType {
   performVisualSearch: (imageSrc: string) => Promise<void>;
   clearVisualSearch: () => void;
 
-  // User & Addresses
-  user: {
-    name: string;
-    email: string;
-    phone: string;
-    tier: string;
-  };
+  // User Addresses
   savedAddresses: UserAddress[];
   addSavedAddress: (address: Omit<UserAddress, 'id'>) => void;
 
@@ -182,16 +307,27 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(INITIAL_ORDER_SAMPLE);
-  
-  // App Mode & active Android tab
-  const [isAppMode, setIsAppMode] = useState<boolean>(false);
-  const [appActiveTab, setAppActiveTab] = useState<'home' | 'shop' | 'discover' | 'orders' | 'profile'>('home');
 
   // Currency
   const [currency, setCurrency] = useState<Currency>('EUR');
 
-  // Products
-  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
+  // Products - start empty, load from API
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+
+  // Fetch products from backend on mount
+  useEffect(() => {
+    api.products.list()
+      .then((data: any[]) => {
+        setProducts(data);
+      })
+      .catch((err) => {
+        console.warn('Failed to load products from API, falling back to mock data:', err.message);
+        // Fallback to mock data if API is unavailable
+        import('../data/mockData').then(m => setProducts(m.MOCK_PRODUCTS));
+      })
+      .finally(() => setIsLoadingProducts(false));
+  }, []);
 
   // Cart
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -204,24 +340,89 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   });
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
+  // Sync cart from API if authenticated
+  useEffect(() => {
+    const token = localStorage.getItem('vaelyrion_token');
+    if (token) {
+      api.cart.get()
+        .then((res: any) => {
+          if (res.items && res.items.length > 0) {
+            const mappedCart: CartItem[] = res.items.map((item: any) => {
+              const prod = item.products;
+              const attrs = item.product_variants?.attributes || {};
+              return {
+                id: item.id,
+                product: {
+                  id: prod.id,
+                  title: prod.name,
+                  slug: prod.slug,
+                  subtitle: '',
+                  category: 'wigs',
+                  price: prod.selling_price,
+                  originalPrice: prod.selling_price,
+                  supplierCost: 0,
+                  rating: 5,
+                  reviewCount: 0,
+                  images: prod.product_images?.map((img: any) => img.image_url) || [],
+                  isPreOrder: prod.is_preorder,
+                  estimatedDelivery: '',
+                  stockCount: 0,
+                  textures: [],
+                  lengths: [],
+                  densities: [],
+                  laceTypes: [],
+                  colors: [],
+                  description: '',
+                  hairOrigin: '',
+                  details: [],
+                  careInstructions: [],
+                  isNew: false,
+                  isBestSeller: false,
+                  supplierId: ''
+                },
+                selectedLength: attrs.lengths?.[0] || 'Unknown',
+                selectedDensity: attrs.densities?.[0] || 'Unknown',
+                selectedLace: attrs.laceTypes?.[0] || 'Unknown',
+                selectedColor: attrs.colors?.[0] || 'Unknown',
+                unitPrice: item.unit_price,
+                quantity: item.quantity,
+                isPreOrder: prod.is_preorder
+              };
+            });
+            setCart(mappedCart);
+          }
+        })
+        .catch(console.error);
+    }
+  }, []);
+
   // Wishlist
   const [wishlist, setWishlist] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('vaelyrion_wishlist');
-      return saved ? JSON.parse(saved) : ['prod-01', 'prod-04'];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return ['prod-01', 'prod-04'];
+      return [];
     }
   });
 
   // Orders
   const [orders, setOrders] = useState<Order[]>([INITIAL_ORDER_SAMPLE]);
 
-  // Batches
-  const [batches, setBatches] = useState<WeeklyBatch[]>(MOCK_BATCHES);
-
-  // Suppliers
-  const [suppliers, setSuppliers] = useState<Supplier[]>(MOCK_SUPPLIERS);
+  // Sync orders from API if authenticated
+  useEffect(() => {
+    const token = localStorage.getItem('vaelyrion_token');
+    if (!token) return;
+    api.orders.list()
+      .then((serverOrders: any[]) => {
+        const mapped = serverOrders.map(buildOrderFromServer);
+        setOrders(mapped.length > 0 ? mapped : []);
+        if (mapped.length > 0) {
+          setSelectedOrder(mapped[0]);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Notifications
   const [notifications, setNotifications] = useState<AppNotification[]>([
@@ -247,36 +448,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Toasts
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // User Profile
-  const [user] = useState({
-    name: 'Astrid Holmsen',
-    email: 'astrid.holmsen@example.no',
-    phone: '+47 982 45 102',
-    tier: 'Vaelyrion Black Diamond Member'
-  });
-
-  const [savedAddresses, setSavedAddresses] = useState<UserAddress[]>([
-    {
-      id: 'addr-01',
-      name: 'Home (Oslo)',
-      street: 'Bygdøy Allé 14B',
-      city: 'Oslo',
-      postalCode: '0262',
-      country: 'Norway',
-      isDefault: true,
-      phone: '+47 982 45 102'
-    },
-    {
-      id: 'addr-02',
-      name: 'Summer House (Bergen)',
-      street: 'Kalfarveien 28',
-      city: 'Bergen',
-      postalCode: '5018',
-      country: 'Norway',
-      isDefault: false,
-      phone: '+47 982 45 102'
-    }
-  ]);
+  const [savedAddresses, setSavedAddresses] = useState<UserAddress[]>([]);
 
   // Filters
   const [filters, setFilters] = useState<FilterState>({
@@ -461,217 +633,6 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
-  // Orders
-  const createOrder = (orderData: Omit<Order, 'id' | 'orderNumber' | 'date' | 'trackingEvents' | 'batchId' | 'trackingNumber'>): Order => {
-    const orderNum = `VA${Math.floor(10000 + Math.random() * 90000)}`;
-    const trackingNum = `VAE-NO-${Math.floor(10000000 + Math.random() * 90000000)}`;
-    const newOrder: Order = {
-      ...orderData,
-      id: `ord-${Date.now()}`,
-      orderNumber: orderNum,
-      date: new Date().toISOString().split('T')[0],
-      batchId: 'batch-003',
-      trackingNumber: trackingNum,
-      estimatedDeliveryRange: '10–18 business days',
-      trackingEvents: [
-        {
-          step: 'payment_confirmed',
-          title: 'Payment Confirmed',
-          description: 'Secure transaction confirmed with Vaelyrion Vault.',
-          location: 'Vaelyrion Commerce Engine',
-          timestamp: 'Just now',
-          completed: true,
-          current: false
-        },
-        {
-          step: 'order_received',
-          title: 'Order Queued in Batch #BATCH-2026-W34',
-          description: 'Order consolidated into this Sunday\'s supplier batch pool.',
-          location: 'Operations · Oslo',
-          timestamp: 'Just now',
-          completed: true,
-          current: true
-        },
-        {
-          step: 'weekly_batch_created',
-          title: 'Weekly Batch PO Generation',
-          description: 'Batch closes Sunday 23:59 CET for artisan dispatch.',
-          location: 'Operations · Oslo',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'supplier_processing',
-          title: 'Artisan Custom Handcrafting',
-          description: 'Single-knot ventilation & cuticle alignment in Qingdao atelier.',
-          location: 'Qingdao Atelier, China',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'shipped_china',
-          title: 'Dispatched from Supplier Atelier',
-          description: 'Export clearance and air cargo freight transfer.',
-          location: 'Qingdao (TAO), China',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'international_transit',
-          title: 'International Air Transit',
-          description: 'Air freight express to Scandinavia.',
-          location: 'In Flight · Air Corridor',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'arrived_norway',
-          title: 'Customs Clearance in Norway',
-          description: 'Arrival at Gardermoen Cargo bonded warehouse.',
-          location: 'Oslo Gardermoen (OSL)',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'fulfillment_center',
-          title: 'Received by Oslo 3PL Center',
-          description: 'QC inspection & signature unboxing presentation.',
-          location: 'Vaelyrion 3PL Center, Oslo',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'preparing_shipment',
-          title: 'Vaelyrion Luxury Packaging Sealed',
-          description: 'Magnetic hard box, silk bonnet, detangling comb & certificate.',
-          location: 'Fulfillment Logistics, Oslo',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'shipped_customer',
-          title: 'Dispatched via Posten / Bring Norway',
-          description: 'Courier tracking barcode generated.',
-          location: 'Posten Hub, Oslo',
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'out_for_delivery',
-          title: 'Out for Courier Delivery',
-          description: 'Courier on final route to destination.',
-          location: orderData.customer.city,
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        },
-        {
-          step: 'delivered',
-          title: 'Delivered in Vaelyrion Luxury Packaging',
-          description: 'Signed and completed.',
-          location: `${orderData.customer.address}, ${orderData.customer.city}`,
-          timestamp: 'Pending',
-          completed: false,
-          current: false
-        }
-      ]
-    };
-
-    setOrders(prev => [newOrder, ...prev]);
-    setSelectedOrder(newOrder);
-    clearCart();
-
-    // Notify user
-    sendMockPushNotification(
-      `Order Confirmed #${orderNum}`,
-      `Your luxury pre-order has been registered in Batch #003. Live tracking is active.`
-    );
-
-    return newOrder;
-  };
-
-  const updateOrderStatus = (orderId: string, newStatus: Order['orderStatus']) => {
-    const stepOrder: Order['orderStatus'][] = [
-      'payment_confirmed',
-      'order_received',
-      'weekly_batch_created',
-      'supplier_processing',
-      'shipped_china',
-      'international_transit',
-      'arrived_norway',
-      'fulfillment_center',
-      'preparing_shipment',
-      'shipped_customer',
-      'out_for_delivery',
-      'delivered'
-    ];
-
-    const targetIdx = stepOrder.indexOf(newStatus);
-
-    setOrders(prev => prev.map(ord => {
-      if (ord.id === orderId) {
-        const updatedEvents = ord.trackingEvents.map(evt => {
-          const evtIdx = stepOrder.indexOf(evt.step);
-          return {
-            ...evt,
-            completed: evtIdx <= targetIdx,
-            current: evtIdx === targetIdx,
-            timestamp: evtIdx <= targetIdx ? (evt.timestamp.includes('Pending') ? 'Updated Today' : evt.timestamp) : 'Pending'
-          };
-        });
-
-        return {
-          ...ord,
-          orderStatus: newStatus,
-          trackingEvents: updatedEvents
-        };
-      }
-      return ord;
-    }));
-
-    if (selectedOrder && selectedOrder.id === orderId) {
-      setSelectedOrder(prev => prev ? {
-        ...prev,
-        orderStatus: newStatus,
-        trackingEvents: prev.trackingEvents.map(evt => {
-          const evtIdx = stepOrder.indexOf(evt.step);
-          return {
-            ...evt,
-            completed: evtIdx <= targetIdx,
-            current: evtIdx === targetIdx,
-            timestamp: evtIdx <= targetIdx ? (evt.timestamp.includes('Pending') ? 'Updated Today' : evt.timestamp) : 'Pending'
-          };
-        })
-      } : null);
-    }
-
-    showToast('Order Status Updated', `Status changed to ${newStatus.replace(/_/g, ' ')}.`, 'gold');
-  };
-
-  // Batches operations
-  const approveBatch = (batchId: string) => {
-    setBatches(prev => prev.map(b => b.id === batchId ? { ...b, status: 'supplier_processing' } : b));
-    showToast('Weekly Batch Approved', 'PO transmitted to Qingdao atelier. Supplier processing begun.', 'gold');
-  };
-
-  const generateSupplierPO = (batchId: string) => {
-    setBatches(prev => prev.map(b => b.id === batchId ? { ...b, status: 'po_generated', poDocumentNumber: `PO-VAE-2026-${Math.floor(1000 + Math.random() * 9000)}` } : b));
-    showToast('Supplier Purchase Order Generated', 'Batch consolidated with complete unit breakdown.', 'gold');
-  };
-
-  const updateSupplier = (supplier: Supplier) => {
-    setSuppliers(prev => prev.map(s => s.id === supplier.id ? supplier : s));
-    showToast('Supplier Profile Updated', `${supplier.name} parameters saved.`, 'gold');
-  };
-
   // Visual Search Simulation
   const performVisualSearch = async (imageSrc: string) => {
     setIsSearchingImage(true);
@@ -756,10 +717,6 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setSelectedArticleId,
       selectedOrder,
       setSelectedOrder,
-      isAppMode,
-      setIsAppMode,
-      appActiveTab,
-      setAppActiveTab,
       currency,
       setCurrency,
       formatPrice,
@@ -783,18 +740,10 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       toggleWishlist,
       isInWishlist,
       orders,
-      createOrder,
-      updateOrderStatus,
-      batches,
-      approveBatch,
-      generateSupplierPO,
-      suppliers,
-      updateSupplier,
       visualSearchResults,
       isSearchingImage,
       performVisualSearch,
       clearVisualSearch,
-      user,
       savedAddresses,
       addSavedAddress,
       notifications,

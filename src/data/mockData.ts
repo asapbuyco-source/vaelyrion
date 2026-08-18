@@ -1,4 +1,4 @@
-import { Product, WeeklyBatch, Supplier, DiscoverArticle, Review, Order } from '../types';
+import { Product, DiscoverArticle, Review, Order } from '../types';
 
 export const MOCK_PRODUCTS: Product[] = [
   {
@@ -318,106 +318,6 @@ export const MOCK_PRODUCTS: Product[] = [
     isBestSeller: false,
     isTrending: true,
     supplierId: 'sup-01'
-  }
-];
-
-export const MOCK_BATCHES: WeeklyBatch[] = [
-  {
-    id: 'batch-003',
-    batchNumber: '#BATCH-2026-W34',
-    title: 'Weekly Batch #003 — Autumn Pre-Order Pool',
-    status: 'collecting',
-    cutOffDate: 'Sunday, Aug 23, 23:59 CET',
-    totalUnits: 38,
-    totalSupplierCost: 5120,
-    totalCustomerRevenue: 13940,
-    expectedMargin: 63.27,
-    productsSummary: [
-      { category: 'Wigs', units: 22, supplierCost: 3740, revenue: 9940 },
-      { category: 'Bundles', units: 9, supplierCost: 990, revenue: 2610 },
-      { category: 'Frontals', units: 5, supplierCost: 340, revenue: 925 },
-      { category: 'Extensions', units: 2, supplierCost: 50, revenue: 465 }
-    ],
-    poDocumentNumber: 'PO-VAE-2026-0834',
-    createdAt: '2026-08-17'
-  },
-  {
-    id: 'batch-002',
-    batchNumber: '#BATCH-2026-W33',
-    title: 'Weekly Batch #002 — International Transit to Oslo 3PL',
-    status: 'shipped_china',
-    cutOffDate: 'Sunday, Aug 16, 23:59 CET',
-    totalUnits: 46,
-    totalSupplierCost: 6340,
-    totalCustomerRevenue: 17180,
-    expectedMargin: 63.09,
-    productsSummary: [
-      { category: 'Wigs', units: 28, supplierCost: 4760, revenue: 12560 },
-      { category: 'Bundles', units: 12, supplierCost: 1320, revenue: 3480 },
-      { category: 'Frontals & Closures', units: 6, supplierCost: 260, revenue: 1140 }
-    ],
-    poDocumentNumber: 'PO-VAE-2026-0833',
-    createdAt: '2026-08-10'
-  },
-  {
-    id: 'batch-001',
-    batchNumber: '#BATCH-2026-W32',
-    title: 'Weekly Batch #001 — Arrived at Oslo Warehouse / Fulfillment',
-    status: 'arrived_norway',
-    cutOffDate: 'Sunday, Aug 09, 23:59 CET',
-    totalUnits: 34,
-    totalSupplierCost: 4790,
-    totalCustomerRevenue: 12890,
-    expectedMargin: 62.83,
-    productsSummary: [
-      { category: 'Wigs', units: 20, supplierCost: 3400, revenue: 8900 },
-      { category: 'Bundles', units: 10, supplierCost: 1100, revenue: 2900 },
-      { category: 'Accessories', units: 4, supplierCost: 290, revenue: 1090 }
-    ],
-    poDocumentNumber: 'PO-VAE-2026-0832',
-    createdAt: '2026-08-03'
-  }
-];
-
-export const MOCK_SUPPLIERS: Supplier[] = [
-  {
-    id: 'sup-01',
-    name: 'Qingdao Royal Raw Hair Atelier Ltd.',
-    location: 'Qingdao, Shandong, China',
-    platform: 'Direct Factory & OEM Custom Guild',
-    contact: 'chen.weili@royalrawhair.cn · +86 532 8892 4102',
-    specialty: 'Raw Temple Virgin Hair & 13x6 HD Swiss Micro-Knot Wigs',
-    moq: 5,
-    leadTimeDays: 4,
-    qualityRating: 4.96,
-    status: 'preferred',
-    notes: 'Premium partner with triple-inspection protocol. Ships directly via DHL Express to Oslo freight forwarder.'
-  },
-  {
-    id: 'sup-02',
-    name: 'Guangzhou Luster Lace Co.',
-    location: 'Guangzhou, Guangdong, China',
-    platform: 'Certified B2B Export Partner',
-    contact: 'export@lusterlace.com · +86 20 8645 2200',
-    specialty: 'HD Invisible Closures, Frontals, Pre-plucked Melt bases',
-    moq: 10,
-    leadTimeDays: 3,
-    qualityRating: 4.88,
-    status: 'approved',
-    notes: 'Exceptional Swiss mesh lace transparency. Consistent single-knot quality.'
-  },
-  {
-    id: 'sup-03',
-    name: 'Xuchang Silk & Luxury Fiber Works',
-    location: 'Xuchang, Henan, China',
-    platform: 'Direct Manufacturer',
-    contact: 'sales@xuchangluxuryfiber.cn · +86 374 231 9901',
-    specialty: 'Seamless PU Clip-in Extensions & 22-Momme Silk Accessories',
-    moq: 15,
-    leadTimeDays: 5,
-    qualityRating: 4.92,
-    status: 'approved',
-    notes: 'Specializes in European texture matching and Grade 6A mulberry silk packaging inserts.'
   }
 ];
 

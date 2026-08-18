@@ -1,62 +1,76 @@
 import React from 'react';
-import { Sparkles, Scan, ArrowRight, Upload, Camera } from 'lucide-react';
+import { Scan, Upload, ArrowRight, Sparkles, Camera } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const FindThisHairBanner: React.FC = () => {
   const { setCurrentView } = useStore();
 
   return (
-    <section className="bg-[#141414] text-[#FAF8F5] py-16 sm:py-24 border-y border-[#262626] relative overflow-hidden">
-      
-      {/* Visual Accent */}
-      <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-20 pointer-events-none hidden lg:block">
-        <img
-          src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=80"
-          alt="Hair visual search AI"
-          className="w-full h-full object-cover mix-blend-screen"
-        />
-      </div>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="relative overflow-hidden rounded-3xl bg-[#141414] min-h-[440px] flex flex-col lg:flex-row">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-3xl space-y-6">
-          
-          <div className="inline-flex items-center gap-2 bg-[#2A2A2A] border border-[#B5935A]/40 px-3.5 py-1.5 rounded-full text-xs text-[#E8DFC8] tracking-widest uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-[#B5935A]" />
-            <span>Signature Visual AI Matcher</span>
+        {/* LEFT: Text content */}
+        <div className="relative z-10 flex-1 p-10 sm:p-14 flex flex-col justify-center">
+          <div className="inline-flex items-center gap-2 bg-[#B5935A]/20 border border-[#B5935A]/30 text-[#C8AD7F] text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full w-fit mb-6">
+            <Sparkles className="w-3 h-3" />
+            AI-Powered Match
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-white leading-tight">
-            FIND THIS HAIR
+          <h2 className="font-serif text-4xl sm:text-5xl font-normal text-white leading-tight mb-4">
+            Seen a look<br />
+            <span className="italic text-[#C8AD7F]">you love?</span>
           </h2>
 
-          <p className="font-serif text-lg sm:text-xl text-[#E8DFC8] italic font-light">
-            Seen a look you love? Upload a photo and we'll help you find it.
+          <p className="text-stone-400 font-light text-sm leading-relaxed max-w-xs mb-8">
+            Upload a screenshot, photo, or video frame. Our AI matches it to the exact hair texture, 
+            length, and style in our catalog.
           </p>
 
-          <p className="text-xs sm:text-sm text-stone-300 font-light max-w-xl leading-relaxed">
-            Whether it's a screenshot from Instagram, a TikTok trend, a Pinterest board, or a red-carpet snapshot, our intelligent visual scanner analyzes hair wave curvature, density, lace micro-knots, and origin to match you with the exact Vaelyrion atelier piece.
-          </p>
+          <button
+            onClick={() => setCurrentView('find-hair')}
+            className="group flex items-center gap-2.5 bg-[#FAF8F5] hover:bg-white text-[#141414] text-xs uppercase tracking-widest font-bold py-4 px-7 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg w-fit active:scale-[0.98]"
+          >
+            <Camera className="w-4 h-4 text-[#8E7348]" />
+            <span>Find This Hair</span>
+            <ArrowRight className="w-4 h-4 text-[#8E7348] group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
 
-          <div className="pt-2 flex flex-wrap items-center gap-4">
-            <button
-              onClick={() => setCurrentView('find-hair')}
-              className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-4 px-8 rounded-xs transition-colors flex items-center gap-2 cursor-pointer shadow-lg active:scale-98"
-            >
-              <Scan className="w-4 h-4" />
-              <span>Launch Visual Search</span>
-            </button>
-
-            <button
-              onClick={() => setCurrentView('find-hair')}
-              className="text-stone-300 hover:text-white text-xs uppercase tracking-widest font-medium py-3 px-4 transition-colors flex items-center gap-1.5 cursor-pointer underline"
-            >
-              <span>Try with Sample Editorial Looks →</span>
-            </button>
+        {/* RIGHT: Visual upload zone */}
+        <div className="relative flex-1 p-10 sm:p-14 flex items-center justify-center">
+          {/* Decorative circles */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-64 h-64 rounded-full border border-white/5" />
+            <div className="absolute w-48 h-48 rounded-full border border-white/8" />
+            <div className="absolute w-32 h-32 rounded-full border border-white/10" />
           </div>
 
-        </div>
-      </div>
+          {/* Floating upload card */}
+          <div className="relative z-10 glass-dark rounded-3xl p-8 border border-white/10 shadow-2xl text-center w-full max-w-xs cursor-pointer hover:border-[#B5935A]/30 transition-all duration-300 group"
+            onClick={() => setCurrentView('find-hair')}
+          >
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#B5935A]/15 border border-[#B5935A]/20 flex items-center justify-center group-hover:bg-[#B5935A]/25 transition-colors">
+              <Upload className="w-7 h-7 text-[#C8AD7F] group-hover:scale-110 transition-transform" />
+            </div>
+            <p className="text-white font-serif text-base mb-1">Drop your photo here</p>
+            <p className="text-stone-500 text-xs font-light mb-4">JPG, PNG, MP4 up to 20MB</p>
+            <div className="border border-dashed border-[#B5935A]/30 rounded-xl p-3 text-[11px] text-[#C8AD7F] uppercase tracking-widest font-semibold">
+              Browse Files
+            </div>
+          </div>
 
+          {/* Floating match example */}
+          <div className="absolute top-8 right-8 glass-gold rounded-2xl p-3 text-left shadow-lg hidden lg:block animate-float">
+            <p className="text-[10px] uppercase tracking-widest text-[#8E7348] font-bold mb-1">Match Found</p>
+            <p className="font-serif text-sm text-[#141414]">22" Body Wave</p>
+            <p className="text-[10px] text-stone-500">98% similarity</p>
+          </div>
+        </div>
+
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#B5935A]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-[#B5935A]/3 rounded-full blur-3xl pointer-events-none" />
+      </div>
     </section>
   );
 };

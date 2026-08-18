@@ -1,102 +1,187 @@
-import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, Truck, Scan } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Scan, ShieldCheck, Sparkles, Truck, Star } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const Hero: React.FC = () => {
   const { setCurrentView, setFilters } = useStore();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsVisible(true), 80);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
-    <section className="relative bg-[#141414] text-[#FAF8F5] overflow-hidden">
-      
-      {/* Background Editorial Visuals */}
+    <section className="relative overflow-hidden bg-[#FAF8F5] min-h-[90vh] flex items-center">
+
+      {/* Background texture / warm gradient */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=2000&q=85"
-          alt="Vaelyrion Luxury Campaign"
-          className="w-full h-full object-cover object-top opacity-40 mix-blend-luminosity scale-105 animate-in fade-in duration-1000"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/75 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#F4EFEA] to-[#EDE8E1]" />
+        {/* Subtle noise texture for depth */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+          backgroundSize: '200px 200px'
+        }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
-        <div className="max-w-2xl space-y-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[90vh]">
           
-          {/* Subtle VIP Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#222222]/80 backdrop-blur-md border border-[#B5935A]/40 px-3.5 py-1.5 rounded-full text-xs text-[#E8DFC8] tracking-widest uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-[#B5935A]" />
-            <span>Weekly Batch #003 Allocations Now Open</span>
-          </div>
+          {/* LEFT: Editorial Text Column */}
+          <div className="space-y-8 lg:py-24">
 
-          {/* Major Editorial Headline */}
-          <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-white leading-[1.05]">
-            THE NEW COLLECTION
-          </h1>
-
-          <p className="font-serif text-xl sm:text-2xl text-[#E8DFC8] italic font-light">
-            Beyond What You Expect.
-          </p>
-
-          <p className="text-xs sm:text-sm text-stone-300 font-light max-w-lg leading-relaxed">
-            Ethically sourced single-donor temple hair, engineered with undetectable 0.03mm Swiss HD lace. Handcrafted on demand, inspected at our Oslo 3PL facility, and delivered in signature velvet unboxing.
-          </p>
-
-          {/* Action CTAs */}
-          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-            <button
-              onClick={() => {
-                setFilters(prev => ({ ...prev, category: 'all', searchQuery: '' }));
-                setCurrentView('shop');
+            {/* Batch badge */}
+            <div 
+              className="inline-flex items-center gap-2.5 glass-gold px-4 py-2 rounded-full text-xs text-[#8E7348] font-semibold tracking-widest uppercase cursor-pointer"
+              style={{ 
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
+                transition: 'all 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s'
               }}
-              className="w-full sm:w-auto bg-[#FAF8F5] hover:bg-white text-[#141414] text-xs uppercase tracking-widest font-bold py-4 px-8 rounded-xs transition-all flex items-center justify-center sm:justify-start gap-2 cursor-pointer shadow-lg active:scale-98"
             >
-              <span>Shop The Collection</span>
-              <ArrowRight className="w-4 h-4 text-[#8E7348]" />
-            </button>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B5935A] animate-gold-pulse" />
+              Weekly Batch #003 · Allocations Open
+            </div>
 
-            <button
-              onClick={() => setCurrentView('find-hair')}
-              className="w-full sm:w-auto bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 text-xs uppercase tracking-widest font-semibold py-4 px-6 rounded-xs transition-all flex items-center justify-center sm:justify-start gap-2 cursor-pointer"
+            {/* Big headline */}
+            <div style={{ 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+              transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s'
+            }}>
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#141414] leading-[1.02] tracking-tight text-balance">
+                Discover Your<br />
+                <span className="italic text-[#8E7348]">Signature</span><br />
+                Look
+              </h1>
+            </div>
+
+            <div style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.35s'
+            }}>
+              <p className="text-stone-500 font-light text-base leading-relaxed max-w-md">
+                Premium raw hair, ethically sourced worldwide. Handcrafted on demand,
+                inspected in Oslo, delivered to your door.
+              </p>
+            </div>
+
+            {/* CTAs */}
+            <div
+              className="flex flex-col sm:flex-row gap-3"
+              style={{ 
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
+                transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.45s'
+              }}
             >
-              <Scan className="w-4 h-4 text-[#B5935A]" />
-              <span>Find This Hair (AI Match)</span>
-            </button>
+              <button
+                onClick={() => {
+                  setFilters(prev => ({ ...prev, category: 'all', searchQuery: '' }));
+                  setCurrentView('shop');
+                }}
+                className="group flex items-center justify-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] text-xs uppercase tracking-widest font-bold py-4 px-8 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
+              >
+                <span>Shop Collection</span>
+                <ArrowRight className="w-4 h-4 text-[#B5935A] group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <button
+                onClick={() => setCurrentView('find-hair')}
+                className="flex items-center justify-center gap-2.5 glass border border-[#141414]/12 text-[#141414] hover:border-[#B5935A]/40 text-xs uppercase tracking-widest font-semibold py-4 px-6 rounded-2xl transition-all duration-300 cursor-pointer"
+              >
+                <Scan className="w-4 h-4 text-[#B5935A]" />
+                <span>Find This Hair</span>
+              </button>
+            </div>
+
+            {/* Trust stats */}
+            <div 
+              className="pt-6 border-t border-[#141414]/8 grid grid-cols-3 gap-4"
+              style={{ 
+                opacity: isVisible ? 1 : 0,
+                transition: 'opacity 0.7s ease 0.6s'
+              }}
+            >
+              {[
+                { icon: ShieldCheck, label: '100% Single Donor', sub: 'Cuticle Aligned' },
+                { icon: Sparkles, label: '0.03mm HD Lace', sub: 'Swiss Micro-Knot' },
+                { icon: Truck, label: 'Oslo QC Hub', sub: 'Norway Inspected' }
+              ].map(({ icon: Icon, label, sub }) => (
+                <div key={label} className="space-y-1">
+                  <Icon className="w-4 h-4 text-[#B5935A] mb-2" />
+                  <p className="font-serif text-sm font-medium text-[#141414]">{label}</p>
+                  <p className="text-[11px] text-stone-400 font-light">{sub}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Trust Highlights */}
-          <div className="pt-10 border-t border-stone-800/80 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 text-xs font-light text-stone-400">
-            <div className="flex items-center sm:block gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#222222] flex items-center justify-center sm:hidden text-[#B5935A]">
-                <ShieldCheck className="w-5 h-5" />
+          {/* RIGHT: Large editorial imagery with floating card */}
+          <div 
+            className="relative hidden lg:block"
+            style={{ 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateX(0)' : 'translateX(32px)',
+              transition: 'all 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s'
+            }}
+          >
+            {/* Main hero image */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85"
+                alt="Vaelyrion Luxury Campaign"
+                className="w-full h-full object-cover object-center"
+              />
+              {/* Subtle overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            </div>
+
+            {/* Floating product preview card */}
+            <div className="absolute -bottom-6 -left-8 glass rounded-2xl p-4 shadow-xl max-w-[200px] animate-float">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-10 h-12 rounded-lg overflow-hidden bg-stone-200 shrink-0">
+                  <img 
+                    src="https://cdn.shopify.com/s/files/1/2465/8681/files/2080932979095207936xsrAfr1mIeIlZkLF.png"
+                    className="w-full h-full object-cover" 
+                    alt="Featured product"
+                  />
+                </div>
+                <div>
+                  <p className="font-serif text-xs font-medium leading-tight text-[#141414]">Signature HD Wig</p>
+                  <p className="text-[10px] text-stone-400">26" Body Wave</p>
+                </div>
               </div>
-              <div>
-                <strong className="text-white block font-serif text-sm">100% Single Donor</strong>
-                <span>Temple Cuticle Aligned</span>
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-sm text-[#141414]">€395</span>
+                <div className="flex items-center gap-0.5">
+                  {[1,2,3,4,5].map(i => (
+                    <Star key={i} className="w-2.5 h-2.5 fill-[#B5935A] text-[#B5935A]" />
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="flex items-center sm:block gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#222222] flex items-center justify-center sm:hidden text-[#B5935A]">
-                <Sparkles className="w-5 h-5" />
+
+            {/* Floating batch badge */}
+            <div className="absolute top-6 -right-4 glass-gold rounded-2xl p-3 shadow-lg">
+              <p className="text-[10px] uppercase tracking-widest text-[#8E7348] font-bold">Batch #003</p>
+              <p className="font-serif text-sm font-medium text-[#141414] mt-0.5">Now Open</p>
+              <div className="mt-2 w-full bg-stone-200 rounded-full h-1">
+                <div className="bg-[#B5935A] h-1 rounded-full" style={{ width: '68%' }} />
               </div>
-              <div>
-                <strong className="text-white block font-serif text-sm">0.03mm HD Swiss</strong>
-                <span>Micro-Knotted Scalp Melt</span>
-              </div>
-            </div>
-            <div className="flex items-center sm:block gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#222222] flex items-center justify-center sm:hidden text-[#B5935A]">
-                <Truck className="w-5 h-5" />
-              </div>
-              <div>
-                <strong className="text-white block font-serif text-sm">Oslo 3PL QC Hub</strong>
-                <span>Inspected in Norway</span>
-              </div>
+              <p className="text-[9px] text-stone-400 mt-1">68% allocated</p>
             </div>
           </div>
 
         </div>
       </div>
 
+      {/* Bottom scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[11px] text-stone-400 uppercase tracking-widest">
+        <div className="w-px h-8 bg-gradient-to-b from-transparent to-[#B5935A]" />
+        <span>Scroll</span>
+      </div>
     </section>
   );
 };

@@ -1,40 +1,38 @@
 import React, { useState } from 'react';
 import { 
-  User, 
   Package, 
-  Heart, 
   MapPin, 
   Bell, 
-  ShieldCheck, 
   Headphones, 
-  LogOut, 
   Plus, 
-  Check, 
   Truck, 
   Sparkles,
-  Calendar,
-  RotateCcw
+  RotateCcw,
+  LogOut
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { UserAddress } from '../../types';
+import { useAuth } from '../../context/AuthContext';
 
 export const AccountPage: React.FC = () => {
   const { 
-    user, 
     orders, 
-    wishlist, 
-    products, 
     savedAddresses, 
     addSavedAddress, 
     notifications, 
     markNotificationRead,
     setSelectedOrder, 
     setCurrentView,
+    setIsCartDrawerOpen,
     formatPrice,
     addToCart,
     sendMockPushNotification,
     showToast
   } = useStore();
+
+  const { authUser, isAuthenticated, login, register, logout, authError } = useAuth();
+
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authForm, setAuthForm] = useState({ email: '', password: '', firstName: '', lastName: '' });
 
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses' | 'notifications' | 'support'>('orders');
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
@@ -44,27 +42,39 @@ export const AccountPage: React.FC = () => {
     city: '',
     postalCode: '',
     country: 'Norway',
-    phone: user.phone,
+    phone: '',
     isDefault: false
   });
 
   const [supportMessage, setSupportMessage] = useState('');
   const [supportSent, setSupportSent] = useState(false);
 
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (authMode === 'login') {
+        await login(authForm.email, authForm.password);
+        showToast('Login Successful', 'Welcome back to Vaelyrion.', 'gold');
+      } else {
+        await register({
+          email: authForm.email,
+          password: authForm.password,
+          firstName: authForm.firstName,
+          lastName: authForm.lastName
+        });
+        showToast('Account Created', 'Welcome to the Vaelyrion Society.', 'gold');
+      }
+    } catch (err) {
+      // Error is handled in context
+    }
+  };
+
   const handleCreateAddress = (e: React.FormEvent) => {
     e.preventDefault();
     if (newAddr.name && newAddr.street && newAddr.city) {
       addSavedAddress(newAddr);
       setShowAddAddressModal(false);
-      setNewAddr({
-        name: '',
-        street: '',
-        city: '',
-        postalCode: '',
-        country: 'Norway',
-        phone: user.phone,
-        isDefault: false
-      });
+      setNewAddr({ ...newAddr, name: '', street: '', city: '', postalCode: '' });
     }
   };
 
@@ -88,8 +98,82 @@ export const AccountPage: React.FC = () => {
       });
     });
     showToast('Items Added to Bag', 'All creations from your previous order added.', 'gold');
-    setCurrentView('cart');
+    setIsCartDrawerOpen(true);
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
+        <div className="max-w-md w-full p-8 bg-white border border-[#141414]/10 rounded-sm shadow-xs mt-12">
+          <h2 className="font-serif text-3xl font-medium text-center mb-6">
+            {authMode === 'login' ? 'Sign In' : 'Create Account'}
+          </h2>
+          
+          {authError && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded border border-red-200">
+              {authError}
+            </div>
+          )}
+
+          <form onSubmit={handleAuth} className="space-y-4">
+            {authMode === 'register' && (
+              <div className="flex gap-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  required
+                  value={authForm.firstName}
+                  onChange={e => setAuthForm({ ...authForm, firstName: e.target.value })}
+                  className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  required
+                  value={authForm.lastName}
+                  onChange={e => setAuthForm({ ...authForm, lastName: e.target.value })}
+                  className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+                />
+              </div>
+            )}
+            <input
+              type="email"
+              placeholder="Email Address"
+              required
+              value={authForm.email}
+              onChange={e => setAuthForm({ ...authForm, email: e.target.value })}
+              className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              value={authForm.password}
+              onChange={e => setAuthForm({ ...authForm, password: e.target.value })}
+              className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+            />
+            <button
+              type="submit"
+              className="w-full bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs"
+            >
+              {authMode === 'login' ? 'Sign In' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+              className="text-xs text-stone-500 hover:text-stone-900 underline underline-offset-4 cursor-pointer"
+            >
+              {authMode === 'login' ? 'Need an account? Register' : 'Already have an account? Sign In'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const fullName = authUser?.profile?.first_name ? `${authUser.profile.first_name} ${authUser.profile.last_name}` : authUser?.email;
 
   return (
     <div className="bg-[#FAF8F5] min-h-screen pb-24">
@@ -99,27 +183,28 @@ export const AccountPage: React.FC = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-[#141414] text-[#B5935A] font-serif text-2xl flex items-center justify-center font-semibold shadow-md">
-              {user.name.split(' ').map(n => n[0]).join('')}
+              {fullName?.charAt(0).toUpperCase() || '?'}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-stone-900">{user.name}</h1>
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-stone-900">{fullName}</h1>
                 <span className="bg-[#FAF5ED] text-[#8E7348] text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-xs border border-[#E8DFC8]">
-                  VIP Diamond
+                  Society Member
                 </span>
               </div>
               <p className="text-xs text-stone-500 font-light mt-0.5">
-                {user.email} · {user.phone}
+                {authUser?.email}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 text-xs">
             <button
-              onClick={() => sendMockPushNotification('Batch #003 Allocation Ready', 'Your order is currently being conditioned in Oslo.')}
-              className="bg-white hover:bg-stone-50 border border-[#141414]/15 px-3.5 py-2 rounded-xs text-stone-700 font-medium transition-colors cursor-pointer"
+              onClick={() => logout()}
+              className="bg-white hover:bg-stone-50 border border-[#141414]/15 px-3.5 py-2 rounded-xs text-stone-700 font-medium transition-colors cursor-pointer flex items-center gap-2"
             >
-              Simulate Push Alert
+              <LogOut className="w-3.5 h-3.5" />
+              Sign Out
             </button>
           </div>
         </div>
@@ -253,7 +338,7 @@ export const AccountPage: React.FC = () => {
                         <Sparkles className="w-4 h-4 text-[#8E7348]" />
                         <span>Status: <strong className="capitalize">{ord.orderStatus.replace(/_/g, ' ')}</strong></span>
                       </div>
-                      <span className="font-mono text-[11px]">Waybill: {ord.trackingNumber}</span>
+                      <span className="font-mono text-[11px] truncate ml-2">Waybill: {ord.trackingNumber}</span>
                     </div>
 
                   </div>
@@ -314,7 +399,7 @@ export const AccountPage: React.FC = () => {
                           required
                           value={newAddr.name}
                           onChange={(e) => setNewAddr({ ...newAddr, name: e.target.value })}
-                          className="w-full bg-white border border-[#141414]/15 px-3 py-2 rounded-xs"
+                          className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
                         />
                       </div>
                       <div>
@@ -324,7 +409,7 @@ export const AccountPage: React.FC = () => {
                           required
                           value={newAddr.street}
                           onChange={(e) => setNewAddr({ ...newAddr, street: e.target.value })}
-                          className="w-full bg-white border border-[#141414]/15 px-3 py-2 rounded-xs"
+                          className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -335,7 +420,7 @@ export const AccountPage: React.FC = () => {
                             required
                             value={newAddr.city}
                             onChange={(e) => setNewAddr({ ...newAddr, city: e.target.value })}
-                            className="w-full bg-white border border-[#141414]/15 px-3 py-2 rounded-xs"
+                            className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
                           />
                         </div>
                         <div>
@@ -345,7 +430,7 @@ export const AccountPage: React.FC = () => {
                             required
                             value={newAddr.postalCode}
                             onChange={(e) => setNewAddr({ ...newAddr, postalCode: e.target.value })}
-                            className="w-full bg-white border border-[#141414]/15 px-3 py-2 rounded-xs"
+                            className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
                           />
                         </div>
                       </div>
@@ -429,7 +514,7 @@ export const AccountPage: React.FC = () => {
 
               {supportSent && (
                 <p className="text-xs text-[#8E7348] font-medium bg-[#FAF5ED] p-3 rounded-xs border border-[#E8DFC8]">
-                  ✓ Message received by Oslo Concierge team. We will reply to {user.email}.
+                  ✓ Message received by Oslo Concierge team. We will reply to {authUser?.email}.
                 </p>
               )}
             </div>

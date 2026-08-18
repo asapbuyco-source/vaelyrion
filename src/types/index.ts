@@ -118,40 +118,6 @@ export interface Order {
   estimatedDeliveryRange: string;
 }
 
-export interface WeeklyBatch {
-  id: string;
-  batchNumber: string;
-  title: string;
-  status: 'collecting' | 'po_generated' | 'supplier_processing' | 'shipped_china' | 'arrived_norway' | 'fulfilled';
-  cutOffDate: string;
-  totalUnits: number;
-  totalSupplierCost: number;
-  totalCustomerRevenue: number;
-  expectedMargin: number;
-  productsSummary: {
-    category: string;
-    units: number;
-    supplierCost: number;
-    revenue: number;
-  }[];
-  poDocumentNumber: string;
-  createdAt: string;
-}
-
-export interface Supplier {
-  id: string;
-  name: string;
-  location: string;
-  platform: string;
-  contact: string;
-  specialty: string;
-  moq: number;
-  leadTimeDays: number;
-  qualityRating: number;
-  status: 'approved' | 'in_review' | 'preferred';
-  notes: string;
-}
-
 export interface Review {
   id: string;
   author: string;

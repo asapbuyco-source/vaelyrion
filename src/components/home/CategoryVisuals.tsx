@@ -6,64 +6,64 @@ import { CategoryType } from '../../types';
 export const CategoryVisuals: React.FC = () => {
   const { setCurrentView, setFilters } = useStore();
 
-  const visualCategories: {
-    title: string;
-    subtitle: string;
-    category: CategoryType;
-    image: string;
-    tag: string;
-  }[] = [
+  const categories = [
     {
       title: 'HD Swiss Lace Wigs',
-      subtitle: '13x6 Melt Frontals & Glueless 3D Caps',
-      category: 'wigs',
+      subtitle: 'Undetectable melt — 13x6 frontals',
+      category: 'wigs' as CategoryType,
       image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85',
-      tag: 'Haute Craft'
+      tag: 'Most Popular',
+      span: 'lg:col-span-2 lg:row-span-2'
     },
     {
       title: 'Raw Virgin Bundles',
-      subtitle: 'Single-Donor Temple Cuticle Aligned',
-      category: 'bundles',
-      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85',
-      tag: 'Pure Luster'
+      subtitle: 'Single-donor temple cuticle aligned',
+      category: 'bundles' as CategoryType,
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=85',
+      tag: 'Bestseller',
+      span: ''
     },
     {
-      title: '13x6 HD Frontals & Closures',
-      subtitle: '0.03mm Invisible Skin Partings',
-      category: 'frontals',
-      image: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=800&q=85',
-      tag: 'Micro Knots'
+      title: 'HD Frontals & Closures',
+      subtitle: '0.03mm invisible skin partings',
+      category: 'frontals' as CategoryType,
+      image: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=600&q=85',
+      tag: 'Micro Knots',
+      span: ''
     },
     {
-      title: 'Seamless Clip-In Extensions',
-      subtitle: 'Ultra-Flat Polyurethane Band Sets',
-      category: 'extensions',
-      image: 'https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?auto=format&fit=crop&w=800&q=85',
-      tag: 'Instant Volume'
+      title: 'Clip-In Extensions',
+      subtitle: 'Ultra-flat polyurethane band sets',
+      category: 'extensions' as CategoryType,
+      image: 'https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?auto=format&fit=crop&w=600&q=85',
+      tag: 'Instant Volume',
+      span: ''
     },
     {
-      title: 'Mulberry Silk & Care Kits',
-      subtitle: '22-Momme Bonnets & Brass Detangling',
-      category: 'accessories',
-      image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=85',
-      tag: 'Longevity'
-    }
+      title: 'Silk & Care Kits',
+      subtitle: '22-momme mulberry silk bonnets',
+      category: 'accessories' as CategoryType,
+      image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=85',
+      tag: 'Longevity',
+      span: ''
+    },
   ];
 
-  const handleCategoryClick = (cat: CategoryType) => {
+  const handleClick = (cat: CategoryType) => {
     setFilters(prev => ({ ...prev, category: cat, searchQuery: '' }));
     setCurrentView('shop');
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+      {/* Section Header */}
+      <div className="flex items-end justify-between mb-10">
         <div>
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
-            Curated Categories
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium mt-1">
-            Shop By Atelier Discipline
+          <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">
+            Collections
+          </p>
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
+            Shop By Category
           </h2>
         </div>
         <button
@@ -71,43 +71,49 @@ export const CategoryVisuals: React.FC = () => {
             setFilters(prev => ({ ...prev, category: 'all' }));
             setCurrentView('shop');
           }}
-          className="text-xs uppercase tracking-widest font-semibold text-[#141414] hover:text-[#8E7348] transition-colors flex items-center gap-1 cursor-pointer"
+          className="hidden sm:flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold text-[#141414] hover:text-[#8E7348] transition-colors cursor-pointer group"
         >
-          <span>View Complete Catalog</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>View All</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {visualCategories.map((item, idx) => (
+      {/* Masonry-style category grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 auto-rows-[220px] lg:auto-rows-[200px]">
+        {categories.map((item, idx) => (
           <div
             key={idx}
-            onClick={() => handleCategoryClick(item.category)}
-            className={`group relative overflow-hidden rounded-sm cursor-pointer border border-[#141414]/10 bg-stone-100 ${
-              idx === 0 ? 'sm:col-span-2 lg:col-span-2 aspect-16/9 lg:aspect-auto' : 'aspect-4/5'
-            }`}
+            onClick={() => handleClick(item.category)}
+            className={`group relative overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-all duration-500 ${item.span}`}
           >
             <img
               src={item.image}
               alt={item.title}
-              className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-700 ease-out"
+              className="w-full h-full object-cover object-center transition-transform duration-700 ease-out will-change-transform group-hover:scale-[1.06]"
+              loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-            <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-white">
-              <span className="bg-[#141414]/80 backdrop-blur-xs text-[#FAF8F5] text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-xs w-fit border border-white/15">
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+
+            {/* Top tag */}
+            <div className="absolute top-4 left-4">
+              <span className="glass-dark text-[#E8DFC8] text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-white/10">
                 {item.tag}
               </span>
+            </div>
 
-              <div className="space-y-1">
-                <h3 className="font-serif text-2xl sm:text-3xl font-medium leading-tight group-hover:text-[#E8DFC8] transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-stone-300 font-light">{item.subtitle}</p>
-                <div className="pt-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#B5935A]">
-                  <span>Explore</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </div>
+            {/* Bottom info */}
+            <div className="absolute bottom-0 inset-x-0 p-5 text-white">
+              <h3 className="font-serif text-xl lg:text-2xl font-medium leading-tight group-hover:text-[#E8DFC8] transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-xs text-stone-300 font-light mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {item.subtitle}
+              </p>
+              <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#B5935A]">
+                <span>Explore</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </div>
           </div>
