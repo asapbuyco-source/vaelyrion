@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { CategoryType } from '../../types';
+import { SmartImage } from '../common/SmartImage';
 
 export const CategoryVisuals: React.FC = () => {
   const { setCurrentView, setFilters } = useStore();
@@ -59,10 +60,10 @@ export const CategoryVisuals: React.FC = () => {
       {/* Section Header */}
       <div className="flex items-end justify-between mb-10">
         <div>
-          <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">
+          <p className="section-label text-xs uppercase tracking-[0.25em] text-[#9C7C43] font-semibold mb-2">
             Collections
           </p>
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#16150F] font-medium">
             Shop By Category
           </h2>
         </div>
@@ -71,7 +72,7 @@ export const CategoryVisuals: React.FC = () => {
             setFilters(prev => ({ ...prev, category: 'all' }));
             setCurrentView('shop');
           }}
-          className="hidden sm:flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold text-[#141414] hover:text-[#8E7348] transition-colors cursor-pointer group"
+          className="hidden sm:flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold text-[#16150F] hover:text-[#7E6436] transition-colors cursor-pointer group"
         >
           <span>View All</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -84,34 +85,34 @@ export const CategoryVisuals: React.FC = () => {
           <div
             key={idx}
             onClick={() => handleClick(item.category)}
-            className={`group relative overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-all duration-500 ${item.span}`}
+            className={`group relative overflow-hidden rounded-md cursor-pointer border border-[#16150F]/10 transition-all duration-500 ${item.span}`}
           >
-            <img
+            <SmartImage
               src={item.image}
               alt={item.title}
+              fallbackKind="portrait"
               className="w-full h-full object-cover object-center transition-transform duration-700 ease-out will-change-transform group-hover:scale-[1.06]"
-              loading="lazy"
             />
 
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#16150F]/80 via-[#16150F]/15 to-transparent" />
 
             {/* Top tag */}
             <div className="absolute top-4 left-4">
-              <span className="glass-dark text-[#E8DFC8] text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-white/10">
+              <span className="glass-dark text-[#E4D9C1] text-[9.5px] uppercase font-semibold tracking-[0.16em] px-2.5 py-1 rounded-sm">
                 {item.tag}
               </span>
             </div>
 
             {/* Bottom info */}
             <div className="absolute bottom-0 inset-x-0 p-5 text-white">
-              <h3 className="font-serif text-xl lg:text-2xl font-medium leading-tight group-hover:text-[#E8DFC8] transition-colors">
+              <h3 className="font-serif text-xl lg:text-2xl font-medium leading-tight group-hover:text-[#E4D9C1] transition-colors">
                 {item.title}
               </h3>
               <p className="text-xs text-stone-300 font-light mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 {item.subtitle}
               </p>
-              <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#B5935A]">
+              <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#9C7C43]">
                 <span>Explore</span>
                 <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-300" />
               </div>

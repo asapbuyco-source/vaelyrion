@@ -103,8 +103,8 @@ export const AccountPage: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
-        <div className="max-w-md w-full p-8 bg-white border border-[#141414]/10 rounded-sm shadow-xs mt-12">
+      <div className="bg-[#F6F3EE] min-h-screen pb-24 flex items-center justify-center">
+        <div className="max-w-md w-full p-8 bg-white border border-[#16150F]/10 rounded-sm shadow-xs mt-12">
           <h2 className="font-serif text-3xl font-medium text-center mb-6">
             {authMode === 'login' ? 'Sign In' : 'Create Account'}
           </h2>
@@ -124,7 +124,7 @@ export const AccountPage: React.FC = () => {
                   required
                   value={authForm.firstName}
                   onChange={e => setAuthForm({ ...authForm, firstName: e.target.value })}
-                  className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+                  className="w-full bg-[#F6F3EE] border border-[#16150F]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
                 />
                 <input
                   type="text"
@@ -132,7 +132,7 @@ export const AccountPage: React.FC = () => {
                   required
                   value={authForm.lastName}
                   onChange={e => setAuthForm({ ...authForm, lastName: e.target.value })}
-                  className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+                  className="w-full bg-[#F6F3EE] border border-[#16150F]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
                 />
               </div>
             )}
@@ -142,7 +142,7 @@ export const AccountPage: React.FC = () => {
               required
               value={authForm.email}
               onChange={e => setAuthForm({ ...authForm, email: e.target.value })}
-              className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+              className="w-full bg-[#F6F3EE] border border-[#16150F]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
             />
             <input
               type="password"
@@ -150,11 +150,11 @@ export const AccountPage: React.FC = () => {
               required
               value={authForm.password}
               onChange={e => setAuthForm({ ...authForm, password: e.target.value })}
-              className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+              className="w-full bg-[#F6F3EE] border border-[#16150F]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
             />
             <button
               type="submit"
-              className="w-full bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs"
+              className="w-full bg-[#16150F] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs"
             >
               {authMode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
@@ -176,19 +176,19 @@ export const AccountPage: React.FC = () => {
   const fullName = authUser?.profile?.first_name ? `${authUser.profile.first_name} ${authUser.profile.last_name}` : authUser?.email;
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
       {/* Account Header */}
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#EFEAE2] border-b border-[#16150F]/10 py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-[#141414] text-[#B5935A] font-serif text-2xl flex items-center justify-center font-semibold shadow-md">
+            <div className="w-16 h-16 rounded-full bg-[#16150F] text-[#9C7C43] font-serif text-2xl flex items-center justify-center font-semibold shadow-md">
               {fullName?.charAt(0).toUpperCase() || '?'}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-serif text-2xl sm:text-3xl font-medium text-stone-900">{fullName}</h1>
-                <span className="bg-[#FAF5ED] text-[#8E7348] text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-xs border border-[#E8DFC8]">
+                <span className="bg-[#F3ECDF] text-[#7E6436] text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-xs border border-[#E4D9C1]">
                   Society Member
                 </span>
               </div>
@@ -201,7 +201,7 @@ export const AccountPage: React.FC = () => {
           <div className="flex items-center gap-3 text-xs">
             <button
               onClick={() => logout()}
-              className="bg-white hover:bg-stone-50 border border-[#141414]/15 px-3.5 py-2 rounded-xs text-stone-700 font-medium transition-colors cursor-pointer flex items-center gap-2"
+              className="bg-white hover:bg-stone-50 border border-[#16150F]/15 px-3.5 py-2 rounded-xs text-stone-700 font-medium transition-colors cursor-pointer flex items-center gap-2"
             >
               <LogOut className="w-3.5 h-3.5" />
               Sign Out
@@ -213,7 +213,7 @@ export const AccountPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         
         {/* Navigation Tabs */}
-        <div className="flex border-b border-[#141414]/10 gap-8 overflow-x-auto">
+        <div className="flex border-b border-[#16150F]/10 gap-8 overflow-x-auto">
           {[
             { id: 'orders', label: 'Order History & Batch Tracking', icon: Package, count: orders.length },
             { id: 'addresses', label: 'Saved Addresses', icon: MapPin, count: savedAddresses.length },
@@ -226,20 +226,20 @@ export const AccountPage: React.FC = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`pb-3.5 text-xs uppercase tracking-widest font-semibold flex items-center gap-2 whitespace-nowrap transition-colors relative cursor-pointer ${
-                  activeTab === tab.id ? 'text-[#141414]' : 'text-stone-400 hover:text-stone-700'
+                  activeTab === tab.id ? 'text-[#16150F]' : 'text-stone-400 hover:text-stone-700'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
                 <span>{tab.label}</span>
                 {tab.count !== undefined && tab.count > 0 && (
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                    activeTab === tab.id ? 'bg-[#141414] text-white' : 'bg-stone-200 text-stone-600'
+                    activeTab === tab.id ? 'bg-[#16150F] text-white' : 'bg-stone-200 text-stone-600'
                   }`}>
                     {tab.count}
                   </span>
                 )}
                 {activeTab === tab.id && (
-                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#B5935A]"></span>
+                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#9C7C43]"></span>
                 )}
               </button>
             );
@@ -253,13 +253,13 @@ export const AccountPage: React.FC = () => {
           {activeTab === 'orders' && (
             <div className="space-y-6">
               {orders.length === 0 ? (
-                <div className="bg-white border border-[#141414]/10 rounded-sm p-12 text-center space-y-3">
+                <div className="bg-white border border-[#16150F]/10 rounded-sm p-12 text-center space-y-3">
                   <Package className="w-10 h-10 text-stone-300 mx-auto" />
                   <h3 className="font-serif text-lg text-stone-900">No previous orders</h3>
                   <p className="text-xs text-stone-500 font-light">Explore our raw hair collections to make your first batch reservation.</p>
                   <button
                     onClick={() => setCurrentView('shop')}
-                    className="bg-[#141414] text-white text-xs uppercase tracking-widest px-6 py-2.5 rounded-xs"
+                    className="bg-[#16150F] text-white text-xs uppercase tracking-widest px-6 py-2.5 rounded-xs"
                   >
                     Browse Collections
                   </button>
@@ -268,15 +268,15 @@ export const AccountPage: React.FC = () => {
                 orders.map((ord) => (
                   <div
                     key={ord.id}
-                    className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-6 shadow-xs"
+                    className="bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-6 shadow-xs"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#141414]/8 pb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#16150F]/8 pb-4">
                       <div>
                         <div className="flex items-center gap-3">
                           <h3 className="font-serif text-xl font-semibold text-stone-900">
                             ORDER #{ord.orderNumber}
                           </h3>
-                          <span className="bg-[#FAF5ED] text-[#8E7348] text-xs font-semibold px-2.5 py-0.5 rounded-xs border border-[#E8DFC8]">
+                          <span className="bg-[#F3ECDF] text-[#7E6436] text-xs font-semibold px-2.5 py-0.5 rounded-xs border border-[#E4D9C1]">
                             {ord.batchId.toUpperCase()}
                           </span>
                         </div>
@@ -291,15 +291,15 @@ export const AccountPage: React.FC = () => {
                             setSelectedOrder(ord);
                             setCurrentView('tracking');
                           }}
-                          className="bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold px-4 py-2.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          className="bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold px-4 py-2.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
                         >
-                          <Truck className="w-3.5 h-3.5 text-[#B5935A]" />
+                          <Truck className="w-3.5 h-3.5 text-[#9C7C43]" />
                           <span>Track Live Timeline</span>
                         </button>
 
                         <button
                           onClick={() => handleReorder(ord)}
-                          className="bg-white hover:bg-stone-50 border border-[#141414]/15 text-stone-800 text-xs uppercase tracking-widest font-semibold px-4 py-2.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                          className="bg-white hover:bg-stone-50 border border-[#16150F]/15 text-stone-800 text-xs uppercase tracking-widest font-semibold px-4 py-2.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer"
                         >
                           <RotateCcw className="w-3 h-3" />
                           <span>Reorder</span>
@@ -310,7 +310,7 @@ export const AccountPage: React.FC = () => {
                     {/* Order Items */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {ord.items.map((item) => (
-                        <div key={item.id} className="flex gap-3 text-xs p-3 bg-[#FAF8F5] rounded-xs border border-[#141414]/6">
+                        <div key={item.id} className="flex gap-3 text-xs p-3 bg-[#F6F3EE] rounded-xs border border-[#16150F]/6">
                           <img
                             src={item.product.images[0]}
                             alt={item.product.title}
@@ -333,9 +333,9 @@ export const AccountPage: React.FC = () => {
                     </div>
 
                     {/* Current Step preview */}
-                    <div className="p-3 bg-[#FAF5ED] rounded-xs border border-[#E5DAC8] text-xs text-[#7A5B28] flex items-center justify-between">
+                    <div className="p-3 bg-[#F3ECDF] rounded-xs border border-[#E5DAC8] text-xs text-[#7A5B28] flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#8E7348]" />
+                        <Sparkles className="w-4 h-4 text-[#7E6436]" />
                         <span>Status: <strong className="capitalize">{ord.orderStatus.replace(/_/g, ' ')}</strong></span>
                       </div>
                       <span className="font-mono text-[11px] truncate ml-2">Waybill: {ord.trackingNumber}</span>
@@ -356,7 +356,7 @@ export const AccountPage: React.FC = () => {
                 </p>
                 <button
                   onClick={() => setShowAddAddressModal(true)}
-                  className="bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-wider font-semibold px-4 py-2.5 rounded-xs flex items-center gap-1.5 cursor-pointer"
+                  className="bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-wider font-semibold px-4 py-2.5 rounded-xs flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add New Address</span>
@@ -367,12 +367,12 @@ export const AccountPage: React.FC = () => {
                 {savedAddresses.map((addr) => (
                   <div
                     key={addr.id}
-                    className="bg-white border border-[#141414]/10 rounded-sm p-6 space-y-3 relative shadow-xs"
+                    className="bg-white border border-[#16150F]/10 rounded-sm p-6 space-y-3 relative shadow-xs"
                   >
                     <div className="flex items-center justify-between">
                       <h4 className="font-serif text-base font-semibold text-stone-900">{addr.name}</h4>
                       {addr.isDefault && (
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-[#8E7348] bg-[#FAF5ED] px-2 py-0.5 rounded-xs border border-[#E8DFC8]">
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-[#7E6436] bg-[#F3ECDF] px-2 py-0.5 rounded-xs border border-[#E4D9C1]">
                           Primary
                         </span>
                       )}
@@ -389,7 +389,7 @@ export const AccountPage: React.FC = () => {
               {/* Add Address Modal */}
               {showAddAddressModal && (
                 <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-                  <div className="bg-[#FAF8F5] max-w-md w-full rounded-sm p-6 sm:p-8 space-y-5 border border-[#141414]/10 shadow-2xl">
+                  <div className="bg-[#F6F3EE] max-w-md w-full rounded-sm p-6 sm:p-8 space-y-5 border border-[#16150F]/10 shadow-2xl">
                     <h3 className="font-serif text-xl font-medium text-stone-900">Add New Shipping Address</h3>
                     <form onSubmit={handleCreateAddress} className="space-y-4 text-xs">
                       <div>
@@ -399,7 +399,7 @@ export const AccountPage: React.FC = () => {
                           required
                           value={newAddr.name}
                           onChange={(e) => setNewAddr({ ...newAddr, name: e.target.value })}
-                          className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
+                          className="w-full bg-white border border-[#16150F]/15 px-3 py-3 rounded-xs"
                         />
                       </div>
                       <div>
@@ -409,7 +409,7 @@ export const AccountPage: React.FC = () => {
                           required
                           value={newAddr.street}
                           onChange={(e) => setNewAddr({ ...newAddr, street: e.target.value })}
-                          className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
+                          className="w-full bg-white border border-[#16150F]/15 px-3 py-3 rounded-xs"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -420,7 +420,7 @@ export const AccountPage: React.FC = () => {
                             required
                             value={newAddr.city}
                             onChange={(e) => setNewAddr({ ...newAddr, city: e.target.value })}
-                            className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
+                            className="w-full bg-white border border-[#16150F]/15 px-3 py-3 rounded-xs"
                           />
                         </div>
                         <div>
@@ -430,7 +430,7 @@ export const AccountPage: React.FC = () => {
                             required
                             value={newAddr.postalCode}
                             onChange={(e) => setNewAddr({ ...newAddr, postalCode: e.target.value })}
-                            className="w-full bg-white border border-[#141414]/15 px-3 py-3 rounded-xs"
+                            className="w-full bg-white border border-[#16150F]/15 px-3 py-3 rounded-xs"
                           />
                         </div>
                       </div>
@@ -438,13 +438,13 @@ export const AccountPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setShowAddAddressModal(false)}
-                          className="flex-1 py-2.5 text-stone-600 border border-[#141414]/20 rounded-xs"
+                          className="flex-1 py-2.5 text-stone-600 border border-[#16150F]/20 rounded-xs"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          className="flex-1 py-2.5 bg-[#141414] text-white rounded-xs font-semibold uppercase tracking-wider"
+                          className="flex-1 py-2.5 bg-[#16150F] text-white rounded-xs font-semibold uppercase tracking-wider"
                         >
                           Save Address
                         </button>
@@ -465,12 +465,12 @@ export const AccountPage: React.FC = () => {
                   onClick={() => markNotificationRead(notif.id)}
                   className={`p-5 rounded-sm border transition-all cursor-pointer ${
                     notif.read
-                      ? 'bg-white border-[#141414]/10 text-stone-600'
-                      : 'bg-[#FAF5ED] border-[#B5935A]/50 text-stone-900 shadow-xs'
+                      ? 'bg-white border-[#16150F]/10 text-stone-600'
+                      : 'bg-[#F3ECDF] border-[#9C7C43]/50 text-stone-900 shadow-xs'
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="font-semibold uppercase tracking-wider text-[#8E7348]">{notif.title}</span>
+                    <span className="font-semibold uppercase tracking-wider text-[#7E6436]">{notif.title}</span>
                     <span className="text-stone-400 text-[11px]">{notif.timestamp}</span>
                   </div>
                   <p className="text-xs font-light leading-relaxed">{notif.message}</p>
@@ -481,7 +481,7 @@ export const AccountPage: React.FC = () => {
 
           {/* SUPPORT TAB */}
           {activeTab === 'support' && (
-            <div className="max-w-2xl bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-6 shadow-xs">
+            <div className="max-w-2xl bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-6 shadow-xs">
               <div className="space-y-1">
                 <h3 className="font-serif text-xl font-medium text-stone-900">Bespoke Hair Stylist Concierge</h3>
                 <p className="text-xs text-stone-500 font-light">
@@ -500,20 +500,20 @@ export const AccountPage: React.FC = () => {
                     value={supportMessage}
                     onChange={(e) => setSupportMessage(e.target.value)}
                     placeholder="Ask about lace custom tinting, batch dispatch dates, hair density advice, or custom order inquiries..."
-                    className="w-full bg-[#FAF8F5] border border-[#141414]/15 p-3 rounded-xs focus:outline-none focus:border-[#B5935A] font-light"
+                    className="w-full bg-[#F6F3EE] border border-[#16150F]/15 p-3 rounded-xs focus:outline-none focus:border-[#9C7C43] font-light"
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  className="bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold py-3 px-6 rounded-xs transition-colors cursor-pointer"
+                  className="bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold py-3 px-6 rounded-xs transition-colors cursor-pointer"
                 >
                   Transmit Message to Concierge
                 </button>
               </form>
 
               {supportSent && (
-                <p className="text-xs text-[#8E7348] font-medium bg-[#FAF5ED] p-3 rounded-xs border border-[#E8DFC8]">
+                <p className="text-xs text-[#7E6436] font-medium bg-[#F3ECDF] p-3 rounded-xs border border-[#E4D9C1]">
                   ✓ Message received by Oslo Concierge team. We will reply to {authUser?.email}.
                 </p>
               )}

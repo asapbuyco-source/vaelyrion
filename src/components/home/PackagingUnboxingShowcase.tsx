@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sparkles, Check } from 'lucide-react';
+import { SmartImage } from '../common/SmartImage';
 
 export const PackagingUnboxingShowcase: React.FC = () => {
   const inclusions = [
@@ -16,19 +17,19 @@ export const PackagingUnboxingShowcase: React.FC = () => {
           
           {/* Left: Image with floating tag */}
           <div className="relative">
-            <div className="rounded-3xl overflow-hidden shadow-xl bg-stone-900 aspect-[4/3]">
-              <img
+            <div className="rounded-lg overflow-hidden shadow-xl bg-[#16150F] aspect-[4/3]">
+              <SmartImage
                 src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85"
-                alt="Vaelyrion Luxury Packaging"
+                alt="Vaelyrion luxury packaging"
+                fallbackKind="care"
                 className="w-full h-full object-cover"
-                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
             
             {/* Floating card */}
             <div className="absolute -bottom-4 right-2 sm:-right-6 glass-dark rounded-2xl p-4 shadow-2xl border border-white/10 max-w-[200px]">
-              <div className="flex items-center gap-2 text-[#B5935A] mb-2">
+              <div className="flex items-center gap-2 text-[#9C7C43] mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span className="text-[10px] uppercase font-bold tracking-widest">Included Free</span>
               </div>
@@ -40,10 +41,10 @@ export const PackagingUnboxingShowcase: React.FC = () => {
 
           {/* Right: Editorial copy */}
           <div className="space-y-6">
-            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold">
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#9C7C43] font-semibold">
               The Unboxing Ritual
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#16150F] font-medium leading-tight">
               An Elevated Experience<br />From the First Touch
             </h2>
             <p className="text-sm text-stone-500 font-light leading-relaxed">
@@ -54,8 +55,8 @@ export const PackagingUnboxingShowcase: React.FC = () => {
               {inclusions.map((item, idx) => (
                 <div key={idx} className="card-float bg-white p-5 rounded-2xl space-y-2">
                   <div className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-[#FAF5ED] border border-[#E8DFC8] flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#B5935A]" />
+                    <span className="w-5 h-5 rounded-full bg-[#F3ECDF] border border-[#E4D9C1] flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 text-[#9C7C43]" />
                     </span>
                     <h4 className="font-serif text-sm font-semibold text-stone-900">{item.title}</h4>
                   </div>

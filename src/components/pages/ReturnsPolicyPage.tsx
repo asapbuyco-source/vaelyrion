@@ -6,14 +6,14 @@ export const ReturnsPolicyPage: React.FC = () => {
   const { setCurrentView } = useStore();
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#EFEAE2] border-b border-[#16150F]/10 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-2">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#7E6436] font-semibold">
             Client Assurance
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#141414]">
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#16150F]">
             RETURNS & 14-DAY HYGIENE POLICY
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-lg mx-auto">
@@ -24,8 +24,8 @@ export const ReturnsPolicyPage: React.FC = () => {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-8 text-xs sm:text-sm text-stone-800 leading-relaxed font-light">
         
-        <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
-          <h3 className="font-serif text-lg font-semibold text-stone-900 border-b border-[#141414]/8 pb-2">
+        <div className="bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
+          <h3 className="font-serif text-lg font-semibold text-stone-900 border-b border-[#16150F]/8 pb-2">
             14-Day Untouched Lace Return Guarantee
           </h3>
           <p>
@@ -33,9 +33,9 @@ export const ReturnsPolicyPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-[#FAF5ED] border border-[#E5DAC8] rounded-sm p-6 sm:p-8 space-y-4 text-xs text-[#7A5B28]">
+        <div className="bg-[#F3ECDF] border border-[#E5DAC8] rounded-sm p-6 sm:p-8 space-y-4 text-xs text-[#7A5B28]">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-[#8E7348]" />
+            <AlertCircle className="w-4 h-4 text-[#7E6436]" />
             <h4 className="font-serif text-sm font-semibold text-stone-900">Hygiene & Safety Criteria</h4>
           </div>
           <p>
@@ -49,8 +49,8 @@ export const ReturnsPolicyPage: React.FC = () => {
           </ul>
         </div>
 
-        <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
-          <h3 className="font-serif text-lg font-semibold text-stone-900 border-b border-[#141414]/8 pb-2">
+        <div className="bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
+          <h3 className="font-serif text-lg font-semibold text-stone-900 border-b border-[#16150F]/8 pb-2">
             How to Initiate a Return
           </h3>
           <p>

@@ -55,15 +55,15 @@ export const ShopPage: React.FC = () => {
     (filters.searchQuery ? 1 : 0);
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-28">
+    <div className="bg-[#F6F3EE] min-h-screen pb-28">
       
       {/* Editorial Category Header */}
-      <div className="bg-gradient-to-b from-[#F4EFEA] to-[#FAF8F5] border-b border-[#141414]/8 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="bg-gradient-to-b from-[#EFEAE2] to-[#F6F3EE] border-b border-[#16150F]/8 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center space-y-4">
-          <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold inline-block">
+          <p className="section-label text-xs uppercase tracking-[0.25em] text-[#9C7C43] font-semibold inline-block">
             Atelier Haute Coiffure
           </p>
-          <h1 className="font-serif text-3xl sm:text-5xl font-medium text-[#141414]">
+          <h1 className="font-serif text-3xl sm:text-5xl font-medium text-[#16150F]">
             {filters.category === 'all' && 'The Complete Collection'}
             {filters.category === 'wigs' && 'HD Swiss Lace Wigs'}
             {filters.category === 'bundles' && 'Raw Virgin Bundles'}
@@ -86,8 +86,8 @@ export const ShopPage: React.FC = () => {
                 onClick={() => setFilters(prev => ({ ...prev, category: cat.id }))}
                 className={`py-2 px-5 text-xs tracking-wider uppercase font-semibold rounded-full transition-all duration-200 whitespace-nowrap cursor-pointer ${
                   filters.category === cat.id
-                    ? 'bg-[#141414] text-white shadow-sm'
-                    : 'glass border border-[#141414]/10 text-stone-600 hover:text-stone-900 hover:border-[#141414]/20'
+                    ? 'bg-[#16150F] text-white shadow-sm'
+                    : 'glass border border-[#16150F]/10 text-stone-600 hover:text-stone-900 hover:border-[#16150F]/20'
                 }`}
               >
                 {cat.label}
@@ -101,7 +101,7 @@ export const ShopPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         
         {/* Top Control Bar: Total count, Search indicator, Sorting, Mobile Filter Toggle */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#141414]/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#16150F]/10">
           
           <div className="flex items-center gap-3">
             <span className="text-xs text-stone-600 uppercase tracking-widest font-light">
@@ -111,7 +111,7 @@ export const ShopPage: React.FC = () => {
             {activeFiltersCount > 0 && (
               <button
                 onClick={resetFilters}
-                className="flex items-center gap-1 text-[11px] text-[#8E7348] hover:text-black transition-colors font-medium cursor-pointer"
+                className="flex items-center gap-1 text-[11px] text-[#7E6436] hover:text-black transition-colors font-medium cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reset ({activeFiltersCount})</span>
@@ -124,12 +124,12 @@ export const ShopPage: React.FC = () => {
             {/* Mobile Filter Button */}
             <button
               onClick={() => setIsMobileFilterOpen(true)}
-              className="lg:hidden flex items-center gap-1.5 py-2 px-3.5 bg-white border border-[#141414]/15 rounded-xs text-xs uppercase tracking-wider font-semibold cursor-pointer"
+              className="lg:hidden flex items-center gap-1.5 py-2 px-3.5 bg-white border border-[#16150F]/15 rounded-xs text-xs uppercase tracking-wider font-semibold cursor-pointer"
             >
-              <Filter className="w-3.5 h-3.5 text-[#B5935A]" />
+              <Filter className="w-3.5 h-3.5 text-[#9C7C43]" />
               <span>Filters</span>
               {activeFiltersCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-[#141414] text-white text-[10px] flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-[#16150F] text-white text-[10px] flex items-center justify-center">
                   {activeFiltersCount}
                 </span>
               )}
@@ -141,7 +141,7 @@ export const ShopPage: React.FC = () => {
               <select
                 value={filters.sortBy}
                 onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value as any }))}
-                className="bg-white border border-[#141414]/15 py-2 px-3 rounded-xs text-xs text-stone-800 focus:outline-none focus:border-[#B5935A] cursor-pointer"
+                className="bg-white border border-[#16150F]/15 py-2 px-3 rounded-xs text-xs text-stone-800 focus:outline-none focus:border-[#9C7C43] cursor-pointer"
               >
                 <option value="featured">Featured Curations</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -176,18 +176,18 @@ export const ShopPage: React.FC = () => {
                     key={opt.id}
                     onClick={() => setFilters(prev => ({ ...prev, availability: opt.id as any }))}
                     className={`w-full text-left py-1.5 px-2 rounded-xs flex items-center justify-between transition-colors cursor-pointer ${
-                      filters.availability === opt.id ? 'bg-[#F4EFEA] font-semibold text-black' : 'hover:bg-white text-stone-600'
+                      filters.availability === opt.id ? 'bg-[#EFEAE2] font-semibold text-black' : 'hover:bg-white text-stone-600'
                     }`}
                   >
                     <span>{opt.label}</span>
-                    {filters.availability === opt.id && <Check className="w-3 h-3 text-[#B5935A]" />}
+                    {filters.availability === opt.id && <Check className="w-3 h-3 text-[#9C7C43]" />}
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Hair Texture Filter */}
-            <div className="space-y-3 pt-6 border-t border-[#141414]/8">
+            <div className="space-y-3 pt-6 border-t border-[#16150F]/8">
               <h4 className="text-xs uppercase tracking-widest font-semibold text-stone-900">
                 Hair Texture
               </h4>
@@ -195,7 +195,7 @@ export const ShopPage: React.FC = () => {
                 <button
                   onClick={() => setFilters(prev => ({ ...prev, texture: 'all' }))}
                   className={`py-1 px-2.5 text-[11px] rounded-xs border transition-colors cursor-pointer ${
-                    filters.texture === 'all' ? 'bg-[#141414] text-white border-black font-medium' : 'bg-white border-[#141414]/10 text-stone-600'
+                    filters.texture === 'all' ? 'bg-[#16150F] text-white border-black font-medium' : 'bg-white border-[#16150F]/10 text-stone-600'
                   }`}
                 >
                   All Textures
@@ -205,7 +205,7 @@ export const ShopPage: React.FC = () => {
                     key={tex}
                     onClick={() => setFilters(prev => ({ ...prev, texture: tex }))}
                     className={`py-1 px-2.5 text-[11px] rounded-xs border transition-colors cursor-pointer ${
-                      filters.texture === tex ? 'bg-[#141414] text-white border-black font-medium' : 'bg-white border-[#141414]/10 text-stone-600 hover:border-stone-400'
+                      filters.texture === tex ? 'bg-[#16150F] text-white border-black font-medium' : 'bg-white border-[#16150F]/10 text-stone-600 hover:border-stone-400'
                     }`}
                   >
                     {tex}
@@ -215,7 +215,7 @@ export const ShopPage: React.FC = () => {
             </div>
 
             {/* Length Filter */}
-            <div className="space-y-3 pt-6 border-t border-[#141414]/8">
+            <div className="space-y-3 pt-6 border-t border-[#16150F]/8">
               <h4 className="text-xs uppercase tracking-widest font-semibold text-stone-900">
                 Length
               </h4>
@@ -223,7 +223,7 @@ export const ShopPage: React.FC = () => {
                 <button
                   onClick={() => setFilters(prev => ({ ...prev, length: 'all' }))}
                   className={`py-1 px-2 text-[11px] rounded-xs border transition-colors cursor-pointer text-center ${
-                    filters.length === 'all' ? 'bg-[#141414] text-white border-black font-medium' : 'bg-white border-[#141414]/10 text-stone-600'
+                    filters.length === 'all' ? 'bg-[#16150F] text-white border-black font-medium' : 'bg-white border-[#16150F]/10 text-stone-600'
                   }`}
                 >
                   All
@@ -233,7 +233,7 @@ export const ShopPage: React.FC = () => {
                     key={len}
                     onClick={() => setFilters(prev => ({ ...prev, length: len }))}
                     className={`py-1 px-2 text-[11px] rounded-xs border font-mono transition-colors cursor-pointer text-center ${
-                      filters.length === len ? 'bg-[#141414] text-white border-black font-medium' : 'bg-white border-[#141414]/10 text-stone-600 hover:border-stone-400'
+                      filters.length === len ? 'bg-[#16150F] text-white border-black font-medium' : 'bg-white border-[#16150F]/10 text-stone-600 hover:border-stone-400'
                     }`}
                   >
                     {len.replace(' inch', '"')}
@@ -243,7 +243,7 @@ export const ShopPage: React.FC = () => {
             </div>
 
             {/* Density Filter */}
-            <div className="space-y-3 pt-6 border-t border-[#141414]/8">
+            <div className="space-y-3 pt-6 border-t border-[#16150F]/8">
               <h4 className="text-xs uppercase tracking-widest font-semibold text-stone-900">
                 Density
               </h4>
@@ -251,7 +251,7 @@ export const ShopPage: React.FC = () => {
                 <button
                   onClick={() => setFilters(prev => ({ ...prev, density: 'all' }))}
                   className={`py-1 px-2 text-[11px] rounded-xs border transition-colors cursor-pointer text-center ${
-                    filters.density === 'all' ? 'bg-[#141414] text-white border-black font-medium' : 'bg-white border-[#141414]/10 text-stone-600'
+                    filters.density === 'all' ? 'bg-[#16150F] text-white border-black font-medium' : 'bg-white border-[#16150F]/10 text-stone-600'
                   }`}
                 >
                   All Densities
@@ -261,7 +261,7 @@ export const ShopPage: React.FC = () => {
                     key={den}
                     onClick={() => setFilters(prev => ({ ...prev, density: den }))}
                     className={`py-1 px-2 text-[11px] rounded-xs border transition-colors cursor-pointer text-center ${
-                      filters.density === den ? 'bg-[#141414] text-white border-black font-medium' : 'bg-white border-[#141414]/10 text-stone-600 hover:border-stone-400'
+                      filters.density === den ? 'bg-[#16150F] text-white border-black font-medium' : 'bg-white border-[#16150F]/10 text-stone-600 hover:border-stone-400'
                     }`}
                   >
                     {den}
@@ -271,7 +271,7 @@ export const ShopPage: React.FC = () => {
             </div>
 
             {/* Lace Architecture */}
-            <div className="space-y-3 pt-6 border-t border-[#141414]/8">
+            <div className="space-y-3 pt-6 border-t border-[#16150F]/8">
               <h4 className="text-xs uppercase tracking-widest font-semibold text-stone-900">
                 Lace Construction
               </h4>
@@ -279,22 +279,22 @@ export const ShopPage: React.FC = () => {
                 <button
                   onClick={() => setFilters(prev => ({ ...prev, lace: 'all' }))}
                   className={`w-full text-left py-1.5 px-2 rounded-xs flex items-center justify-between transition-colors cursor-pointer ${
-                    filters.lace === 'all' ? 'bg-[#F4EFEA] font-semibold text-black' : 'hover:bg-white text-stone-600'
+                    filters.lace === 'all' ? 'bg-[#EFEAE2] font-semibold text-black' : 'hover:bg-white text-stone-600'
                   }`}
                 >
                   <span>All Lace Types</span>
-                  {filters.lace === 'all' && <Check className="w-3 h-3 text-[#B5935A]" />}
+                  {filters.lace === 'all' && <Check className="w-3 h-3 text-[#9C7C43]" />}
                 </button>
                 {laceTypes.map((lace) => (
                   <button
                     key={lace}
                     onClick={() => setFilters(prev => ({ ...prev, lace }))}
                     className={`w-full text-left py-1.5 px-2 rounded-xs flex items-center justify-between transition-colors cursor-pointer text-[11px] ${
-                      filters.lace === lace ? 'bg-[#F4EFEA] font-semibold text-black' : 'hover:bg-white text-stone-600'
+                      filters.lace === lace ? 'bg-[#EFEAE2] font-semibold text-black' : 'hover:bg-white text-stone-600'
                     }`}
                   >
                     <span className="truncate">{lace}</span>
-                    {filters.lace === lace && <Check className="w-3 h-3 text-[#B5935A]" />}
+                    {filters.lace === lace && <Check className="w-3 h-3 text-[#9C7C43]" />}
                   </button>
                 ))}
               </div>
@@ -306,8 +306,8 @@ export const ShopPage: React.FC = () => {
           <main className="lg:col-span-9">
             {filteredProducts.length === 0 ? (
               <div className="bg-white rounded-3xl p-16 text-center space-y-4 shadow-sm">
-                <div className="w-16 h-16 rounded-2xl bg-[#FAF5ED] flex items-center justify-center mx-auto">
-                  <Search className="w-7 h-7 text-[#B5935A]" />
+                <div className="w-16 h-16 rounded-2xl bg-[#F3ECDF] flex items-center justify-center mx-auto">
+                  <Search className="w-7 h-7 text-[#9C7C43]" />
                 </div>
                 <h3 className="font-serif text-xl text-stone-900">No matching pieces found</h3>
                 <p className="text-sm text-stone-400 font-light max-w-xs mx-auto">
@@ -315,7 +315,7 @@ export const ShopPage: React.FC = () => {
                 </p>
                 <button
                   onClick={resetFilters}
-                  className="bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold px-8 py-3 rounded-2xl hover:bg-[#2A2A2A] transition-colors cursor-pointer"
+                  className="bg-[#16150F] text-white text-xs uppercase tracking-widest font-semibold px-8 py-3 rounded-2xl hover:bg-[#26241A] transition-colors cursor-pointer"
                 >
                   Reset All Filters
                 </button>
@@ -341,9 +341,9 @@ export const ShopPage: React.FC = () => {
             className="absolute inset-0 bg-black/50 backdrop-blur-xs"
           />
           <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div className="w-screen max-w-sm bg-[#FAF8F5] shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+5rem)]">
+            <div className="w-screen max-w-sm bg-[#F6F3EE] shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+5rem)]">
               
-              <div className="flex items-center justify-between border-b border-[#141414]/10 pb-4">
+              <div className="flex items-center justify-between border-b border-[#16150F]/10 pb-4">
                 <h3 className="font-serif text-lg font-medium text-stone-900">Refine Selection</h3>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
@@ -366,7 +366,7 @@ export const ShopPage: React.FC = () => {
                       key={opt.id}
                       onClick={() => setFilters(prev => ({ ...prev, availability: opt.id as any }))}
                       className={`w-full text-left py-2 px-3 rounded-xs text-xs flex justify-between ${
-                        filters.availability === opt.id ? 'bg-[#141414] text-white font-medium' : 'bg-white text-stone-700'
+                        filters.availability === opt.id ? 'bg-[#16150F] text-white font-medium' : 'bg-white text-stone-700'
                       }`}
                     >
                       <span>{opt.label}</span>
@@ -384,7 +384,7 @@ export const ShopPage: React.FC = () => {
                       key={tex}
                       onClick={() => setFilters(prev => ({ ...prev, texture: filters.texture === tex ? 'all' : tex }))}
                       className={`py-1.5 px-3 text-xs rounded-xs border ${
-                        filters.texture === tex ? 'bg-[#141414] text-white' : 'bg-white text-stone-700'
+                        filters.texture === tex ? 'bg-[#16150F] text-white' : 'bg-white text-stone-700'
                       }`}
                     >
                       {tex}
@@ -394,16 +394,16 @@ export const ShopPage: React.FC = () => {
               </div>
 
               {/* Apply / Reset Actions */}
-              <div className="pt-6 border-t border-[#141414]/10 flex gap-3">
+              <div className="pt-6 border-t border-[#16150F]/10 flex gap-3">
                 <button
                   onClick={resetFilters}
-                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold border border-[#141414]/20 rounded-2xl"
+                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold border border-[#16150F]/20 rounded-2xl"
                 >
                   Reset
                 </button>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
-                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold bg-[#141414] text-white rounded-2xl"
+                  className="flex-1 py-3 text-xs uppercase tracking-wider font-semibold bg-[#16150F] text-white rounded-2xl"
                 >
                   View ({filteredProducts.length})
                 </button>

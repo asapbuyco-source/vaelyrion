@@ -21,15 +21,15 @@ export const DiscoverPage: React.FC = () => {
   const secondaryArticles = MOCK_ARTICLES.slice(1);
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
       {/* Editorial Header */}
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#EFEAE2] border-b border-[#16150F]/10 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#7E6436] font-semibold">
             The Vaelyrion Gazette & Lookbook
           </span>
-          <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#141414]">
+          <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#16150F]">
             DISCOVER & INSPIRATION
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-xl mx-auto leading-relaxed">
@@ -44,7 +44,7 @@ export const DiscoverPage: React.FC = () => {
         {featuredArticle && (
           <div 
             onClick={() => handleArticleClick(featuredArticle.id)}
-            className="group grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white border border-[#141414]/10 rounded-sm overflow-hidden shadow-xs hover:border-[#B5935A] transition-all cursor-pointer"
+            className="group grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white border border-[#16150F]/10 rounded-sm overflow-hidden shadow-xs hover:border-[#9C7C43] transition-all cursor-pointer"
           >
             <div className="lg:col-span-7 aspect-16/10 lg:aspect-auto overflow-hidden bg-stone-100">
               <img
@@ -57,7 +57,7 @@ export const DiscoverPage: React.FC = () => {
             <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-xs">
-                  <span className="bg-[#FAF5ED] text-[#8E7348] px-2.5 py-0.5 rounded-xs font-semibold uppercase tracking-wider border border-[#E8DFC8]">
+                  <span className="bg-[#F3ECDF] text-[#7E6436] px-2.5 py-0.5 rounded-xs font-semibold uppercase tracking-wider border border-[#E4D9C1]">
                     {featuredArticle.category}
                   </span>
                   <span className="text-stone-400 flex items-center gap-1 font-light">
@@ -66,7 +66,7 @@ export const DiscoverPage: React.FC = () => {
                   </span>
                 </div>
 
-                <h2 className="font-serif text-2xl sm:text-3xl text-stone-900 font-medium group-hover:text-[#8E7348] transition-colors leading-snug">
+                <h2 className="font-serif text-2xl sm:text-3xl text-stone-900 font-medium group-hover:text-[#7E6436] transition-colors leading-snug">
                   {featuredArticle.title}
                 </h2>
 
@@ -75,18 +75,18 @@ export const DiscoverPage: React.FC = () => {
                 </p>
 
                 {featuredArticle.quote && (
-                  <blockquote className="border-l-2 border-[#B5935A] pl-4 italic text-stone-700 text-xs font-serif">
+                  <blockquote className="border-l-2 border-[#9C7C43] pl-4 italic text-stone-700 text-xs font-serif">
                     "{featuredArticle.quote}"
                   </blockquote>
                 )}
               </div>
 
-              <div className="pt-4 border-t border-[#141414]/8 flex items-center justify-between">
+              <div className="pt-4 border-t border-[#16150F]/8 flex items-center justify-between">
                 <div className="text-xs text-stone-500 font-light">
                   <span>By {featuredArticle.author}</span>
                 </div>
 
-                <div className="flex items-center gap-1 text-xs uppercase tracking-widest font-semibold text-[#141414] group-hover:text-[#8E7348]">
+                <div className="flex items-center gap-1 text-xs uppercase tracking-widest font-semibold text-[#16150F] group-hover:text-[#7E6436]">
                   <span>Read Story</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -97,7 +97,7 @@ export const DiscoverPage: React.FC = () => {
 
         {/* Secondary Editorial Stories */}
         <div className="space-y-6">
-          <div className="border-b border-[#141414]/10 pb-4">
+          <div className="border-b border-[#16150F]/10 pb-4">
             <h3 className="font-serif text-2xl text-stone-900 font-medium">Masterclasses & Atelier Notes</h3>
           </div>
 
@@ -106,7 +106,7 @@ export const DiscoverPage: React.FC = () => {
               <div
                 key={article.id}
                 onClick={() => handleArticleClick(article.id)}
-                className="group bg-white border border-[#141414]/10 hover:border-[#B5935A] rounded-sm overflow-hidden transition-all shadow-xs cursor-pointer flex flex-col justify-between"
+                className="group bg-white border border-[#16150F]/10 hover:border-[#9C7C43] rounded-sm overflow-hidden transition-all shadow-xs cursor-pointer flex flex-col justify-between"
               >
                 <div className="aspect-16/9 overflow-hidden bg-stone-100">
                   <img
@@ -119,14 +119,14 @@ export const DiscoverPage: React.FC = () => {
                 <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="text-[#8E7348] font-semibold uppercase tracking-wider">
+                      <span className="text-[#7E6436] font-semibold uppercase tracking-wider">
                         {article.category}
                       </span>
                       <span className="text-stone-400">•</span>
                       <span className="text-stone-400 text-[11px] font-light">{article.readTime}</span>
                     </div>
 
-                    <h4 className="font-serif text-xl text-stone-900 font-medium group-hover:text-[#8E7348] transition-colors leading-snug">
+                    <h4 className="font-serif text-xl text-stone-900 font-medium group-hover:text-[#7E6436] transition-colors leading-snug">
                       {article.title}
                     </h4>
 
@@ -135,9 +135,9 @@ export const DiscoverPage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-[#141414]/8 flex items-center justify-between text-xs text-stone-500 font-light">
+                  <div className="pt-4 border-t border-[#16150F]/8 flex items-center justify-between text-xs text-stone-500 font-light">
                     <span>{article.date}</span>
-                    <span className="text-black font-medium flex items-center gap-1 group-hover:text-[#8E7348]">
+                    <span className="text-black font-medium flex items-center gap-1 group-hover:text-[#7E6436]">
                       Read <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
@@ -148,9 +148,9 @@ export const DiscoverPage: React.FC = () => {
         </div>
 
         {/* Find This Hair Signature Interactive Teaser */}
-        <div className="bg-[#141414] text-[#FAF8F5] p-8 sm:p-12 rounded-sm relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="bg-[#16150F] text-[#F6F3EE] p-8 sm:p-12 rounded-sm relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-xl text-center sm:text-left">
-            <span className="text-xs uppercase tracking-widest text-[#B5935A] font-semibold">
+            <span className="text-xs uppercase tracking-widest text-[#9C7C43] font-semibold">
               Signature Visual Search
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl text-white font-medium">
@@ -163,7 +163,7 @@ export const DiscoverPage: React.FC = () => {
 
           <button
             onClick={() => setCurrentView('find-hair')}
-            className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-3.5 px-8 rounded-xs transition-colors shrink-0 shadow-md cursor-pointer"
+            className="bg-[#9C7C43] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-3.5 px-8 rounded-xs transition-colors shrink-0 shadow-md cursor-pointer"
           >
             Launch Visual Search
           </button>

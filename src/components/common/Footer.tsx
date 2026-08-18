@@ -17,46 +17,46 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#141414] text-[#FAF8F5] pt-16 pb-32 lg:pb-12 border-t border-[#262626]">
+    <footer className="bg-[#16150F] text-[#F6F3EE] pt-16 pb-32 lg:pb-12 border-t border-[#262626]">
       {/* Brand Value Pillars */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 border-b border-[#2A2A2A]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 border-b border-[#26241A]">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
           
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
+            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#9C7C43] mb-1">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">100% Single-Donor Raw Hair</h4>
+            <h4 className="font-serif text-lg tracking-wide text-[#F6F3EE]">100% Single-Donor Raw Hair</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
               Cuticle-aligned temple hair with zero chemical baths. Retains natural vitality and movement for 2+ years.
             </p>
           </div>
 
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
+            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#9C7C43] mb-1">
               <Truck className="w-5 h-5" />
             </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Curated Weekly Batches</h4>
+            <h4 className="font-serif text-lg tracking-wide text-[#F6F3EE]">Curated Weekly Batches</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
               Orders consolidated weekly for fresh handcrafting in China, followed by air freight to our Oslo fulfillment hub.
             </p>
           </div>
 
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
+            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#9C7C43] mb-1">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Bespoke Oslo 3PL QC</h4>
+            <h4 className="font-serif text-lg tracking-wide text-[#F6F3EE]">Bespoke Oslo 3PL QC</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
               Every unit is meticulously inspected, botanical-conditioned, and nestled into signature magnetic unboxing.
             </p>
           </div>
 
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
+            <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#9C7C43] mb-1">
               <RefreshCw className="w-5 h-5" />
             </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Uncompromised Guarantee</h4>
+            <h4 className="font-serif text-lg tracking-wide text-[#F6F3EE]">Uncompromised Guarantee</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
               14-day lace inspection guarantee. Full refund or exchange if lace remains uncut and security seal intact.
             </p>
@@ -72,10 +72,10 @@ export const Footer: React.FC = () => {
           {/* Brand Manifesto & Newsletter */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
-              <span className="font-display text-2xl tracking-[0.25em] font-semibold text-[#FAF8F5]">
+              <span className="font-display text-3xl tracking-[0.4em] font-medium text-[#F6F3EE]">
                 VAELYRION
               </span>
-              <p className="text-xs tracking-widest text-[#B5935A] uppercase">Beyond What You Expect.</p>
+              <p className="text-xs tracking-widest text-[#9C7C43] uppercase">Beyond What You Expect.</p>
             </div>
             
             <p className="text-stone-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
@@ -84,7 +84,7 @@ export const Footer: React.FC = () => {
 
             {/* Newsletter */}
             <div className="pt-2">
-              <p className="text-xs uppercase tracking-wider font-semibold text-[#FAF8F5] mb-2">
+              <p className="text-xs uppercase tracking-wider font-semibold text-[#F6F3EE] mb-2">
                 Join the Private Pre-Order Circle
               </p>
               <p className="text-xs text-stone-400 mb-3 font-light">
@@ -98,24 +98,24 @@ export const Footer: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
                   required
-                  className="bg-[#222222] border border-stone-700 text-[#FAF8F5] text-xs px-4 py-3 w-full rounded-l-sm focus:outline-none focus:border-[#B5935A] placeholder-stone-500 font-light"
+                  className="bg-[#222222] border border-stone-700 text-[#F6F3EE] text-xs px-4 py-3 w-full rounded-l-sm focus:outline-none focus:border-[#9C7C43] placeholder-stone-500 font-light"
                 />
                 <button
                   type="submit"
-                  className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs font-semibold uppercase tracking-wider px-5 py-3 rounded-r-sm transition-colors flex items-center justify-center shrink-0 cursor-pointer"
+                  className="bg-[#9C7C43] hover:bg-[#C5A880] text-black text-xs font-semibold uppercase tracking-wider px-5 py-3 rounded-r-sm transition-colors flex items-center justify-center shrink-0 cursor-pointer"
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
               {subscribed && (
-                <p className="text-[11px] text-[#B5935A] mt-2">✓ Priority invitation confirmed.</p>
+                <p className="text-[11px] text-[#9C7C43] mt-2">✓ Priority invitation confirmed.</p>
               )}
             </div>
           </div>
 
           {/* Links Column 1: Collections */}
           <div className="lg:col-span-2 space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#B5935A]">Collections</h5>
+            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#9C7C43]">Collections</h5>
             <ul className="space-y-2.5 text-xs text-stone-400 font-light">
               <li>
                 <button 
@@ -170,12 +170,12 @@ export const Footer: React.FC = () => {
 
           {/* Links Column 2: Experience & Model */}
           <div className="lg:col-span-2 space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#B5935A]">Experience</h5>
+            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#9C7C43]">Experience</h5>
             <ul className="space-y-2.5 text-xs text-stone-400 font-light">
               <li>
                 <button 
                   onClick={() => setCurrentView('find-hair')}
-                  className="hover:text-white transition-colors cursor-pointer text-[#E8DFC8]"
+                  className="hover:text-white transition-colors cursor-pointer text-[#E4D9C1]"
                 >
                   Find This Hair (AI Match)
                 </button>
@@ -217,7 +217,7 @@ export const Footer: React.FC = () => {
 
           {/* Links Column 3: Concierge & Trust */}
           <div className="lg:col-span-3 space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#B5935A]">Client Services</h5>
+            <h5 className="text-xs uppercase tracking-widest font-semibold text-[#9C7C43]">Client Services</h5>
             <ul className="space-y-2.5 text-xs text-stone-400 font-light">
               <li>
                 <button 
@@ -256,7 +256,7 @@ export const Footer: React.FC = () => {
                   <p className="text-stone-300 font-medium">Oslo Fulfillment HQ:</p>
                   <p>Vaelyrion Nordic Logistics Hub</p>
                   <p>Karenslyst Allé 16, 0278 Oslo, Norway</p>
-                  <p className="mt-1 text-[#B5935A]">concierge@vaelyrion.com</p>
+                  <p className="mt-1 text-[#9C7C43]">concierge@vaelyrion.com</p>
                 </div>
               </li>
             </ul>

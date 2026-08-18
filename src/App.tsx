@@ -35,7 +35,7 @@ const AppContent: React.FC = () => {
   const isFocusedView = currentView === 'checkout';
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#141414] font-sans antialiased flex flex-col selection:bg-[#E8DFC8] selection:text-[#141414] relative">
+    <div className="min-h-screen bg-[#F6F3EE] text-[#16150F] font-sans antialiased flex flex-col selection:bg-[#E4D9C1] selection:text-[#16150F] relative">
 
       {/* Universal Header (hidden on Checkout for focused UX) */}
       {!isFocusedView && <Header />}

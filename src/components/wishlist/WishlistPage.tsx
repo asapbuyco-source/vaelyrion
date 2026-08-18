@@ -17,15 +17,15 @@ export const WishlistPage: React.FC = () => {
   const savedProducts = products.filter(p => wishlist.includes(p.id));
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
       {/* Header */}
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#EFEAE2] border-b border-[#16150F]/10 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-2">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#7E6436] font-semibold">
             Personal Atelier Curation
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#141414]">
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#16150F]">
             YOUR SAVED WISHLIST
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-md mx-auto">
@@ -36,8 +36,8 @@ export const WishlistPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         {savedProducts.length === 0 ? (
-          <div className="bg-white border border-[#141414]/10 rounded-sm p-16 text-center space-y-4 max-w-xl mx-auto shadow-xs">
-            <div className="w-16 h-16 rounded-full bg-[#FAF5ED] flex items-center justify-center mx-auto text-[#B5935A]">
+          <div className="bg-white border border-[#16150F]/10 rounded-sm p-16 text-center space-y-4 max-w-xl mx-auto shadow-xs">
+            <div className="w-16 h-16 rounded-full bg-[#F3ECDF] flex items-center justify-center mx-auto text-[#9C7C43]">
               <Heart className="w-8 h-8" />
             </div>
             <h3 className="font-serif text-2xl text-stone-900 font-medium">Your Wishlist is Empty</h3>
@@ -46,14 +46,14 @@ export const WishlistPage: React.FC = () => {
             </p>
             <button
               onClick={() => setCurrentView('shop')}
-              className="mt-4 bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold px-8 py-3.5 rounded-xs transition-colors cursor-pointer"
+              className="mt-4 bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold px-8 py-3.5 rounded-xs transition-colors cursor-pointer"
             >
               Explore Collection
             </button>
           </div>
         ) : (
           <div className="space-y-8">
-            <div className="flex items-center justify-between border-b border-[#141414]/10 pb-4">
+            <div className="flex items-center justify-between border-b border-[#16150F]/10 pb-4">
               <span className="text-xs uppercase tracking-widest text-stone-600 font-light">
                 <strong className="text-black font-semibold">{savedProducts.length}</strong> Saved Items
               </span>
@@ -70,7 +70,7 @@ export const WishlistPage: React.FC = () => {
                     });
                   });
                 }}
-                className="text-xs uppercase tracking-widest font-semibold text-[#8E7348] hover:text-black transition-colors cursor-pointer"
+                className="text-xs uppercase tracking-widest font-semibold text-[#7E6436] hover:text-black transition-colors cursor-pointer"
               >
                 Move All to Bag →
               </button>

@@ -6,14 +6,14 @@ export const ShippingPolicyPage: React.FC = () => {
   const { setCurrentView } = useStore();
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#EFEAE2] border-b border-[#16150F]/10 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-2">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#7E6436] font-semibold">
             Logistics Transparency
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#141414]">
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#16150F]">
             SHIPPING & WEEKLY BATCH FULFILLMENT
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-lg mx-auto">
@@ -25,9 +25,9 @@ export const ShippingPolicyPage: React.FC = () => {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-10 text-xs sm:text-sm text-stone-800 leading-relaxed font-light">
         
         {/* Method 1: Pre-Order Batch */}
-        <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
-          <div className="flex items-center gap-3 border-b border-[#141414]/8 pb-3">
-            <Calendar className="w-5 h-5 text-[#8E7348]" />
+        <div className="bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
+          <div className="flex items-center gap-3 border-b border-[#16150F]/8 pb-3">
+            <Calendar className="w-5 h-5 text-[#7E6436]" />
             <h3 className="font-serif text-lg font-semibold text-stone-900">
               1. Weekly Batch Pre-Order System (Made-to-Order)
             </h3>
@@ -42,15 +42,15 @@ export const ShippingPolicyPage: React.FC = () => {
             <li><strong>Norway 3PL Inspection & Unboxing:</strong> Days 11–13 (Conditioning with pure organic argan oil, hygiene seal attachment, and packing into our signature magnetic keepsake box).</li>
             <li><strong>Customer Delivery:</strong> Days 14–18 via Posten / Bring / DHL Express with full SMS tracking.</li>
           </ul>
-          <div className="p-3 bg-[#FAF5ED] rounded-xs border border-[#E8DFC8] text-xs text-[#7A5B28]">
+          <div className="p-3 bg-[#F3ECDF] rounded-xs border border-[#E4D9C1] text-xs text-[#7A5B28]">
             <strong>Total Timeline:</strong> 10 to 18 business days from order date.
           </div>
         </div>
 
         {/* Method 2: In-Stock 3PL */}
-        <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
-          <div className="flex items-center gap-3 border-b border-[#141414]/8 pb-3">
-            <Truck className="w-5 h-5 text-[#8E7348]" />
+        <div className="bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
+          <div className="flex items-center gap-3 border-b border-[#16150F]/8 pb-3">
+            <Truck className="w-5 h-5 text-[#7E6436]" />
             <h3 className="font-serif text-lg font-semibold text-stone-900">
               2. In-Stock Items (Oslo 3PL Warehouse)
             </h3>
@@ -67,9 +67,9 @@ export const ShippingPolicyPage: React.FC = () => {
         </div>
 
         {/* Customs & Taxes */}
-        <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
-          <div className="flex items-center gap-3 border-b border-[#141414]/8 pb-3">
-            <ShieldCheck className="w-5 h-5 text-[#8E7348]" />
+        <div className="bg-white border border-[#16150F]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
+          <div className="flex items-center gap-3 border-b border-[#16150F]/8 pb-3">
+            <ShieldCheck className="w-5 h-5 text-[#7E6436]" />
             <h3 className="font-serif text-lg font-semibold text-stone-900">
               Customs, Duties & Import VAT Guarantee
             </h3>

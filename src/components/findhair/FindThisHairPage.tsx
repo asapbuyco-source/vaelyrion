@@ -90,18 +90,18 @@ export const FindThisHairPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
       {/* Header Banner */}
-      <div className="bg-[#141414] text-[#FAF8F5] py-14 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="bg-[#16150F] text-[#F6F3EE] py-14 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Subtle decorative background watermark */}
         <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none font-display text-[160px] tracking-tighter">
           VAE
         </div>
 
         <div className="max-w-4xl mx-auto text-center space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 bg-[#2A2A2A] border border-[#B5935A]/40 px-3.5 py-1.5 rounded-full text-xs text-[#E8DFC8] tracking-widest uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-[#B5935A]" />
+          <div className="inline-flex items-center gap-2 bg-[#26241A] border border-[#9C7C43]/40 px-3.5 py-1.5 rounded-full text-xs text-[#E4D9C1] tracking-widest uppercase">
+            <Sparkles className="w-3.5 h-3.5 text-[#9C7C43]" />
             <span>AI Hair Architecture Matcher</span>
           </div>
 
@@ -118,7 +118,7 @@ export const FindThisHairPage: React.FC = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         
         {/* Upload Interface Box */}
-        <div className="bg-white border border-[#141414]/10 rounded-sm shadow-xl p-6 sm:p-10">
+        <div className="bg-white border border-[#16150F]/10 rounded-sm shadow-xl p-6 sm:p-10">
           
           {!previewImage ? (
             <div
@@ -127,10 +127,10 @@ export const FindThisHairPage: React.FC = () => {
               onDragOver={handleDrag}
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-sm p-8 sm:p-14 text-center transition-all ${
-                dragActive ? 'border-[#B5935A] bg-[#FAF5ED]' : 'border-stone-300 bg-[#FAF8F5] hover:border-stone-400'
+                dragActive ? 'border-[#9C7C43] bg-[#F3ECDF]' : 'border-stone-300 bg-[#F6F3EE] hover:border-stone-400'
               }`}
             >
-              <div className="w-16 h-16 rounded-full bg-[#F4EFEA] flex items-center justify-center mx-auto text-[#B5935A] mb-4">
+              <div className="w-16 h-16 rounded-full bg-[#EFEAE2] flex items-center justify-center mx-auto text-[#9C7C43] mb-4">
                 <Scan className="w-8 h-8" />
               </div>
 
@@ -142,8 +142,8 @@ export const FindThisHairPage: React.FC = () => {
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <label className="bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 rounded-xs cursor-pointer transition-colors flex items-center gap-2 shadow-sm">
-                  <Upload className="w-4 h-4 text-[#B5935A]" />
+                <label className="bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 rounded-xs cursor-pointer transition-colors flex items-center gap-2 shadow-sm">
+                  <Upload className="w-4 h-4 text-[#9C7C43]" />
                   <span>Choose Image File</span>
                   <input
                     type="file"
@@ -155,7 +155,7 @@ export const FindThisHairPage: React.FC = () => {
               </div>
 
               {/* Sample Quick Try Looks */}
-              <div className="mt-10 pt-8 border-t border-[#141414]/8">
+              <div className="mt-10 pt-8 border-t border-[#16150F]/8">
                 <span className="text-xs uppercase tracking-widest text-stone-500 font-medium block mb-4">
                   Or test with sample editorial looks:
                 </span>
@@ -164,7 +164,7 @@ export const FindThisHairPage: React.FC = () => {
                     <button
                       key={idx}
                       onClick={() => handleSelectSample(sample.image)}
-                      className="group text-left rounded-xs overflow-hidden border border-[#141414]/10 bg-white hover:border-[#B5935A] transition-all cursor-pointer"
+                      className="group text-left rounded-xs overflow-hidden border border-[#16150F]/10 bg-white hover:border-[#9C7C43] transition-all cursor-pointer"
                     >
                       <div className="aspect-3/4 overflow-hidden bg-stone-100">
                         <img
@@ -174,7 +174,7 @@ export const FindThisHairPage: React.FC = () => {
                         />
                       </div>
                       <div className="p-2 bg-white">
-                        <span className="text-[10px] text-[#8E7348] font-mono block">{sample.tag}</span>
+                        <span className="text-[10px] text-[#7E6436] font-mono block">{sample.tag}</span>
                         <p className="text-[11px] font-serif text-stone-900 font-medium truncate">{sample.title}</p>
                       </div>
                     </button>
@@ -188,11 +188,11 @@ export const FindThisHairPage: React.FC = () => {
             <div className="space-y-8">
               
               {/* Top Selected Image & Scanning Status */}
-              <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-[#FAF8F5] rounded-sm border border-[#141414]/10">
-                <div className="relative w-28 h-36 rounded-xs overflow-hidden shrink-0 border border-[#141414]/15 shadow-sm">
+              <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-[#F6F3EE] rounded-sm border border-[#16150F]/10">
+                <div className="relative w-28 h-36 rounded-xs overflow-hidden shrink-0 border border-[#16150F]/15 shadow-sm">
                   <img src={previewImage} alt="Uploaded look" className="w-full h-full object-cover" />
                   {isSearchingImage && (
-                    <div className="absolute inset-0 bg-[#B5935A]/20 backdrop-blur-xs flex items-center justify-center animate-pulse">
+                    <div className="absolute inset-0 bg-[#9C7C43]/20 backdrop-blur-xs flex items-center justify-center animate-pulse">
                       <Scan className="w-8 h-8 text-black" />
                     </div>
                   )}
@@ -201,7 +201,7 @@ export const FindThisHairPage: React.FC = () => {
                 <div className="flex-1 text-center sm:text-left space-y-1.5">
                   <div className="flex items-center justify-center sm:justify-start gap-2">
                     {isSearchingImage ? (
-                      <span className="inline-block w-2 h-2 rounded-full bg-[#B5935A] animate-ping"></span>
+                      <span className="inline-block w-2 h-2 rounded-full bg-[#9C7C43] animate-ping"></span>
                     ) : (
                       <CheckCircle2 className="w-4 h-4 text-emerald-700" />
                     )}
@@ -232,7 +232,7 @@ export const FindThisHairPage: React.FC = () => {
               {/* Loading Scanner Animation */}
               {isSearchingImage && (
                 <div className="py-16 text-center space-y-4">
-                  <div className="w-16 h-16 border-3 border-[#B5935A] border-t-transparent rounded-full animate-spin mx-auto"></div>
+                  <div className="w-16 h-16 border-3 border-[#9C7C43] border-t-transparent rounded-full animate-spin mx-auto"></div>
                   <h4 className="font-serif text-xl text-stone-900">Searching master ateliers for matching hair...</h4>
                   <p className="text-xs text-stone-500 font-light">Comparing against raw Cambodian temple stocks and HD Swiss lace frontals.</p>
                 </div>
@@ -241,11 +241,11 @@ export const FindThisHairPage: React.FC = () => {
               {/* Matched Results */}
               {!isSearchingImage && visualSearchResults && (
                 <div className="space-y-6 animate-in fade-in duration-300">
-                  <div className="flex items-center justify-between border-b border-[#141414]/10 pb-3">
+                  <div className="flex items-center justify-between border-b border-[#16150F]/10 pb-3">
                     <h3 className="font-serif text-2xl text-stone-900 font-medium">
                       Top Visual Matches ({visualSearchResults.length})
                     </h3>
-                    <span className="text-xs text-[#8E7348] font-semibold tracking-wider uppercase">
+                    <span className="text-xs text-[#7E6436] font-semibold tracking-wider uppercase">
                       Direct Atelier Replacements
                     </span>
                   </div>
@@ -254,7 +254,7 @@ export const FindThisHairPage: React.FC = () => {
                     {visualSearchResults.map((match, idx) => (
                       <div
                         key={idx}
-                        className="bg-white border border-[#141414]/12 hover:border-[#B5935A] rounded-sm p-4 sm:p-6 transition-all shadow-xs flex flex-col md:flex-row gap-6 items-center"
+                        className="bg-white border border-[#16150F]/12 hover:border-[#9C7C43] rounded-sm p-4 sm:p-6 transition-all shadow-xs flex flex-col md:flex-row gap-6 items-center"
                       >
                         {/* Match Image */}
                         <div 
@@ -262,7 +262,7 @@ export const FindThisHairPage: React.FC = () => {
                             setSelectedProductId(match.product.id);
                             setCurrentView('product');
                           }}
-                          className="w-32 h-40 rounded-xs overflow-hidden shrink-0 bg-[#EFEAE4] cursor-pointer"
+                          className="w-32 h-40 rounded-xs overflow-hidden shrink-0 bg-[#EFEAE2] cursor-pointer"
                         >
                           <img
                             src={match.product.images[0]}
@@ -275,10 +275,10 @@ export const FindThisHairPage: React.FC = () => {
                         <div className="flex-1 space-y-3 text-left w-full">
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                              <span className="bg-[#141414] text-[#FAF8F5] text-xs font-mono font-bold px-2.5 py-0.5 rounded-xs">
+                              <span className="bg-[#16150F] text-[#F6F3EE] text-xs font-mono font-bold px-2.5 py-0.5 rounded-xs">
                                 {match.similarityScore}% Match
                               </span>
-                              <span className="text-xs uppercase font-medium text-[#8E7348] tracking-widest">
+                              <span className="text-xs uppercase font-medium text-[#7E6436] tracking-widest">
                                 {match.product.hairOrigin}
                               </span>
                             </div>
@@ -293,7 +293,7 @@ export const FindThisHairPage: React.FC = () => {
                               setSelectedProductId(match.product.id);
                               setCurrentView('product');
                             }}
-                            className="font-serif text-lg font-semibold text-stone-900 hover:text-[#8E7348] transition-colors cursor-pointer"
+                            className="font-serif text-lg font-semibold text-stone-900 hover:text-[#7E6436] transition-colors cursor-pointer"
                           >
                             {match.product.title}
                           </h4>
@@ -301,7 +301,7 @@ export const FindThisHairPage: React.FC = () => {
                           {/* Detected match reasons */}
                           <div className="flex flex-wrap gap-2 text-[11px]">
                             {match.matchReasons.map((reason, rIdx) => (
-                              <span key={rIdx} className="bg-[#FAF5ED] text-[#8E7348] px-2 py-0.5 rounded-xs border border-[#E8DFC8]">
+                              <span key={rIdx} className="bg-[#F3ECDF] text-[#7E6436] px-2 py-0.5 rounded-xs border border-[#E4D9C1]">
                                 ✓ {reason}
                               </span>
                             ))}
@@ -327,9 +327,9 @@ export const FindThisHairPage: React.FC = () => {
                                 quantity: 1
                               });
                             }}
-                            className="w-full bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold py-3 px-4 rounded-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
+                            className="w-full bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold py-3 px-4 rounded-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
                           >
-                            <ShoppingBag className="w-3.5 h-3.5 text-[#B5935A]" />
+                            <ShoppingBag className="w-3.5 h-3.5 text-[#9C7C43]" />
                             <span>Add to Bag</span>
                           </button>
 
@@ -338,7 +338,7 @@ export const FindThisHairPage: React.FC = () => {
                               setSelectedProductId(match.product.id);
                               setCurrentView('product');
                             }}
-                            className="w-full bg-white hover:bg-stone-50 border border-[#141414]/15 text-stone-800 text-xs uppercase tracking-wider font-semibold py-2.5 px-4 rounded-xs transition-colors text-center cursor-pointer"
+                            className="w-full bg-white hover:bg-stone-50 border border-[#16150F]/15 text-stone-800 text-xs uppercase tracking-wider font-semibold py-2.5 px-4 rounded-xs transition-colors text-center cursor-pointer"
                           >
                             Configure Look
                           </button>

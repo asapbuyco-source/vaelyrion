@@ -38,14 +38,14 @@ export const FaqPage: React.FC = () => {
   ];
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
-      <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#EFEAE2] border-b border-[#16150F]/10 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-2">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#7E6436] font-semibold">
             Hair Knowledge & Atelier Guides
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#141414]">
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-[#16150F]">
             FREQUENTLY ASKED QUESTIONS
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-lg mx-auto">
@@ -58,32 +58,32 @@ export const FaqPage: React.FC = () => {
         {faqs.map((faq, idx) => (
           <div
             key={idx}
-            className="bg-white border border-[#141414]/10 rounded-sm overflow-hidden shadow-xs"
+            className="bg-white border border-[#16150F]/10 rounded-sm overflow-hidden shadow-xs"
           >
             <button
               onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-              className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 font-serif text-base font-semibold text-stone-900 hover:text-[#8E7348] transition-colors cursor-pointer"
+              className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 font-serif text-base font-semibold text-stone-900 hover:text-[#7E6436] transition-colors cursor-pointer"
             >
               <span>{faq.q}</span>
-              <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${openIdx === idx ? 'rotate-180 text-[#B5935A]' : 'text-stone-400'}`} />
+              <ChevronDown className={`w-4 h-4 shrink-0 transition-transform ${openIdx === idx ? 'rotate-180 text-[#9C7C43]' : 'text-stone-400'}`} />
             </button>
 
             {openIdx === idx && (
-              <div className="px-5 pb-6 sm:px-6 text-xs sm:text-sm text-stone-600 font-light leading-relaxed border-t border-[#141414]/6 pt-4 whitespace-pre-line">
+              <div className="px-5 pb-6 sm:px-6 text-xs sm:text-sm text-stone-600 font-light leading-relaxed border-t border-[#16150F]/6 pt-4 whitespace-pre-line">
                 {faq.a}
               </div>
             )}
           </div>
         ))}
 
-        <div className="mt-12 p-8 bg-white border border-[#141414]/10 rounded-sm text-center space-y-3 shadow-xs">
+        <div className="mt-12 p-8 bg-white border border-[#16150F]/10 rounded-sm text-center space-y-3 shadow-xs">
           <h4 className="font-serif text-xl text-stone-900">Have a customized styling question?</h4>
           <p className="text-xs text-stone-500 font-light max-w-md mx-auto">
             Our Oslo Concierge team of master wigmakers and colorists is available daily.
           </p>
           <button
             onClick={() => setCurrentView('account')}
-            className="bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 rounded-xs transition-colors cursor-pointer"
+            className="bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 rounded-xs transition-colors cursor-pointer"
           >
             Contact Stylist Concierge
           </button>

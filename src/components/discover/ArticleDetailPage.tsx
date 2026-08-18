@@ -24,10 +24,10 @@ export const ArticleDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
       {/* Top Breadcrumb */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-b border-[#141414]/6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-b border-[#16150F]/6">
         <div className="flex items-center justify-between text-xs text-stone-500 font-light">
           <button
             onClick={() => setCurrentView('discover')}
@@ -53,7 +53,7 @@ export const ArticleDetailPage: React.FC = () => {
         {/* Category & Meta */}
         <div className="space-y-3 text-center sm:text-left">
           <div className="flex items-center justify-center sm:justify-start gap-3 text-xs">
-            <span className="bg-[#FAF5ED] text-[#8E7348] px-3 py-1 rounded-xs font-semibold uppercase tracking-wider border border-[#E8DFC8]">
+            <span className="bg-[#F3ECDF] text-[#7E6436] px-3 py-1 rounded-xs font-semibold uppercase tracking-wider border border-[#E4D9C1]">
               {article.category}
             </span>
             <span className="text-stone-400 flex items-center gap-1">
@@ -70,14 +70,14 @@ export const ArticleDetailPage: React.FC = () => {
             {article.subtitle}
           </p>
 
-          <div className="pt-2 text-xs text-stone-500 font-light border-t border-[#141414]/8 flex items-center justify-between">
+          <div className="pt-2 text-xs text-stone-500 font-light border-t border-[#16150F]/8 flex items-center justify-between">
             <span>By <strong>{article.author}</strong></span>
             <span>{article.date}</span>
           </div>
         </div>
 
         {/* Hero Image */}
-        <div className="aspect-16/9 rounded-sm overflow-hidden bg-stone-100 border border-[#141414]/8 shadow-sm">
+        <div className="aspect-16/9 rounded-sm overflow-hidden bg-stone-100 border border-[#16150F]/8 shadow-sm">
           <img
             src={article.image}
             alt={article.title}
@@ -87,7 +87,7 @@ export const ArticleDetailPage: React.FC = () => {
 
         {/* Quote */}
         {article.quote && (
-          <div className="bg-[#F4EFEA] p-6 sm:p-8 rounded-sm border-l-4 border-[#B5935A] my-6">
+          <div className="bg-[#EFEAE2] p-6 sm:p-8 rounded-sm border-l-4 border-[#9C7C43] my-6">
             <p className="font-serif text-lg sm:text-xl italic text-stone-900 leading-snug">
               "{article.quote}"
             </p>
@@ -97,17 +97,17 @@ export const ArticleDetailPage: React.FC = () => {
         {/* Body Paragraphs */}
         <div className="space-y-6 text-sm sm:text-base text-stone-800 leading-relaxed font-light">
           {article.content.map((p, idx) => (
-            <p key={idx} className={idx === 0 ? 'first-letter:text-4xl first-letter:font-serif first-letter:float-left first-letter:mr-2 first-letter:text-[#8E7348]' : ''}>
+            <p key={idx} className={idx === 0 ? 'first-letter:text-4xl first-letter:font-serif first-letter:float-left first-letter:mr-2 first-letter:text-[#7E6436]' : ''}>
               {p}
             </p>
           ))}
         </div>
 
         {/* Tags */}
-        <div className="pt-6 border-t border-[#141414]/10 flex flex-wrap items-center gap-2">
+        <div className="pt-6 border-t border-[#16150F]/10 flex flex-wrap items-center gap-2">
           <span className="text-xs text-stone-400 font-medium mr-2">Filed Under:</span>
           {article.tags.map(tag => (
-            <span key={tag} className="bg-white border border-[#141414]/10 text-stone-700 text-xs px-3 py-1 rounded-full">
+            <span key={tag} className="bg-white border border-[#16150F]/10 text-stone-700 text-xs px-3 py-1 rounded-full">
               #{tag}
             </span>
           ))}
@@ -115,10 +115,10 @@ export const ArticleDetailPage: React.FC = () => {
 
         {/* Shoppable Featured Products inside the Article */}
         {featuredProducts.length > 0 && (
-          <div className="mt-14 pt-10 border-t border-[#141414]/10 space-y-6">
+          <div className="mt-14 pt-10 border-t border-[#16150F]/10 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs uppercase tracking-widest text-[#8E7348] font-semibold">
+                <span className="text-xs uppercase tracking-widest text-[#7E6436] font-semibold">
                   Featured In This Story
                 </span>
                 <h3 className="font-serif text-2xl text-stone-900 mt-1">Shop The Featured Look</h3>

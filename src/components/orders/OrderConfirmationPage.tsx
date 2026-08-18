@@ -30,15 +30,15 @@ export const OrderConfirmationPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen pb-24">
+    <div className="bg-[#F6F3EE] min-h-screen pb-24">
       
       {/* Confirmation Hero Banner */}
-      <div className="bg-[#141414] text-white py-14 sm:py-20 px-4 sm:px-6 lg:px-8 text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-[#242424] border border-[#B5935A]/50 flex items-center justify-center mx-auto text-[#B5935A] shadow-xl">
+      <div className="bg-[#16150F] text-white py-14 sm:py-20 px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <div className="w-16 h-16 rounded-full bg-[#242424] border border-[#9C7C43]/50 flex items-center justify-center mx-auto text-[#9C7C43] shadow-xl">
           <CheckCircle2 className="w-8 h-8" />
         </div>
 
-        <span className="text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold block">
+        <span className="text-xs uppercase tracking-[0.25em] text-[#9C7C43] font-semibold block">
           Order Allocation Confirmed
         </span>
 
@@ -53,7 +53,7 @@ export const OrderConfirmationPage: React.FC = () => {
         <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => setCurrentView('tracking')}
-            className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-3 px-6 rounded-xs transition-colors flex items-center gap-2 cursor-pointer shadow-md"
+            className="bg-[#9C7C43] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-3 px-6 rounded-xs transition-colors flex items-center gap-2 cursor-pointer shadow-md"
           >
             <Truck className="w-4 h-4" />
             <span>Track Live Batch Timeline</span>
@@ -71,17 +71,17 @@ export const OrderConfirmationPage: React.FC = () => {
 
       {/* Main Order Details Card */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-        <div className="bg-white border border-[#141414]/10 rounded-sm shadow-xl p-6 sm:p-10 space-y-8">
+        <div className="bg-white border border-[#16150F]/10 rounded-sm shadow-xl p-6 sm:p-10 space-y-8">
           
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-[#FAF8F5] rounded-xs border border-[#141414]/8 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-[#F6F3EE] rounded-xs border border-[#16150F]/8 text-xs">
             <div>
               <span className="text-stone-400 text-[11px] block">Order Number</span>
               <strong className="font-mono text-stone-900 font-semibold">#{order.orderNumber}</strong>
             </div>
             <div>
               <span className="text-stone-400 text-[11px] block">Weekly Batch</span>
-              <strong className="text-[#8E7348] font-medium">Batch #003</strong>
+              <strong className="text-[#7E6436] font-medium">Batch #003</strong>
             </div>
             <div>
               <span className="text-stone-400 text-[11px] block">Estimated Delivery</span>
@@ -94,8 +94,8 @@ export const OrderConfirmationPage: React.FC = () => {
           </div>
 
           {/* Delivery & Unboxing Highlights */}
-          <div className="bg-[#FAF5ED] p-5 rounded-xs border border-[#E5DAC8] flex items-start gap-4">
-            <Sparkles className="w-5 h-5 text-[#8E7348] shrink-0 mt-0.5" />
+          <div className="bg-[#F3ECDF] p-5 rounded-xs border border-[#E5DAC8] flex items-start gap-4">
+            <Sparkles className="w-5 h-5 text-[#7E6436] shrink-0 mt-0.5" />
             <div className="text-xs text-[#7A5B28] space-y-1">
               <h4 className="font-serif text-sm font-semibold text-stone-900">What Happens Next in the Batch Pipeline:</h4>
               <p className="font-light leading-relaxed">
@@ -112,13 +112,13 @@ export const OrderConfirmationPage: React.FC = () => {
 
           {/* Ordered Products Itemized */}
           <div className="space-y-4">
-            <h3 className="font-serif text-lg font-medium text-stone-900 border-b border-[#141414]/10 pb-3">
+            <h3 className="font-serif text-lg font-medium text-stone-900 border-b border-[#16150F]/10 pb-3">
               Allocated Creations ({order.items.reduce((s, i) => s + i.quantity, 0)})
             </h3>
 
             <div className="space-y-4">
               {order.items.map((item) => (
-                <div key={item.id} className="flex gap-4 pb-4 border-b border-[#141414]/6 text-xs">
+                <div key={item.id} className="flex gap-4 pb-4 border-b border-[#16150F]/6 text-xs">
                   <img
                     src={item.product.images[0]}
                     alt={item.product.title}
@@ -138,7 +138,7 @@ export const OrderConfirmationPage: React.FC = () => {
                       </p>
                     </div>
 
-                    <span className="text-[10px] text-[#8E7348] font-mono">
+                    <span className="text-[10px] text-[#7E6436] font-mono">
                       Tracking Barcode: {order.trackingNumber || 'Allocated on dispatch'}
                     </span>
                   </div>
@@ -148,7 +148,7 @@ export const OrderConfirmationPage: React.FC = () => {
           </div>
 
           {/* Shipping Address & Client Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 text-xs text-stone-700 font-light border-t border-[#141414]/8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 text-xs text-stone-700 font-light border-t border-[#16150F]/8">
             <div className="space-y-1">
               <h5 className="font-semibold uppercase tracking-wider text-stone-900">Destination Address</h5>
               <p className="font-medium text-stone-800">{order.customer.name}</p>
@@ -160,7 +160,7 @@ export const OrderConfirmationPage: React.FC = () => {
             <div className="space-y-1">
               <h5 className="font-semibold uppercase tracking-wider text-stone-900">Payment & Security</h5>
               <p className="flex items-center gap-1.5 text-stone-800 font-medium">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#B5935A]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#9C7C43]" />
                 <span>Encrypted Credit Card Transaction (Paid)</span>
               </p>
               <p className="text-stone-500">14-Day Untouched Lace Return Policy</p>
@@ -169,7 +169,7 @@ export const OrderConfirmationPage: React.FC = () => {
           </div>
 
           {/* Footer CTAs */}
-          <div className="pt-6 border-t border-[#141414]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="pt-6 border-t border-[#16150F]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
             <button
               onClick={() => setCurrentView('shop')}
               className="text-xs uppercase tracking-widest font-semibold text-stone-700 hover:text-black transition-colors cursor-pointer"
@@ -179,7 +179,7 @@ export const OrderConfirmationPage: React.FC = () => {
 
             <button
               onClick={() => setCurrentView('tracking')}
-              className="w-full sm:w-auto bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-semibold py-3 px-6 rounded-xs transition-colors text-center cursor-pointer shadow-md"
+              className="w-full sm:w-auto bg-[#16150F] hover:bg-[#26241A] text-white text-xs uppercase tracking-widest font-semibold py-3 px-6 rounded-xs transition-colors text-center cursor-pointer shadow-md"
             >
               View Visual Tracking Timeline
             </button>
