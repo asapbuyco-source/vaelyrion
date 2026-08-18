@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // On mount, try to restore session from stored token
   useEffect(() => {
-    const token = localStorage.getItem('vaelyrion_token');
+    const token = localStorage.getItem('tanelia_token');
     if (token) {
       api.auth.getMe()
         .then((data: any) => {
@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           });
         })
         .catch(() => {
-          localStorage.removeItem('vaelyrion_token');
+          localStorage.removeItem('tanelia_token');
         })
         .finally(() => setIsAuthLoading(false));
     } else {
@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const setSessionFromMe = async (token: string) => {
-    localStorage.setItem('vaelyrion_token', token);
+    localStorage.setItem('tanelia_token', token);
     const data = await api.auth.getMe();
     setAuthUser({
       id: data.user.id,
@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = async () => {
     await api.auth.logout().catch(() => {});
-    localStorage.removeItem('vaelyrion_token');
+    localStorage.removeItem('tanelia_token');
     setAuthUser(null);
   };
 

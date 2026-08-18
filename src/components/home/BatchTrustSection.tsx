@@ -35,10 +35,10 @@ export const BatchTrustSection: React.FC = () => {
         {/* Section header */}
         <div className="text-center mb-16">
           <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-3 inline-block">
-            Why Vaelyrion
+            Why Tanelia
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
-            The Vaelyrion Experience
+            The Tanelia Experience
           </h2>
           <p className="text-stone-500 font-light text-sm mt-3 max-w-md mx-auto">
             Every detail of your order is curated for a seamless, premium experience from atelier to doorstep.

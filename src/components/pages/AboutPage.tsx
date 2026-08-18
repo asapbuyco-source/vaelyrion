@@ -18,7 +18,7 @@ export const AboutPage: React.FC = () => {
             BEYOND WHAT YOU EXPECT.
           </h1>
           <p className="text-sm sm:text-base text-stone-300 font-light max-w-xl mx-auto leading-relaxed">
-            Vaelyrion was founded to dismantle the chaotic, deceptive landscape of online hair extensions and wigs with radical transparency, uncompromised craftsmanship, and Scandinavian aesthetic restraint.
+            Tanelia was founded to dismantle the chaotic, deceptive landscape of online hair extensions and wigs with radical transparency, uncompromised craftsmanship, and Scandinavian aesthetic restraint.
           </p>
         </div>
       </div>
@@ -43,7 +43,7 @@ export const AboutPage: React.FC = () => {
               Standard commercial hair is stripped in hydrochloric acid baths to remove tangling cuticles, then coated with artificial silicone that washes out in three shampoos.
             </p>
             <p className="text-xs sm:text-sm text-stone-600 font-light leading-relaxed">
-              Vaelyrion curates exclusively from single donors. Every strand runs in its natural biological cuticle direction, delivering an authentic 3–5 year lifespan under proper care.
+              Tanelia curates exclusively from single donors. Every strand runs in its natural biological cuticle direction, delivering an authentic 3–5 year lifespan under proper care.
             </p>
           </div>
         </div>
@@ -74,7 +74,7 @@ export const AboutPage: React.FC = () => {
         {/* Pillars Grid */}
         <div className="border-t border-[#141414]/10 pt-12">
           <div className="text-center mb-10">
-            <h3 className="font-serif text-2xl text-stone-900">The Vaelyrion Guarantees</h3>
+            <h3 className="font-serif text-2xl text-stone-900">The Tanelia Guarantees</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="bg-white border border-[#141414]/8 p-6 rounded-xs space-y-2 text-center shadow-xs">

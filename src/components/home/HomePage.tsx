@@ -126,7 +126,7 @@ export const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* 7. Vaelyrion Experience / Trust */}
+      {/* 7. Tanelia Experience / Trust */}
       <BatchTrustSection />
 
       {/* 8. Luxury Packaging Showcase */}
@@ -138,7 +138,7 @@ export const HomePage: React.FC = () => {
           <div>
             <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">Editorial</p>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
-              The Vaelyrion Gazette
+              The Tanelia Gazette
             </h2>
           </div>
           <button

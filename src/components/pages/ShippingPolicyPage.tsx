@@ -75,7 +75,7 @@ export const ShippingPolicyPage: React.FC = () => {
             </h3>
           </div>
           <p>
-            <strong>Zero surprise fees at your doorstep:</strong> All applicable VAT, European customs, and import duties are prepaid and fully cleared by Vaelyrion at our Oslo transit hub. The price you see at checkout is the absolute final cost.
+            <strong>Zero surprise fees at your doorstep:</strong> All applicable VAT, European customs, and import duties are prepaid and fully cleared by Tanelia at our Oslo transit hub. The price you see at checkout is the absolute final cost.
           </p>
         </div>
 

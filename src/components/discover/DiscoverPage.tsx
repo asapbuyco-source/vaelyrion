@@ -27,7 +27,7 @@ export const DiscoverPage: React.FC = () => {
       <div className="bg-[#F4EFEA] border-b border-[#141414]/10 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-3">
           <span className="text-xs uppercase tracking-[0.25em] text-[#8E7348] font-semibold">
-            The Vaelyrion Gazette & Lookbook
+            The Tanelia Gazette & Lookbook
           </span>
           <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#141414]">
             DISCOVER & INSPIRATION
@@ -75,7 +75,7 @@ export const DiscoverPage: React.FC = () => {
                 </p>
 
                 {featuredArticle.quote && (
-                  <blockquote className="border-l-2 border-[#B5935A] pl-4 italic text-stone-700 text-xs font-serif">
+                  <blockquote className="border-l-2 border-[#B5935A] pl-4 italic text-stone-700 text-xs font-serif leading-relaxed">
                     "{featuredArticle.quote}"
                   </blockquote>
                 )}
@@ -148,7 +148,7 @@ export const DiscoverPage: React.FC = () => {
         </div>
 
         {/* Find This Hair Signature Interactive Teaser */}
-        <div className="bg-[#141414] text-[#FAF8F5] p-8 sm:p-12 rounded-sm relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="bg-[#141414] text-[#FAF8F5] p-8 sm:p-12 rounded-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-xl text-center sm:text-left">
             <span className="text-xs uppercase tracking-widest text-[#B5935A] font-semibold">
               Signature Visual Search
@@ -163,7 +163,7 @@ export const DiscoverPage: React.FC = () => {
 
           <button
             onClick={() => setCurrentView('find-hair')}
-            className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-3.5 px-8 rounded-xs transition-colors shrink-0 shadow-md cursor-pointer"
+            className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-4 px-8 rounded-2xl transition-all shrink-0 shadow-lg cursor-pointer active:scale-[0.98]"
           >
             Launch Visual Search
           </button>

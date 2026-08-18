@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Scan, ShieldCheck, Sparkles, Truck, Star } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { SmartImage } from '../common/SmartImage';
 
 export const Hero: React.FC = () => {
   const { setCurrentView, setFilters } = useStore();
@@ -129,9 +130,10 @@ export const Hero: React.FC = () => {
           >
             {/* Main hero image */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
-              <img
+              <SmartImage
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85"
-                alt="Vaelyrion Luxury Campaign"
+                alt="Tanelia Luxury Campaign"
+                fallbackKind="editorial"
                 className="w-full h-full object-cover object-center"
               />
               {/* Subtle overlay */}
@@ -142,8 +144,9 @@ export const Hero: React.FC = () => {
             <div className="absolute -bottom-6 -left-8 glass rounded-2xl p-4 shadow-xl max-w-[200px] animate-float">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-10 h-12 rounded-lg overflow-hidden bg-stone-200 shrink-0">
-                  <img 
+                  <SmartImage 
                     src="https://cdn.shopify.com/s/files/1/2465/8681/files/2080932979095207936xsrAfr1mIeIlZkLF.png"
+                    fallbackKind="hair"
                     className="w-full h-full object-cover" 
                     alt="Featured product"
                   />

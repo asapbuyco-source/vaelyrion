@@ -6,7 +6,7 @@
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-display: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
 
-    /* Vaelyrion Design Tokens */
+    /* Tanelia Design Tokens */
     --color-ivory: #FAF8F5;
     --color-ivory-warm: #F4EFEA;
     --color-ivory-deep: #EDE8E1;
@@ -31,6 +31,7 @@
     background-color: var(--color-ivory);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, .font-serif {
@@ -39,6 +40,11 @@
 
   .font-display {
     font-family: var(--font-display);
+  }
+
+  ::selection {
+    background: var(--color-gold-pale);
+    color: var(--color-near-black);
   }
 }
 

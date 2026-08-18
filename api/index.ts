@@ -39,7 +39,7 @@ app.use('/api/v1/orders', orderRoutes);
 
 // Health check
 app.get('/api/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', message: 'Vaelyrion backend is running', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', message: 'Tanelia backend is running', timestamp: new Date().toISOString() });
 });
 
 // 404 fallback
@@ -49,7 +49,7 @@ app.use((_req: Request, res: Response) => {
 
 if (process.env.NODE_ENV !== 'production') {
   app.listen(port, () => {
-    console.log(`\n🚀 Vaelyrion backend running on http://localhost:${port}`);
+    console.log(`\n🚀 Tanelia backend running on http://localhost:${port}`);
     console.log(`📦 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔗 Supabase: ${process.env.SUPABASE_URL ? '✓ Connected' : '✗ Missing URL'}\n`);
   });

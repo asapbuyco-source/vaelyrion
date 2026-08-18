@@ -9,7 +9,7 @@ export const FaqPage: React.FC = () => {
   const faqs = [
     {
       q: 'What is 100% Raw Virgin Single-Donor Temple Hair?',
-      a: 'Unlike standard commercial "remy" hair which is floor-collected from mixed brushes and chemically stripped in acid baths, Vaelyrion hair is sourced directly from single donors at temples in Cambodia and Southern India. All cuticles run in the exact same biological direction, preserving natural moisture, tensile strength, and authentic luster for 3–5 years.'
+      a: 'Unlike standard commercial "remy" hair which is floor-collected from mixed brushes and chemically stripped in acid baths, Tanelia hair is sourced directly from single donors at temples in Cambodia and Southern India. All cuticles run in the exact same biological direction, preserving natural moisture, tensile strength, and authentic luster for 3–5 years.'
     },
     {
       q: 'What makes 0.03mm Swiss HD Lace completely invisible on skin?',
@@ -20,7 +20,7 @@ export const FaqPage: React.FC = () => {
       a: 'Mass-market retailers store thousands of pre-made wigs in non-climate-controlled warehouses for months or years, drying out the cuticles and weakening the lace. By consolidating weekly orders on Sundays and manufacturing freshly on demand, we deliver salon-grade fresh hair while eliminating wasteful retail markup.'
     },
     {
-      q: 'Can I bleach and dye Vaelyrion hair?',
+      q: 'Can I bleach and dye Tanelia hair?',
       a: 'Yes. Because our hair has never undergone acid baths or synthetic silicone coatings, it lifts effortlessly and safely up to level 10 (#613 Pure Blonde) or rich fashion tones while retaining its soft cuticle elasticity.'
     },
     {
@@ -32,7 +32,7 @@ export const FaqPage: React.FC = () => {
       a: 'If you have a screenshot of a celebrity, runway model, or influencer style from TikTok or Instagram, simply upload the image on our "Find This Hair" page. Our visual matcher identifies strand texture, wave pattern, lace type, and recommended length to suggest the exact atelier piece.'
     },
     {
-      q: 'What is included in the signature Vaelyrion unboxing?',
+      q: 'What is included in the signature Tanelia unboxing?',
       a: 'Every wig and bundle set arrives in our matte black magnetic keepsake box, complete with a 100% pure mulberry silk storage pouch, two salon sectioning clips, an atelier origin certificate, and our organic argan oil care guide.'
     }
   ];

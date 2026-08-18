@@ -54,7 +54,7 @@ export const AccountPage: React.FC = () => {
     try {
       if (authMode === 'login') {
         await login(authForm.email, authForm.password);
-        showToast('Login Successful', 'Welcome back to Vaelyrion.', 'gold');
+        showToast('Login Successful', 'Welcome back to Tanelia.', 'gold');
       } else {
         await register({
           email: authForm.email,
@@ -62,7 +62,7 @@ export const AccountPage: React.FC = () => {
           firstName: authForm.firstName,
           lastName: authForm.lastName
         });
-        showToast('Account Created', 'Welcome to the Vaelyrion Society.', 'gold');
+        showToast('Account Created', 'Welcome to the Tanelia Society.', 'gold');
       }
     } catch (err) {
       // Error is handled in context

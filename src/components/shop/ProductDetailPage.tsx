@@ -22,6 +22,7 @@ import { Product, HairDensity, LaceType, HairColor } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { MOCK_REVIEWS } from '../../data/mockData';
 import { ProductCard } from './ProductCard';
+import { SmartImage } from '../common/SmartImage';
 
 export const ProductDetailPage: React.FC = () => {
   const { 
@@ -112,6 +113,12 @@ export const ProductDetailPage: React.FC = () => {
     }
   };
 
+  const fallbackFor = (category: string) => {
+    if (category === 'bundles') return 'bundles';
+    if (category === 'accessories') return 'care';
+    return 'portrait';
+  };
+
   // Related products
   const relatedProducts = products
     .filter(p => p.id !== product.id && (p.category === product.category || p.isTrending))
@@ -159,9 +166,10 @@ export const ProductDetailPage: React.FC = () => {
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              <img
+              <SmartImage
                 src={product.images[activeImageIdx] || product.images[0]}
                 alt={product.title}
+                fallbackKind={fallbackFor(product.category)}
                 className="w-full h-full object-cover object-center transition-opacity duration-300 pointer-events-none"
                 draggable={false}
               />
@@ -447,7 +455,7 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Package className="w-4 h-4 text-[#B5935A] shrink-0" />
-                  <span>Vaelyrion Hard Box Packaging</span>
+                  <span>Tanelia Hard Box Packaging</span>
                 </div>
               </div>
 
@@ -513,7 +521,7 @@ export const ProductDetailPage: React.FC = () => {
                   <div className="w-8 h-8 rounded-full bg-[#FAF5ED] flex items-center justify-center text-[#B5935A] font-serif font-bold">1</div>
                   <h5 className="font-serif text-base text-stone-900">Rigid Magnetic Black Box</h5>
                   <p className="text-xs text-stone-600 font-light">
-                    Sturdy velvet-lined hard storage chest featuring gold-foil stamped Vaelyrion crest.
+                    Sturdy velvet-lined hard storage chest featuring gold-foil stamped Tanelia crest.
                   </p>
                 </div>
                 <div className="p-5 bg-white border border-[#141414]/10 rounded-sm space-y-2">
@@ -536,7 +544,7 @@ export const ProductDetailPage: React.FC = () => {
             {activeTab === 'shipping' && (
               <div className="space-y-6 text-xs text-stone-700">
                 <div className="bg-[#FAF5ED] p-6 rounded-sm border border-[#E5DAC8] space-y-3">
-                  <h4 className="font-serif text-lg text-stone-900">The Vaelyrion Weekly Batch Fulfillment Promise</h4>
+                  <h4 className="font-serif text-lg text-stone-900">The Tanelia Weekly Batch Fulfillment Promise</h4>
                   <p className="font-light leading-relaxed">
                     To maintain strict salon-grade hair freshness and prevent warehouse dry-out, we operate on a Weekly Batch consolidation schedule.
                   </p>
@@ -560,7 +568,7 @@ export const ProductDetailPage: React.FC = () => {
 
             {activeTab === 'care' && (
               <div className="space-y-4 text-xs text-stone-700">
-                <h4 className="font-serif text-lg text-stone-900">How to Maintain Your Vaelyrion Crown</h4>
+                <h4 className="font-serif text-lg text-stone-900">How to Maintain Your Tanelia Crown</h4>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 font-light">
                   {product.careInstructions.map((inst, i) => (
                     <li key={i} className="p-4 bg-white border border-[#141414]/10 rounded-sm flex items-start gap-3">

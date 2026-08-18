@@ -38,7 +38,7 @@ export const MOCK_PRODUCTS: Product[] = [
     careInstructions: [
       'Co-wash weekly with sulfate-free hydrating shampoo & rich argan oil conditioner',
       'Always detangle starting from the ends working gently up to the roots using a wide-tooth comb',
-      'Store on the included Vaelyrion velvet satin head stand inside the magnetic protective box'
+      'Store on the included Tanelia velvet satin head stand inside the magnetic protective box'
     ],
     isNew: true,
     isBestSeller: true,
@@ -79,7 +79,7 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     careInstructions: [
       'Apply lightweight heat protectant serum before hot wand styling',
-      'Sleep on the Vaelyrion mulberry silk pillowcase or wear our signature silk bonnet'
+      'Sleep on the Tanelia mulberry silk pillowcase or wear our signature silk bonnet'
     ],
     isNew: false,
     isBestSeller: true,
@@ -197,7 +197,7 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     careInstructions: [
       'Wash every 15–20 wears with lukewarm water and deep hydrating mask',
-      'Store in the provided Vaelyrion travel zip hanger case'
+      'Store in the provided Tanelia travel zip hanger case'
     ],
     isNew: true,
     isBestSeller: false,
@@ -244,8 +244,8 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-07',
-    title: 'Vaelyrion Mulberry Silk Care Kit',
-    slug: 'vaelyrion-mulberry-silk-care-kit',
+    title: 'Tanelia Mulberry Silk Care Kit',
+    slug: 'tanelia-mulberry-silk-care-kit',
     subtitle: 'Signature 22-Momme Silk Bonnet & Wide-Tooth Brass Comb',
     category: 'accessories',
     price: 65,
@@ -270,7 +270,7 @@ export const MOCK_PRODUCTS: Product[] = [
     details: [
       'Extra-wide soft elastic band with zero forehead crease mark technology',
       'Roomy interior accommodating up to 34" long hair and high-density wigs',
-      'Includes handcrafted anti-static detangling comb with Vaelyrion insignia'
+      'Includes handcrafted anti-static detangling comb with Tanelia insignia'
     ],
     careInstructions: [
       'Hand wash in cold water with delicate silk detergent; flat dry in shade'
@@ -334,7 +334,7 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
     featuredProductIds: ['prod-01', 'prod-03'],
     quote: 'True luxury in hair is invisible. It looks like it is growing directly from your own scalp.',
     content: [
-      'In traditional wig production, thick French lace and bulky double knots create an artificial ridge at the hairline. At Vaelyrion, we re-engineered the architecture from the ground up.',
+      'In traditional wig production, thick French lace and bulky double knots create an artificial ridge at the hairline. At Tanelia, we re-engineered the architecture from the ground up.',
       'We utilize ultra-fine 0.03mm Swiss HD mesh combined with single-hair hand ventilation. Each strand is knotted at an anatomical 45-degree angle, mimicking the natural whorl of human scalp growth.',
       'Coupled with our raw Cambodian temple hair that has never undergone chemical acid baths, the hair retains natural elasticity, movement, and a high-end natural sheen that lasts years.'
     ],
@@ -353,8 +353,8 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
     quote: 'By consolidating orders weekly, we ensure custom salon-grade freshness while avoiding landfill overproduction.',
     content: [
       'Mass-produced retail hair often sits in damp warehouses for months, drying out delicate cuticles before reaching customers.',
-      'Vaelyrion operates a curated weekly batch model: customers place pre-orders Monday through Sunday. On Monday morning, consolidated purchase orders are sent directly to our master craftsmen in China.',
-      'Within 4 days, finished units are inspected, packaged in custom temperature-controlled freight, and flown directly to our Norwegian 3PL center in Oslo. Here, each piece is inspected, conditioned, and nestled into signature Vaelyrion rigid magnetic packaging.'
+      'Tanelia operates a curated weekly batch model: customers place pre-orders Monday through Sunday. On Monday morning, consolidated purchase orders are sent directly to our master craftsmen in China.',
+      'Within 4 days, finished units are inspected, packaged in custom temperature-controlled freight, and flown directly to our Norwegian 3PL center in Oslo. Here, each piece is inspected, conditioned, and nestled into signature Tanelia rigid magnetic packaging.'
     ],
     tags: ['Sustainability', 'Logistics', 'Transparency', 'Norway 3PL']
   },
@@ -385,7 +385,7 @@ export const MOCK_REVIEWS: Review[] = [
     location: 'Oslo, Norway',
     rating: 5,
     title: 'The lace completely vanished on my skin',
-    content: 'I have worn luxury hair for over 7 years from London and New York salons, and Vaelyrion is on an entirely different level. The Sovereign HD melted seamlessly with zero makeup foundation needed. The pre-order took 12 days to arrive at my door in Oslo in the most gorgeous magnetic black box with silk pouch. Incredible.',
+    content: 'I have worn luxury hair for over 7 years from London and New York salons, and Tanelia is on an entirely different level. The Sovereign HD melted seamlessly with zero makeup foundation needed. The pre-order took 12 days to arrive at my door in Oslo in the most gorgeous magnetic black box with silk pouch. Incredible.',
     date: 'August 12, 2026',
     verifiedPurchase: true,
     hairLength: '24 inch',
@@ -462,7 +462,7 @@ export const INITIAL_ORDER_SAMPLE: Order = {
       step: 'payment_confirmed',
       title: 'Payment Confirmed',
       description: 'Secure transaction processed via Stripe Gateway.',
-      location: 'Vaelyrion Commerce Engine',
+      location: 'Tanelia Commerce Engine',
       timestamp: 'Aug 15, 14:22 CET',
       completed: true,
       current: false
@@ -471,7 +471,7 @@ export const INITIAL_ORDER_SAMPLE: Order = {
       step: 'order_received',
       title: 'Order Allocated to Weekly Batch',
       description: 'Order registered into Weekly Batch #BATCH-2026-W33.',
-      location: 'Vaelyrion Operations Hub',
+      location: 'Tanelia Operations Hub',
       timestamp: 'Aug 15, 14:25 CET',
       completed: true,
       current: false
@@ -525,7 +525,7 @@ export const INITIAL_ORDER_SAMPLE: Order = {
       step: 'fulfillment_center',
       title: 'Received by Oslo 3PL Center',
       description: 'Quality QC, argan conditioning & placement into luxury box.',
-      location: 'Vaelyrion 3PL Center, Oslo',
+      location: 'Tanelia 3PL Center, Oslo',
       timestamp: 'Pending (Expected Aug 22)',
       completed: false,
       current: false

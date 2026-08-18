@@ -45,14 +45,14 @@ const TRACKING_STEPS: OrderStatusStep[] = [
 ];
 
 const TRACKING_TEMPLATE: Array<{ step: OrderStatusStep; title: string; description: string; location: string }> = [
-  { step: 'payment_confirmed', title: 'Payment Confirmed', description: 'Secure transaction processed via Stripe Gateway.', location: 'Vaelyrion Commerce Engine' },
-  { step: 'order_received', title: 'Order Allocated to Weekly Batch', description: 'Order registered into this week\'s supplier batch pool.', location: 'Vaelyrion Operations Hub' },
+  { step: 'payment_confirmed', title: 'Payment Confirmed', description: 'Secure transaction processed via Stripe Gateway.', location: 'Tanelia Commerce Engine' },
+  { step: 'order_received', title: 'Order Allocated to Weekly Batch', description: 'Order registered into this week\'s supplier batch pool.', location: 'Tanelia Operations Hub' },
   { step: 'weekly_batch_created', title: 'Weekly Batch PO Generated', description: 'Consolidated purchase order transmitted to Qingdao atelier.', location: 'Operations · Oslo' },
   { step: 'supplier_processing', title: 'Artisan Custom Handcrafting', description: 'Single-knot ventilation & cuticle alignment inspection in progress.', location: 'Qingdao Atelier, China' },
   { step: 'shipped_china', title: 'Dispatched from Supplier Atelier', description: 'Handed over to International Air Freight.', location: 'Qingdao Airport (TAO), China' },
   { step: 'international_transit', title: 'International Air Transit', description: 'Flight in transit toward Scandinavian Hub.', location: 'In Flight · International Air Corridor' },
   { step: 'arrived_norway', title: 'Customs Clearance & Arrival in Norway', description: 'Batch arrives at Gardermoen Cargo & enters bonded transfer.', location: 'Oslo Gardermoen (OSL), Norway' },
-  { step: 'fulfillment_center', title: 'Received by Oslo 3PL Center', description: 'Quality QC, argan conditioning & placement into luxury box.', location: 'Vaelyrion 3PL Center, Oslo' },
+  { step: 'fulfillment_center', title: 'Received by Oslo 3PL Center', description: 'Quality QC, argan conditioning & placement into luxury box.', location: 'Tanelia 3PL Center, Oslo' },
   { step: 'preparing_shipment', title: 'Branded Luxury Packaging Sealed', description: 'Silk bonnet, brass comb, authenticity card & ribbon secured.', location: 'Fulfillment Logistics, Oslo' },
   { step: 'shipped_customer', title: 'Dispatched with Posten / Bring Norway', description: 'Local tracking number assigned.', location: 'Posten Hub, Oslo' },
   { step: 'out_for_delivery', title: 'Out for Courier Delivery', description: 'Courier on route to your specified address.', location: 'Destination Route' },
@@ -90,7 +90,7 @@ export const buildOrderFromServer = (serverOrder: any): Order => {
       id: item.id,
       product: {
         id: item.product_id,
-        title: item.product_name_snapshot || item.products?.name || 'Vaelyrion Creation',
+        title: item.product_name_snapshot || item.products?.name || 'Tanelia Creation',
         slug: item.products?.slug || '',
         subtitle: '',
         category: 'wigs',
@@ -332,7 +332,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Cart
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem('vaelyrion_cart');
+      const saved = localStorage.getItem('tanelia_cart');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -342,7 +342,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Sync cart from API if authenticated
   useEffect(() => {
-    const token = localStorage.getItem('vaelyrion_token');
+    const token = localStorage.getItem('tanelia_token');
     if (token) {
       api.cart.get()
         .then((res: any) => {
@@ -399,7 +399,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Wishlist
   const [wishlist, setWishlist] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('vaelyrion_wishlist');
+      const saved = localStorage.getItem('tanelia_wishlist');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -411,7 +411,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Sync orders from API if authenticated
   useEffect(() => {
-    const token = localStorage.getItem('vaelyrion_token');
+    const token = localStorage.getItem('tanelia_token');
     if (!token) return;
     api.orders.list()
       .then((serverOrders: any[]) => {
@@ -468,11 +468,11 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Sync to local storage
   useEffect(() => {
-    localStorage.setItem('vaelyrion_cart', JSON.stringify(cart));
+    localStorage.setItem('tanelia_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('vaelyrion_wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('tanelia_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
   // Scroll to top on view change
@@ -669,7 +669,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     setVisualSearchResults(matches);
     setIsSearchingImage(false);
-    showToast('Visual Matches Found', 'Found 3 high-affinity Vaelyrion matching styles.', 'gold');
+    showToast('Visual Matches Found', 'Found 3 high-affinity Tanelia matching styles.', 'gold');
   };
 
   const clearVisualSearch = () => {
@@ -682,7 +682,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       id: `addr-${Date.now()}`
     };
     setSavedAddresses(prev => [...prev, newAddr]);
-    showToast('Address Saved', `${newAddr.name} saved to your Vaelyrion address book.`, 'gold');
+    showToast('Address Saved', `${newAddr.name} saved to your Tanelia address book.`, 'gold');
   };
 
   const markNotificationRead = (id: string) => {

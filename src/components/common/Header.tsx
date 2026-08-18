@@ -66,7 +66,7 @@ export const Header: React.FC = () => {
             className="text-left cursor-pointer focus-visible:outline-none group"
           >
             <span className="font-display text-2xl sm:text-3xl tracking-[0.22em] font-semibold text-[#141414] group-hover:text-[#8E7348] transition-colors duration-300">
-              VAELYRION
+              TANELIA
             </span>
           </button>
 

@@ -164,7 +164,7 @@ export const OrderConfirmationPage: React.FC = () => {
                 <span>Encrypted Credit Card Transaction (Paid)</span>
               </p>
               <p className="text-stone-500">14-Day Untouched Lace Return Policy</p>
-              <p className="text-stone-500">Vaelyrion Concierge: concierge@vaelyrion.com</p>
+              <p className="text-stone-500">Tanelia Concierge: concierge@tanelia.shop</p>
             </div>
           </div>
 

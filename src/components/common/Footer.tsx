@@ -73,13 +73,13 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
               <span className="font-display text-2xl tracking-[0.25em] font-semibold text-[#FAF8F5]">
-                VAELYRION
+                TANELIA
               </span>
               <p className="text-xs tracking-widest text-[#B5935A] uppercase">Beyond What You Expect.</p>
             </div>
             
             <p className="text-stone-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
-              Vaelyrion is an international luxury house dedicated to single-origin raw temple hair, undetectable HD Swiss lace engineering, and sensory unboxing ceremonies.
+              Tanelia is an international luxury house dedicated to single-origin raw temple hair, undetectable HD Swiss lace engineering, and sensory unboxing ceremonies.
             </p>
 
             {/* Newsletter */}
@@ -245,7 +245,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a 
-                  href="mailto:concierge@vaelyrion.com"
+                  href="mailto:concierge@tanelia.shop"
                   className="hover:text-white transition-colors cursor-pointer"
                 >
                   Bespoke Stylist Concierge
@@ -254,9 +254,9 @@ export const Footer: React.FC = () => {
               <li>
                 <div className="pt-2 text-[11px] text-stone-400">
                   <p className="text-stone-300 font-medium">Oslo Fulfillment HQ:</p>
-                  <p>Vaelyrion Nordic Logistics Hub</p>
+                  <p>Tanelia Nordic Logistics Hub</p>
                   <p>Karenslyst Allé 16, 0278 Oslo, Norway</p>
-                  <p className="mt-1 text-[#B5935A]">concierge@vaelyrion.com</p>
+                  <p className="mt-1 text-[#B5935A]">concierge@tanelia.shop</p>
                 </div>
               </li>
             </ul>
@@ -268,7 +268,7 @@ export const Footer: React.FC = () => {
       {/* Bottom Legal & Payment Row */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-[#222222] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-500 font-light">
         <div>
-          © {new Date().getFullYear()} VAELYRION AS. All rights reserved. Registered in Norway (Org. nr 932 401 882).
+          © {new Date().getFullYear()} TANELIA AS. All rights reserved. Registered in Norway (Org. nr 932 401 882).
         </div>
 
         <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2 text-[11px]">

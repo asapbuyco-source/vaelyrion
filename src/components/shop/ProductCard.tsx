@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Heart, Star, ShoppingBag } from 'lucide-react';
 import { Product } from '../../types';
 import { useStore } from '../../context/StoreContext';
+import { SmartImage } from '../common/SmartImage';
 
 interface ProductCardProps {
   product: Product;
@@ -49,6 +50,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
     ? Math.round((1 - product.price / product.originalPrice) * 100)
     : null;
 
+  const fallbackFor = (category: string) => {
+    if (category === 'bundles') return 'bundles' as const;
+    if (category === 'accessories') return 'care' as const;
+    return 'portrait' as const;
+  };
+
   return (
     <div 
       onClick={handleCardClick}
@@ -59,9 +66,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
     >
       {/* Image Frame */}
       <div className="relative overflow-hidden bg-[#EFEAE4]" style={{ borderRadius: '20px 20px 0 0', aspectRatio: '3/4' }}>
-        <img
+        <SmartImage
           src={activeImage}
           alt={product.title}
+          fallbackKind={fallbackFor(product.category)}
           className="w-full h-full object-cover object-center transition-transform duration-700 ease-out will-change-transform"
           style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }}
           loading="lazy"
@@ -70,48 +78,35 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
         {/* Gradient overlay at bottom */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
 
-        {/* Status Badge */}
-        <div className="absolute top-3 left-3 z-10">
-          {product.isPreOrder ? (
-            <span className="glass-dark text-[#E8DFC8] text-[10px] uppercase font-semibold tracking-widest px-2.5 py-1 rounded-full border border-[#B5935A]/30">
-              Pre-Order
-            </span>
-          ) : (
-            <span className="glass text-emerald-800 text-[10px] uppercase font-semibold tracking-widest px-2.5 py-1 rounded-full border border-emerald-200/60">
-              In Stock
-            </span>
-          )}
+        {/* Unified badge column — v0 pattern */}
+        <div className="absolute top-3 left-3 right-3 z-10 flex items-start justify-between gap-2">
+          <div className="flex flex-col gap-1.5">
+            {/* Primary status badge */}
+            {(product.isBestSeller || product.isNew || product.isPreOrder) && (
+              <span className="bg-[#141414]/85 text-[#E8DFC8] text-[9.5px] uppercase font-semibold tracking-[0.14em] px-2.5 py-1 rounded-sm backdrop-blur-sm w-fit">
+                {product.isBestSeller ? 'Best Seller' : product.isNew ? 'New Drop' : 'Pre-Order'}
+              </span>
+            )}
+            {/* Discount badge */}
+            {discount && (
+              <span className="bg-[#B5935A] text-[#141414] text-[9.5px] font-bold tracking-[0.1em] px-2 py-0.5 rounded-sm w-fit">
+                −{discount}%
+              </span>
+            )}
+          </div>
+
+          {/* Wishlist Button — right side of the same flex row */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleWishlist(product.id);
+            }}
+            aria-label="Save to wishlist"
+            className="p-2.5 rounded-full glass shadow-sm transition-all duration-200 cursor-pointer active:scale-90 hover:scale-110 shrink-0"
+          >
+            <Heart className={`w-4 h-4 transition-all duration-200 ${isSaved ? 'fill-[#B5935A] text-[#B5935A] scale-110' : 'text-[#3A382F]'}`} />
+          </button>
         </div>
-
-        {/* Discount Badge */}
-        {discount && (
-          <div className="absolute top-3 left-3 mt-8 z-10">
-            <span className="bg-[#B5935A] text-black text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-full">
-              -{discount}%
-            </span>
-          </div>
-        )}
-
-        {/* Best Seller / New */}
-        {(product.isBestSeller || product.isNew) && (
-          <div className="absolute top-3 left-3 mt-8 z-10">
-            <span className="glass text-[#8E7348] text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-full border border-[#B5935A]/20">
-              {product.isBestSeller ? 'Best Seller' : 'New Drop'}
-            </span>
-          </div>
-        )}
-
-        {/* Wishlist Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleWishlist(product.id);
-          }}
-          aria-label="Save to Wishlist"
-          className="absolute top-3 right-3 z-10 p-2.5 rounded-full glass shadow-sm transition-all duration-200 cursor-pointer active:scale-90 hover:scale-110"
-        >
-          <Heart className={`w-4 h-4 transition-all duration-200 ${isSaved ? 'fill-[#B5935A] text-[#B5935A] scale-110' : 'text-stone-600'}`} />
-        </button>
 
         {/* Quick Add Overlay — slides up on hover (desktop only) */}
         <div 

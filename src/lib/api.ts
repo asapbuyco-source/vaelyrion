@@ -4,7 +4,7 @@
 const BASE_URL = '/api/v1';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = localStorage.getItem('vaelyrion_token');
+  const token = localStorage.getItem('tanelia_token');
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),

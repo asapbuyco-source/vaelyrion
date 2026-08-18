@@ -19,7 +19,7 @@ export const PackagingUnboxingShowcase: React.FC = () => {
             <div className="rounded-3xl overflow-hidden shadow-xl bg-stone-900 aspect-[4/3]">
               <img
                 src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85"
-                alt="Vaelyrion Luxury Packaging"
+                alt="Tanelia Luxury Packaging"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

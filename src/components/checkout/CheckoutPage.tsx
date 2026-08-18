@@ -188,7 +188,7 @@ const CheckoutContent: React.FC = () => {
         <Lock className="w-12 h-12 text-[#B5935A]" />
         <h2 className="font-serif text-2xl text-stone-900">Sign in to Checkout</h2>
         <p className="text-xs text-stone-500 font-light max-w-xs mb-4">
-          A Vaelyrion Society account is required to securely process your payment and track your luxury batch delivery.
+          A Tanelia Society account is required to securely process your payment and track your luxury batch delivery.
         </p>
         <button
           onClick={() => setCurrentView('account')}
@@ -215,7 +215,7 @@ const CheckoutContent: React.FC = () => {
           </button>
 
           <span className="font-display text-xl tracking-[0.25em] font-semibold text-[#141414]">
-            VAELYRION
+            TANELIA
           </span>
 
           <div className="flex items-center gap-1.5 text-xs text-stone-500 font-light">
@@ -625,7 +625,7 @@ const CheckoutContent: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#B5935A] shrink-0" />
-                  <span>Includes Vaelyrion Magnetic Box & Silk Pouch</span>
+                  <span>Includes Tanelia Magnetic Box & Silk Pouch</span>
                 </div>
               </div>
 
