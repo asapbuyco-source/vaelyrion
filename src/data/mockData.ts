@@ -13,10 +13,10 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.95,
     reviewCount: 128,
     images: [
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288704Xp9vRzsMdgUsmQaX_3483a27a-35e4-469a-a27c-a8669c3694ec.jpg',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288705sGng7OjgwW8eKtnh.jpg',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085547949357604864fkqqjX08slEa01mr.webp',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085539561127092224G3RuS4ZmhLtI7Mhw.webp'
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1541823709867-1b206113eafd?auto=format&fit=crop&w=1200&q=85'
     ],
     isPreOrder: true,
     estimatedDelivery: '10–18 business days (Batch Delivery to Norway & Europe)',
@@ -137,9 +137,9 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.98,
     reviewCount: 172,
     images: [
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065153v1aY413AR8x3UMJ1_9579f0ac-9a49-4d31-a5d7-1c0927f72b21.png',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065152tq2FNZSPotRRNubJ_a883f996-ea4e-44ac-b083-41e034e27275.png',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320187271258112uQGWZWkeeYeD0s7W_9296d849-7a21-4c40-9253-275161d19f50.png'
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1541823709867-1b206113eafd?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=1200&q=85'
     ],
     isPreOrder: true,
     estimatedDelivery: '10–18 business days (Batch Delivery to Norway & Europe)',
@@ -177,8 +177,8 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.91,
     reviewCount: 88,
     images: [
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320104320507904WHhs8TJ151sL318C_e6a2c697-f41a-416a-9427-c6c0dd66181e.png',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/208532018898672844850NrUyklchO9ysop_64aa0075-ba7e-4dd8-aaef-1bc7434f0555.webp'
+      'https://images.unsplash.com/photo-1503104834685-7205e8607eb9?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=85'
     ],
     isPreOrder: false,
     estimatedDelivery: '2–4 business days (In Stock — Direct Norway 3PL Dispatch)',
@@ -216,8 +216,8 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.86,
     reviewCount: 47,
     images: [
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085705268292820992dfqmuuvWSGHYdU39_230f3642-ec06-4fba-a81c-30bcca57938c.jpg',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320187267063808XAthZtraG4AWmex5_59fc5448-331b-4270-8cd2-8dfbc8c32be3.png'
+      'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85'
     ],
     isPreOrder: false,
     estimatedDelivery: '2–4 business days (In Stock — Direct Norway 3PL Dispatch)',
@@ -254,8 +254,8 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.99,
     reviewCount: 215,
     images: [
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2x_1_55d74548-0357-4f47-8390-65501ff65e04.png',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2x_308f27c5-3af1-4ca4-938b-657dca2b5404.png'
+      'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=1200&q=85'
     ],
     isPreOrder: false,
     estimatedDelivery: '2–4 business days (In Stock — Direct Norway 3PL Dispatch)',
@@ -292,8 +292,8 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.96,
     reviewCount: 78,
     images: [
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065155uX2AlAURXsvNKmbi_9bb3263a-0d58-4b95-ad73-44f519c0e731.png',
-      'https://cdn.shopify.com/s/files/1/2465/8681/files/2089309686636552192d2C5pGL3NMDHWPYY.png'
+      'https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?auto=format&fit=crop&w=1200&q=85',
+      'https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?auto=format&fit=crop&w=1200&q=85'
     ],
     isPreOrder: true,
     estimatedDelivery: '10–18 business days (Batch Delivery to Norway & Europe)',

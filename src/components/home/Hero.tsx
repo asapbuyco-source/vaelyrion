@@ -130,7 +130,7 @@ export const Hero: React.FC = () => {
             {/* Main hero image */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85"
+                src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85"
                 alt="Vaelyrion Luxury Campaign"
                 className="w-full h-full object-cover object-center"
               />
@@ -143,9 +143,9 @@ export const Hero: React.FC = () => {
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-10 h-12 rounded-lg overflow-hidden bg-stone-200 shrink-0">
                   <img 
-                    src="https://cdn.shopify.com/s/files/1/2465/8681/files/2080932979095207936xsrAfr1mIeIlZkLF.png"
+                    src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80"
                     className="w-full h-full object-cover" 
-                    alt="Featured product"
+                    alt="Signature HD wig in body wave texture"
                   />
                 </div>
                 <div>
