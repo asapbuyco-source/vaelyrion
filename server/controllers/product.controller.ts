@@ -4,6 +4,8 @@ import { supabase } from '../config/supabase';
 const formatProduct = (p: any) => {
   const defaultVariant = p.product_variants?.[0] || {};
   const attrs = defaultVariant.attributes || {};
+  const createdMs = p.created_at ? new Date(p.created_at).getTime() : 0;
+  const isRecent = createdMs > Date.now() - 21 * 24 * 60 * 60 * 1000;
 
   return {
     id: p.id,
@@ -29,8 +31,8 @@ const formatProduct = (p: any) => {
     hairOrigin: p.hair_origin || '',
     details: p.details || [],
     careInstructions: p.care_instructions || [],
-    isNew: false,
-    isBestSeller: false,
+    isNew: isRecent,
+    isBestSeller: p.selling_price >= 200,
     supplierId: p.supplier_id
   };
 };

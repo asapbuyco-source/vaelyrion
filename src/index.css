@@ -185,3 +185,78 @@
   vertical-align: middle;
   margin-right: 10px;
 }
+
+/* ─── Brand Wordmark ──────────────────────────────────────── */
+.wordmark {
+  font-family: var(--font-display);
+  letter-spacing: 0.22em;
+  font-weight: 600;
+}
+.wordmark .wordmark-diamond {
+  display: inline-block;
+  font-size: 0.4em;
+  vertical-align: 0.34em;
+  margin: 0 0.4em;
+  color: var(--color-gold);
+  transform: rotate(45deg);
+}
+
+/* ─── Editorial Numeral ───────────────────────────────────── */
+.section-num {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.32em;
+  color: var(--color-gold);
+}
+
+/* ─── Reveal on Scroll ────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Text-Arrow CTA ──────────────────────────────────────── */
+.btn-text-arrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-near-black);
+}
+.btn-text-arrow::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 1px;
+  width: 100%;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--transition-smooth);
+}
+.btn-text-arrow:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.btn-text-arrow:hover {
+  color: var(--color-taupe);
+}
+
+/* ─── Hero Settle Zoom ────────────────────────────────────── */
+@keyframes settleZoom {
+  from { transform: scale(1.07); }
+  to   { transform: scale(1); }
+}
+.animate-settle {
+  animation: settleZoom 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

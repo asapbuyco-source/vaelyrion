@@ -26,7 +26,7 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[90vh]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center lg:min-h-[90vh]">
           
           {/* LEFT: Editorial Text Column */}
           <div className="space-y-8 lg:py-24">
@@ -50,7 +50,8 @@ export const Hero: React.FC = () => {
               transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
               transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s'
             }}>
-              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#141414] leading-[1.02] tracking-tight text-balance">
+              <p className="section-num mb-4">TANELIA · THE ATELIER</p>
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-normal text-[#141414] leading-[1.02] tracking-tight text-balance">
                 Discover Your<br />
                 <span className="italic text-[#8E7348]">Signature</span><br />
                 Look
@@ -82,15 +83,15 @@ export const Hero: React.FC = () => {
                   setFilters(prev => ({ ...prev, category: 'all', searchQuery: '' }));
                   setCurrentView('shop');
                 }}
-                className="group flex items-center justify-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] text-xs uppercase tracking-widest font-bold py-4 px-8 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
+                className="group flex items-center justify-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] text-xs uppercase tracking-widest font-bold py-4 px-10 rounded-full transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
               >
-                <span>Shop Collection</span>
+                <span>Shop the Collection</span>
                 <ArrowRight className="w-4 h-4 text-[#B5935A] group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
                 onClick={() => setCurrentView('find-hair')}
-                className="flex items-center justify-center gap-2.5 glass border border-[#141414]/12 text-[#141414] hover:border-[#B5935A]/40 text-xs uppercase tracking-widest font-semibold py-4 px-6 rounded-2xl transition-all duration-300 cursor-pointer"
+                className="btn-text-arrow py-4 px-2 cursor-pointer"
               >
                 <Scan className="w-4 h-4 text-[#B5935A]" />
                 <span>Find This Hair</span>
@@ -121,7 +122,7 @@ export const Hero: React.FC = () => {
 
           {/* RIGHT: Large editorial imagery with floating card */}
           <div 
-            className="relative hidden lg:block"
+            className="relative block"
             style={{ 
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateX(0)' : 'translateX(32px)',
@@ -129,7 +130,7 @@ export const Hero: React.FC = () => {
             }}
           >
             {/* Main hero image */}
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
+            <div className="animate-settle relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
               <SmartImage
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85"
                 alt="Tanelia Luxury Campaign"
@@ -141,7 +142,7 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Floating product preview card */}
-            <div className="absolute -bottom-6 -left-8 glass rounded-2xl p-4 shadow-xl max-w-[200px] animate-float">
+            <div className="absolute -bottom-6 -left-8 glass rounded-2xl p-4 shadow-xl max-w-[200px] animate-float hidden sm:block">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-10 h-12 rounded-lg overflow-hidden bg-stone-200 shrink-0">
                   <SmartImage 
@@ -167,7 +168,7 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Floating batch badge */}
-            <div className="absolute top-6 -right-4 glass-gold rounded-2xl p-3 shadow-lg">
+            <div className="absolute top-6 -right-4 glass-gold rounded-2xl p-3 shadow-lg hidden sm:block">
               <p className="text-[10px] uppercase tracking-widest text-[#8E7348] font-bold">Batch #003</p>
               <p className="font-serif text-sm font-medium text-[#141414] mt-0.5">Now Open</p>
               <div className="mt-2 w-full bg-stone-200 rounded-full h-1">

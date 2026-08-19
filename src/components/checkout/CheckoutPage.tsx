@@ -214,8 +214,8 @@ const CheckoutContent: React.FC = () => {
             <span className="hidden sm:inline">Return to Collection</span>
           </button>
 
-          <span className="font-display text-xl tracking-[0.25em] font-semibold text-[#141414]">
-            TANELIA
+          <span className="wordmark text-xl text-[#141414]">
+            TANE<span className="wordmark-diamond">■</span>LIA
           </span>
 
           <div className="flex items-center gap-1.5 text-xs text-stone-500 font-light">

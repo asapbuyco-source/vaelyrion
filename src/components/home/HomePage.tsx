@@ -6,12 +6,15 @@ import { FindThisHairBanner } from './FindThisHairBanner';
 import { BatchTrustSection } from './BatchTrustSection';
 import { PackagingUnboxingShowcase } from './PackagingUnboxingShowcase';
 import { ProductCard } from '../shop/ProductCard';
+import { SmartImage } from '../common/SmartImage';
 import { useStore } from '../../context/StoreContext';
+import { useReveal } from '../../hooks/useReveal';
 import { MOCK_ARTICLES } from '../../data/mockData';
 
 export const HomePage: React.FC = () => {
   const { products, setCurrentView, setFilters, setSelectedArticleId } = useStore();
   const [activeTab, setActiveTab] = useState<'featured' | 'wigs' | 'bundles'>('featured');
+  const revealRef = useReveal<HTMLDivElement>();
 
   const displayedProducts = products
     .filter(p => {
@@ -27,7 +30,7 @@ export const HomePage: React.FC = () => {
   const secondaryStory = MOCK_ARTICLES[1];
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen">
+    <div className="bg-[#FAF8F5] min-h-screen" ref={revealRef}>
 
       {/* 1. Editorial Hero */}
       <Hero />
@@ -35,25 +38,50 @@ export const HomePage: React.FC = () => {
       {/* 2. Category Visual Grid */}
       <CategoryVisuals />
 
+      {/* 2.5 Full-Bleed Atelier Band */}
+      <section className="relative h-[52vh] min-h-[360px] lg:h-[60vh] w-full overflow-hidden">
+        <div className="absolute inset-0">
+          <SmartImage
+            src="https://images.unsplash.com/photo-1522337660859-02fbefca4d79?auto=format&fit=crop&w=2400&q=80"
+            alt="Tanelia Atelier"
+            fallbackKind="editorial"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10" />
+        </div>
+        <div className="reveal relative z-10 h-full flex flex-col items-center justify-end text-center px-6 pb-12 lg:pb-16">
+          <span className="section-num text-[#C8AD7F]">ATELIER NOTE · 01</span>
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#FAF8F5] italic mt-4 max-w-3xl text-balance leading-tight">
+            "Hair that moves like it was never touched."
+          </h2>
+          <div className="w-12 h-px bg-[#B5935A] my-6" />
+          <p className="text-[#E8DFC8]/80 text-[11px] uppercase tracking-[0.3em] font-light">
+            Single-Donor · Hand-Ventilated · Oslo-Inspected
+          </p>
+        </div>
+      </section>
+
       {/* 3. New Arrivals */}
       {newArrivals.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <div className="flex items-end justify-between mb-10">
+          <div className="reveal flex items-end justify-between mb-10">
             <div>
-              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">Just Arrived</p>
+              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 01 · Just Arrived</p>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">New Arrivals</h2>
             </div>
             <button
               onClick={() => { setFilters(p => ({ ...p, category: 'all' })); setCurrentView('shop'); }}
-              className="hidden sm:flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold text-[#141414] hover:text-[#8E7348] transition-colors cursor-pointer group"
+              className="btn-text-arrow hidden sm:inline-flex cursor-pointer"
             >
               <span>See All</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 text-[#B5935A] transition-transform duration-300" />
             </button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {newArrivals.map((p, i) => (
-              <ProductCard key={p.id} product={p} animationDelay={i * 80} />
+              <div key={p.id} className={`reveal ${i % 2 === 1 ? 'lg:mt-10' : ''}`}>
+                <ProductCard product={p} animationDelay={i * 80} />
+              </div>
             ))}
           </div>
         </section>
@@ -61,9 +89,9 @@ export const HomePage: React.FC = () => {
 
       {/* 4. Featured Hair Architecture (with tabs) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 border-t border-[#141414]/8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">Our Curations</p>
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 02 · Our Curations</p>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">Featured Collection</h2>
           </div>
 
@@ -98,7 +126,7 @@ export const HomePage: React.FC = () => {
         <div className="mt-12 text-center">
           <button
             onClick={() => { setFilters(p => ({ ...p, category: 'all' })); setCurrentView('shop'); }}
-            className="inline-flex items-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-bold px-10 py-4 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg group"
+            className="inline-flex items-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-bold px-10 py-4 rounded-full transition-all duration-300 cursor-pointer shadow-lg group"
           >
             <span>Explore Full Collection</span>
             <ArrowRight className="w-4 h-4 text-[#B5935A] group-hover:translate-x-1 transition-transform" />
@@ -112,9 +140,9 @@ export const HomePage: React.FC = () => {
       {/* 6. Trending Now */}
       {trending.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 border-t border-[#141414]/8">
-          <div className="flex items-end justify-between mb-10">
+          <div className="reveal flex items-end justify-between mb-10">
             <div>
-              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">Most Loved</p>
+              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 03 · Most Loved</p>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">Trending Now</h2>
             </div>
           </div>
@@ -134,19 +162,19 @@ export const HomePage: React.FC = () => {
 
       {/* 9. Editorial / Gazette */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">Editorial</p>
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 04 · Editorial</p>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
               The Tanelia Gazette
             </h2>
           </div>
           <button
             onClick={() => setCurrentView('discover')}
-            className="flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold text-[#141414] hover:text-[#8E7348] transition-colors cursor-pointer group"
+            className="btn-text-arrow cursor-pointer"
           >
             <span>View All Stories</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-[#B5935A] transition-transform duration-300" />
           </button>
         </div>
 

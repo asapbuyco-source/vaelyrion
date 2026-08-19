@@ -65,8 +65,8 @@ export const Header: React.FC = () => {
             onClick={() => { setCurrentView('home'); setFilters(p => ({ ...p, category: 'all', searchQuery: '' })); }}
             className="text-left cursor-pointer focus-visible:outline-none group"
           >
-            <span className="font-display text-2xl sm:text-3xl tracking-[0.22em] font-semibold text-[#141414] group-hover:text-[#8E7348] transition-colors duration-300">
-              TANELIA
+            <span className="wordmark text-2xl sm:text-3xl text-[#141414] group-hover:text-[#8E7348] transition-colors duration-300">
+              TANE<span className="wordmark-diamond">■</span>LIA
             </span>
           </button>
 

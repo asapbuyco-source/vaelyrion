@@ -72,8 +72,8 @@ export const Footer: React.FC = () => {
           {/* Brand Manifesto & Newsletter */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
-              <span className="font-display text-2xl tracking-[0.25em] font-semibold text-[#FAF8F5]">
-                TANELIA
+              <span className="wordmark text-2xl text-[#FAF8F5]">
+                TANE<span className="wordmark-diamond">■</span>LIA
               </span>
               <p className="text-xs tracking-widest text-[#B5935A] uppercase">Beyond What You Expect.</p>
             </div>
