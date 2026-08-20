@@ -362,23 +362,32 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
-  // Fetch products from backend on mount
+// Fetch products from backend on mount
   useEffect(() => {
-    api.products.list()
-      .then((response: any) => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const response: any = await api.products.list();
+        if (cancelled) return;
         const data = Array.isArray(response) ? response : response?.products || response?.data || [];
         if (data.length > 0) {
           setProducts(data.map(normalizeServerProduct));
           return;
         }
         throw new Error('The catalog API returned no active products.');
-      })
-      .catch((err) => {
+      } catch (err: any) {
+        if (cancelled) return;
         console.warn('Failed to load products from API, falling back to mock data:', err.message);
         // Fallback to mock data if API is unavailable
-        import('../data/mockData').then(m => setProducts(m.MOCK_PRODUCTS));
-      })
-      .finally(() => setIsLoadingProducts(false));
+        import('../data/mockData').then(m => {
+          if (!cancelled) setProducts(m.MOCK_PRODUCTS);
+        });
+      } finally {
+        if (!cancelled) setIsLoadingProducts(false);
+      }
+    };
+    load();
+    return () => { cancelled = true; };
   }, []);
 
   // Cart

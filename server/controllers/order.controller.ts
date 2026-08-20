@@ -1,7 +1,7 @@
 // server/src/controllers/order.controller.ts
 import { Response } from 'express';
-import { supabase } from '../config/supabase';
-import { AuthRequest } from '../middleware/auth.middleware';
+import { supabase } from '../config/supabase.js';
+import { AuthRequest } from '../middleware/auth.middleware.js';
 
 export class OrderController {
   static async getMyOrders(req: AuthRequest, res: Response) {

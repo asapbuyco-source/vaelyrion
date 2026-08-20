@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { supabase } from '../config/supabase';
+import { supabase } from '../config/supabase.js';
 
 export class ContactController {
   static async createRequest(req: Request, res: Response) {

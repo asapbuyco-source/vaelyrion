@@ -3,7 +3,10 @@
 
 const BASE_URL = '/api/v1';
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
+const REQUEST_TIMEOUT_MS = 15000;
+const DEFAULT_RETRIES = 1;
+
+async function request<T>(path: string, options?: RequestInit & { retries?: number }): Promise<T> {
   const token = localStorage.getItem('tanelia_token');
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -11,13 +14,34 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options?.headers,
   };
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  const { retries = DEFAULT_RETRIES, ...fetchOptions } = options || {};
+  const method = fetchOptions.method || 'GET';
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || 'API request failed');
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      const res = await fetch(`${BASE_URL}${path}`, {
+        ...fetchOptions,
+        headers,
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || 'API request failed');
+      }
+      return res.json();
+    } catch (err: any) {
+      lastError = err;
+      // Retry only network/timeout failures on idempotent methods
+      if (method !== 'GET' || attempt >= retries) throw err;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
-  return res.json();
+  throw lastError;
 }
 
 export const api = {

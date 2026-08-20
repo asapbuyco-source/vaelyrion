@@ -1,6 +1,6 @@
 // api/middleware/auth.middleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../config/supabase';
+import { supabase } from '../config/supabase.js';
 
 export interface AuthRequest extends Request {
   user?: any;

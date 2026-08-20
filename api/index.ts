@@ -6,16 +6,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Route imports
-import authRoutes from '../server/routes/auth.routes';
-import productRoutes from '../server/routes/product.routes';
-import cartRoutes from '../server/routes/cart.routes';
-import checkoutRoutes from '../server/routes/checkout.routes';
-import orderRoutes from '../server/routes/order.routes';
-import contactRoutes from '../server/routes/contact.routes';
-import adminRoutes from '../server/routes/admin.routes';
-import contentRoutes from '../server/routes/content.routes';
-import { AdminController } from '../server/controllers/admin.controller';
-import { supabase } from '../server/config/supabase';
+import authRoutes from '../server/routes/auth.routes.js';
+import productRoutes from '../server/routes/product.routes.js';
+import cartRoutes from '../server/routes/cart.routes.js';
+import checkoutRoutes from '../server/routes/checkout.routes.js';
+import orderRoutes from '../server/routes/order.routes.js';
+import contactRoutes from '../server/routes/contact.routes.js';
+import adminRoutes from '../server/routes/admin.routes.js';
+import contentRoutes from '../server/routes/content.routes.js';
+import { AdminController } from '../server/controllers/admin.controller.js';
+import { supabase } from '../server/config/supabase.js';
 
 const app = express();
 const port = process.env.PORT || 3001;

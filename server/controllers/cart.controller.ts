@@ -1,7 +1,7 @@
 // server/src/controllers/cart.controller.ts
 import { Response } from 'express';
-import { supabase } from '../config/supabase';
-import { AuthRequest } from '../middleware/auth.middleware';
+import { supabase } from '../config/supabase.js';
+import { AuthRequest } from '../middleware/auth.middleware.js';
 
 const getOrCreateCart = async (userId: string) => {
   // Look for existing active cart

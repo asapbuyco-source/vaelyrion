@@ -1,8 +1,8 @@
 // server/controllers/checkout.controller.ts
 import { Response } from 'express';
 import Stripe from 'stripe';
-import { supabase } from '../config/supabase';
-import { AuthRequest } from '../middleware/auth.middleware';
+import { supabase } from '../config/supabase.js';
+import { AuthRequest } from '../middleware/auth.middleware.js';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
 const stripe = new Stripe(stripeSecretKey);

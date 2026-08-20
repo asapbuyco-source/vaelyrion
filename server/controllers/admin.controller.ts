@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { supabase } from '../config/supabase';
-import { AuthRequest } from '../middleware/auth.middleware';
+import { supabase } from '../config/supabase.js';
+import { AuthRequest } from '../middleware/auth.middleware.js';
 
 const clean = (value: unknown, max = 5000) => String(value ?? '').trim().slice(0, max);
 
