@@ -2,24 +2,24 @@
 
 @layer base {
   :root {
-    --font-serif: 'Cormorant Garamond', Georgia, serif;
-    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+    --font-serif: 'Bodoni Moda', 'Times New Roman', serif;
+    --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Bodoni Moda', 'Times New Roman', serif;
 
     /* Tanelia Design Tokens */
-    --color-ivory: #FAF8F5;
-    --color-ivory-warm: #F4EFEA;
-    --color-ivory-deep: #EDE8E1;
-    --color-near-black: #141414;
-    --color-gold: #B5935A;
-    --color-gold-light: #C8AD7F;
-    --color-gold-pale: #E8DFC8;
+    --color-ivory: #F7F5F0;
+    --color-ivory-warm: #EEEAE2;
+    --color-ivory-deep: #E4DED4;
+    --color-near-black: #171614;
+    --color-gold: #7A5B2A;
+    --color-gold-light: #BFA379;
+    --color-gold-pale: #E3D6C0;
     --color-gold-bg: #FAF5ED;
-    --color-taupe: #8E7348;
-    --radius-card: 20px;
+    --color-taupe: #765C35;
+    --radius-card: 2px;
     --radius-pill: 999px;
-    --shadow-card: 0 4px 24px rgba(20,20,20,0.08), 0 1px 4px rgba(20,20,20,0.04);
-    --shadow-card-hover: 0 12px 40px rgba(20,20,20,0.14), 0 2px 8px rgba(20,20,20,0.06);
+    --shadow-card: 0 12px 30px rgba(20,20,20,0.10), 0 2px 8px rgba(20,20,20,0.05);
+    --shadow-card-hover: 0 22px 46px rgba(20,20,20,0.18), 0 4px 12px rgba(20,20,20,0.08);
     --shadow-float: 0 8px 32px rgba(20,20,20,0.12), 0 2px 8px rgba(20,20,20,0.08);
     --shadow-glass: 0 2px 24px rgba(20,20,20,0.06);
     --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -37,6 +37,9 @@
   h1, h2, h3, h4, .font-serif {
     font-family: var(--font-serif);
   }
+
+  h1, h2 { font-weight: 500; letter-spacing: -0.035em; }
+  h3, h4 { font-weight: 500; letter-spacing: -0.02em; }
 
   .font-display {
     font-family: var(--font-display);
@@ -259,4 +262,40 @@
 }
 .animate-settle {
   animation: settleZoom 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.brand-logo { display: block; }
+.brand-logo-header { max-height: 54px; }
+.brand-logo-footer { filter: brightness(0) invert(1); max-height: 46px; }
+
+/* ─── Quiet luxury refinements ───────────────────────────── */
+body { letter-spacing: -0.01em; }
+button { letter-spacing: inherit; }
+.text-xs { font-size: 0.8rem; line-height: 1.45; }
+.text-\[11px\] { font-size: 0.74rem; line-height: 1.4; }
+.text-\[10px\] { font-size: 0.7rem; line-height: 1.35; }
+.text-\[9px\] { font-size: 0.66rem; line-height: 1.3; }
+.wordmark { letter-spacing: 0.3em; font-weight: 500; }
+.section-label { letter-spacing: 0.2em !important; }
+.section-label::before { width: 34px; margin-right: 14px; }
+.btn-text-arrow { letter-spacing: 0.16em; font-size: 0.72rem; }
+.glass, .glass-gold, .glass-dark { backdrop-filter: none; -webkit-backdrop-filter: none; border-radius: 2px; }
+.glass { background: rgba(247,245,240,.98); border-color: rgba(23,22,20,.12); box-shadow: 0 12px 28px rgba(20,20,20,.10); }
+.glass-gold { background: #eee7dc; border-color: rgba(155,122,74,.35); box-shadow: 0 12px 28px rgba(109,80,37,.12); }
+.card-float { border-radius: 2px; box-shadow: var(--shadow-card); }
+.card-float:hover { transform: translateY(-3px); }
+.luxury-box { background: #fff; border: 1px solid rgba(23,22,20,.10); box-shadow: var(--shadow-card); }
+.luxury-box:hover { box-shadow: var(--shadow-card-hover); }
+.gold-rule { border-color: rgba(155,122,74,.35); }
+/* Accent text is intentionally darker than the metallic surface color so small labels remain readable. */
+.text-\[\#8E7348\] { color: #765C35 !important; }
+.font-light { font-weight: 400; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  body { line-height: 1.55; }
+  .text-xs { font-size: 0.82rem; }
+  .text-\[11px\] { font-size: 0.76rem; }
+  .text-\[10px\] { font-size: 0.72rem; }
+  .text-\[9px\] { font-size: 0.68rem; }
+  .btn-text-arrow { font-size: 0.72rem; letter-spacing: 0.14em; }
 }

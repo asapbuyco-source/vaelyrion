@@ -54,7 +54,7 @@ export const ReturnsPolicyPage: React.FC = () => {
             How to Initiate a Return
           </h3>
           <p>
-            1. Email our Oslo Client Concierge at <strong>concierge@tanelia.shop</strong> or submit an inquiry through your <button onClick={() => setCurrentView('account')} className="underline font-semibold text-black">Client Account Portal</button>.
+            1. Email Tanelia Client Services at <strong>info@tanelia.shop</strong> or submit an inquiry through your <button onClick={() => setCurrentView('account')} className="underline font-semibold text-black">Client Account Portal</button>.
           </p>
           <p>
             2. We will generate a prepaid return airway label for our Oslo 3PL inspection hub.

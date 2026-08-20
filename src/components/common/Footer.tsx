@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
             </div>
             <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">100% Single-Donor Raw Hair</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              Cuticle-aligned temple hair with zero chemical baths. Retains natural vitality and movement for 2+ years.
+              Cuticle-aligned hair selected for its natural movement, softness, and lasting wear.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ export const Footer: React.FC = () => {
             <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Bespoke Oslo 3PL QC</h4>
+            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Prepared in Oslo</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
               Every unit is meticulously inspected, botanical-conditioned, and nestled into signature magnetic unboxing.
             </p>
@@ -58,7 +58,7 @@ export const Footer: React.FC = () => {
             </div>
             <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Uncompromised Guarantee</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              14-day lace inspection guarantee. Full refund or exchange if lace remains uncut and security seal intact.
+              A considered 14-day lace inspection period, with clear returns for untouched pieces.
             </p>
           </div>
 
@@ -72,14 +72,12 @@ export const Footer: React.FC = () => {
           {/* Brand Manifesto & Newsletter */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
-              <span className="wordmark text-2xl text-[#FAF8F5]">
-                TANE<span className="wordmark-diamond">■</span>LIA
-              </span>
+              <img src="/brand/tanelia-logo.png" alt="Tanelia" className="brand-logo brand-logo-footer w-[170px] h-auto object-contain" />
               <p className="text-xs tracking-widest text-[#B5935A] uppercase">Beyond What You Expect.</p>
             </div>
             
             <p className="text-stone-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
-              Tanelia is an international luxury house dedicated to single-origin raw temple hair, undetectable HD Swiss lace engineering, and sensory unboxing ceremonies.
+              Tanelia is a modern hair house dedicated to single-origin hair, fine Swiss lace, and a considered arrival.
             </p>
 
             {/* Newsletter */}
@@ -88,7 +86,7 @@ export const Footer: React.FC = () => {
                 Join the Private Pre-Order Circle
               </p>
               <p className="text-xs text-stone-400 mb-3 font-light">
-                Receive weekly batch drop alerts, private atelier lookbooks, and invitations to new hair drops.
+                Receive release notes, private lookbooks, and early access to new pieces.
               </p>
               
               <form onSubmit={handleSubscribe} className="flex max-w-md">
@@ -177,7 +175,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setCurrentView('find-hair')}
                   className="hover:text-white transition-colors cursor-pointer text-[#E8DFC8]"
                 >
-                  Find This Hair (AI Match)
+                  Find Your Match
                 </button>
               </li>
               <li>
@@ -228,11 +226,19 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
+                <button
+                  onClick={() => setCurrentView('contact')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Contact Tanelia · Oslo
+                </button>
+              </li>
+              <li>
                 <button 
                   onClick={() => setCurrentView('shipping-policy')}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Shipping & Norway 3PL Transit
+                  Shipping & Oslo Preparation
                 </button>
               </li>
               <li>
@@ -245,7 +251,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a 
-                  href="mailto:concierge@tanelia.shop"
+                  href="mailto:info@tanelia.shop"
                   className="hover:text-white transition-colors cursor-pointer"
                 >
                   Bespoke Stylist Concierge
@@ -256,10 +262,11 @@ export const Footer: React.FC = () => {
                   <p className="text-stone-300 font-medium">Oslo Fulfillment HQ:</p>
                   <p>Tanelia Nordic Logistics Hub</p>
                   <p>Karenslyst Allé 16, 0278 Oslo, Norway</p>
-                  <p className="mt-1 text-[#B5935A]">concierge@tanelia.shop</p>
+                  <p className="mt-1 text-[#B5935A]">info@tanelia.shop</p>
                 </div>
               </li>
             </ul>
+            <a href="mailto:info@tanelia.shop" className="inline-block text-xs text-[#B5935A] hover:text-white transition-colors">info@tanelia.shop</a>
           </div>
 
         </div>

@@ -1,15 +1,16 @@
 import React from 'react';
 import { ArrowRight, Clock, Sparkles, BookOpen, User } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { MOCK_ARTICLES } from '../../data/mockData';
 import { DiscoverArticle } from '../../types';
+import { SmartImage } from '../common/SmartImage';
 
 export const DiscoverPage: React.FC = () => {
   const { 
     setSelectedArticleId, 
     setCurrentView,
     setSelectedProductId,
-    products
+    products,
+    articles
   } = useStore();
 
   const handleArticleClick = (articleId: string) => {
@@ -17,8 +18,8 @@ export const DiscoverPage: React.FC = () => {
     setCurrentView('discover-article');
   };
 
-  const featuredArticle = MOCK_ARTICLES[0];
-  const secondaryArticles = MOCK_ARTICLES.slice(1);
+  const featuredArticle = articles[0];
+  const secondaryArticles = articles.slice(1);
 
   return (
     <div className="bg-[#FAF8F5] min-h-screen pb-24">
@@ -33,7 +34,7 @@ export const DiscoverPage: React.FC = () => {
             DISCOVER & INSPIRATION
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-xl mx-auto leading-relaxed">
-            High-fashion hair craft, invisible lace masterclasses, sustainable weekly batch logistics, and salon-grade styling protocols.
+            Hair craft, lace construction, thoughtful sourcing, and guidance for caring for your pieces.
           </p>
         </div>
       </div>
@@ -47,10 +48,12 @@ export const DiscoverPage: React.FC = () => {
             className="group grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white border border-[#141414]/10 rounded-sm overflow-hidden shadow-xs hover:border-[#B5935A] transition-all cursor-pointer"
           >
             <div className="lg:col-span-7 aspect-16/10 lg:aspect-auto overflow-hidden bg-stone-100">
-              <img
+              <SmartImage
                 src={featuredArticle.image}
                 alt={featuredArticle.title}
+                fallbackKind="editorial"
                 className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
+                loading="eager"
               />
             </div>
 
@@ -109,10 +112,12 @@ export const DiscoverPage: React.FC = () => {
                 className="group bg-white border border-[#141414]/10 hover:border-[#B5935A] rounded-sm overflow-hidden transition-all shadow-xs cursor-pointer flex flex-col justify-between"
               >
                 <div className="aspect-16/9 overflow-hidden bg-stone-100">
-                  <img
+                  <SmartImage
                     src={article.image}
                     alt={article.title}
+                    fallbackKind="editorial"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
                   />
                 </div>
 

@@ -35,22 +35,22 @@ export const FindThisHairPage: React.FC = () => {
     {
       title: 'Sleek Bone Straight 28"',
       tag: 'Red Carpet Silk',
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288704Xp9vRzsMdgUsmQaX_3483a27a-35e4-469a-a27c-a8669c3694ec.jpg?width=800',
     },
     {
       title: 'Defined Natural Deep Wave',
       tag: 'Editorial Volume',
-      image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=800&q=80',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065155uX2AlAURXsvNKmbi_9bb3263a-0d58-4b95-ad73-44f519c0e731.png?width=800',
     },
     {
       title: 'Lustrous Hollywood Body Wave',
       tag: 'Soft Romantic S-Curve',
-      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288705sGng7OjgwW8eKtnh.jpg?width=800',
     },
     {
       title: 'Pure Platinum 613 Cold Lift',
       tag: 'High Impact Blonde',
-      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065152tq2FNZSPotRRNubJ_a883f996-ea4e-44ac-b083-41e034e27275.png?width=800',
     }
   ];
 
@@ -102,11 +102,11 @@ export const FindThisHairPage: React.FC = () => {
         <div className="max-w-4xl mx-auto text-center space-y-4 relative z-10">
           <div className="inline-flex items-center gap-2 bg-[#2A2A2A] border border-[#B5935A]/40 px-3.5 py-1.5 rounded-full text-xs text-[#E8DFC8] tracking-widest uppercase">
             <Sparkles className="w-3.5 h-3.5 text-[#B5935A]" />
-            <span>AI Hair Architecture Matcher</span>
+            <span>The Tanelia Match Service</span>
           </div>
 
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-white">
-            FIND THIS HAIR
+            FIND YOUR MATCH
           </h1>
 
           <p className="text-sm sm:text-base text-stone-300 font-light max-w-xl mx-auto leading-relaxed">

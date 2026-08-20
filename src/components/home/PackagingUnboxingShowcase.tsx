@@ -1,12 +1,13 @@
 import React from 'react';
 import { Sparkles, Check } from 'lucide-react';
+import { SmartImage } from '../common/SmartImage';
 
 export const PackagingUnboxingShowcase: React.FC = () => {
   const inclusions = [
-    { title: 'Matte Magnetic Box', desc: 'Heavyweight rigid, hot-stamped champagne gold foil branding.' },
-    { title: 'Pure Mulberry Silk Bag', desc: 'Protects cuticles from humidity, friction, and tangling.' },
-    { title: 'Velvet Hair Clips', desc: 'Salon-grade alligator clips for flawless home styling.' },
-    { title: 'Atelier Certificate', desc: 'Single-donor temple origin verification + care manual.' },
+    { title: 'Matte Magnetic Box', desc: 'A rigid keepsake box finished with the house mark in champagne foil.' },
+    { title: 'Mulberry Silk Pouch', desc: 'A soft protective layer for the hair between wears.' },
+    { title: 'Velvet Hair Clips', desc: 'Quietly considered tools for styling at home.' },
+    { title: 'Origin Certificate', desc: 'Single-donor provenance and care notes for your piece.' },
   ];
 
   return (
@@ -17,9 +18,10 @@ export const PackagingUnboxingShowcase: React.FC = () => {
           {/* Left: Image with floating tag */}
           <div className="relative">
             <div className="rounded-3xl overflow-hidden shadow-xl bg-stone-900 aspect-[4/3]">
-              <img
-                src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85"
-                alt="Tanelia Luxury Packaging"
+              <SmartImage
+                src="/brand/tanelia-care-kit.svg"
+                alt="Tanelia presentation box and care accessories"
+                fallbackKind="care"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -30,10 +32,10 @@ export const PackagingUnboxingShowcase: React.FC = () => {
             <div className="absolute -bottom-4 right-2 sm:-right-6 glass-dark rounded-2xl p-4 shadow-2xl border border-white/10 max-w-[200px]">
               <div className="flex items-center gap-2 text-[#B5935A] mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span className="text-[10px] uppercase font-bold tracking-widest">Included Free</span>
+                <span className="text-[10px] uppercase font-bold tracking-widest">The Arrival</span>
               </div>
               <p className="text-xs font-light text-stone-300 leading-relaxed">
-                White-glove packaged at our Oslo 3PL facility.
+                Prepared in Oslo and presented as part of the Tanelia arrival.
               </p>
             </div>
           </div>
@@ -41,13 +43,13 @@ export const PackagingUnboxingShowcase: React.FC = () => {
           {/* Right: Editorial copy */}
           <div className="space-y-6">
             <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold">
-              The Unboxing Ritual
+              The Arrival
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium leading-tight">
-              An Elevated Experience<br />From the First Touch
+              Considered From<br />The First Touch
             </h2>
             <p className="text-sm text-stone-500 font-light leading-relaxed">
-              We believe luxury hair deserves an uncompromising presentation. Every parcel is prepared as a personal gift — from our magnetic keepsake box to the organic argan oil conditioning performed before dispatch.
+              Your piece arrives ready to be lived in. Each order is conditioned, checked, and placed in its magnetic keepsake box with the care accessories selected for its first wear.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

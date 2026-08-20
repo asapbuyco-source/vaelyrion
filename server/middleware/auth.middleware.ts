@@ -33,3 +33,12 @@ export const requireAuth = async (req: AuthRequest, res: Response, next: NextFun
     res.status(401).json({ error: 'Authentication failed' });
   }
 };
+
+export const requireAdmin = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  await requireAuth(req, res, () => {
+    if (!req.userProfile || !['admin', 'staff'].includes(req.userProfile.role)) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+    next();
+  });
+};

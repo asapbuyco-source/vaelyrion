@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { CategoryType } from '../../types';
+import { SmartImage } from '../common/SmartImage';
 
 export const CategoryVisuals: React.FC = () => {
   const { setCurrentView, setFilters } = useStore();
@@ -11,7 +12,7 @@ export const CategoryVisuals: React.FC = () => {
       title: 'HD Swiss Lace Wigs',
       subtitle: 'Undetectable melt — 13x6 frontals',
       category: 'wigs' as CategoryType,
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288704Xp9vRzsMdgUsmQaX_3483a27a-35e4-469a-a27c-a8669c3694ec.jpg?width=1200',
       tag: 'Most Popular',
       span: 'lg:col-span-2 lg:row-span-2'
     },
@@ -19,7 +20,7 @@ export const CategoryVisuals: React.FC = () => {
       title: 'Raw Virgin Bundles',
       subtitle: 'Single-donor temple cuticle aligned',
       category: 'bundles' as CategoryType,
-      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=85',
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=82',
       tag: 'Bestseller',
       span: ''
     },
@@ -27,7 +28,7 @@ export const CategoryVisuals: React.FC = () => {
       title: 'HD Frontals & Closures',
       subtitle: '0.03mm invisible skin partings',
       category: 'frontals' as CategoryType,
-      image: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=600&q=85',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085705268292820992dfqmuuvWSGHYdU39_230f3642-ec06-4fba-a81c-30bcca57938c.jpg?width=1000',
       tag: 'Micro Knots',
       span: ''
     },
@@ -35,7 +36,7 @@ export const CategoryVisuals: React.FC = () => {
       title: 'Clip-In Extensions',
       subtitle: 'Ultra-flat polyurethane band sets',
       category: 'extensions' as CategoryType,
-      image: 'https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?auto=format&fit=crop&w=600&q=85',
+      image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320104320507904WHhs8TJ151sL318C_e6a2c697-f41a-416a-9427-c6c0dd66181e.png?width=1000',
       tag: 'Instant Volume',
       span: ''
     },
@@ -43,7 +44,7 @@ export const CategoryVisuals: React.FC = () => {
       title: 'Silk & Care Kits',
       subtitle: '22-momme mulberry silk bonnets',
       category: 'accessories' as CategoryType,
-      image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=85',
+      image: '/brand/tanelia-care-kit.svg',
       tag: 'Longevity',
       span: ''
     },
@@ -60,10 +61,10 @@ export const CategoryVisuals: React.FC = () => {
       <div className="flex items-end justify-between mb-10">
         <div>
           <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">
-            Collections
+            The Collections
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
-            Shop By Category
+            Explore the House
           </h2>
         </div>
         <button
@@ -73,7 +74,7 @@ export const CategoryVisuals: React.FC = () => {
           }}
           className="hidden sm:flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold text-[#141414] hover:text-[#8E7348] transition-colors cursor-pointer group"
         >
-          <span>View All</span>
+          <span>View the Collection</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
@@ -84,13 +85,14 @@ export const CategoryVisuals: React.FC = () => {
           <div
             key={idx}
             onClick={() => handleClick(item.category)}
-            className={`group relative overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-all duration-500 ${item.span}`}
+            className={`group relative overflow-hidden rounded-none cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 ${item.span}`}
           >
-            <img
+            <SmartImage
               src={item.image}
               alt={item.title}
+              fallbackKind={item.category === 'accessories' ? 'care' : 'editorial'}
               className="w-full h-full object-cover object-center transition-transform duration-700 ease-out will-change-transform group-hover:scale-[1.06]"
-              loading="lazy"
+              loading={idx < 2 ? 'eager' : 'lazy'}
             />
 
             {/* Gradient overlay */}
@@ -98,7 +100,7 @@ export const CategoryVisuals: React.FC = () => {
 
             {/* Top tag */}
             <div className="absolute top-4 left-4">
-              <span className="glass-dark text-[#E8DFC8] text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-white/10">
+              <span className="bg-[#171614]/90 text-[#E8DFC8] text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 border border-[#C8AD7F]/35 shadow-lg">
                 {item.tag}
               </span>
             </div>

@@ -4,7 +4,8 @@ import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
 import { AuthRequest } from '../middleware/auth.middleware';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+const stripe = new Stripe(stripeSecretKey);
 
 const generateOrderNumber = () => `VA${Math.floor(10000 + Math.random() * 90000)}`;
 
@@ -14,10 +15,16 @@ export class CheckoutController {
       const userId = req.userProfile?.id;
       if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-      const { addressSnapshot, couponCode } = req.body;
+      const { addressSnapshot, shippingMethod = 'standard', couponCode } = req.body;
 
       if (!addressSnapshot) {
         return res.status(400).json({ error: 'Shipping address is required' });
+      }
+      if (!['standard', 'express'].includes(shippingMethod)) {
+        return res.status(400).json({ error: 'A valid shipping method is required' });
+      }
+      if (!stripeSecretKey || stripeSecretKey.startsWith('sk_test_...')) {
+        return res.status(503).json({ error: 'Payments are temporarily unavailable. Please contact Client Services.' });
       }
 
       // Fetch active cart with items — backend always calculates the total
@@ -52,7 +59,9 @@ export class CheckoutController {
         const product: any = item.products;
         const variant: any = item.product_variants;
 
-        if (!product) continue;
+        if (!product || !Number.isInteger(item.quantity) || item.quantity <= 0) {
+          return res.status(400).json({ error: 'Your cart contains an unavailable item. Please refresh and try again.' });
+        }
 
         const unitPrice = product.selling_price + (variant?.price_adjustment || 0);
         const itemTotal = unitPrice * item.quantity;
@@ -69,6 +78,10 @@ export class CheckoutController {
           supplier_cost_snapshot: product.supplier_cost,
           total: itemTotal,
         });
+      }
+
+      if (orderItems.length === 0) {
+        return res.status(400).json({ error: 'Your cart is empty or unavailable.' });
       }
 
       // Apply coupon if provided
@@ -97,11 +110,12 @@ export class CheckoutController {
             if (coupon.maximum_discount) {
               discount = Math.min(discount, coupon.maximum_discount);
             }
+            discount = Math.min(discount, subtotal);
           }
         }
       }
 
-      const shippingCost = 0; // Free shipping for now
+      const shippingCost = subtotal >= 250 ? 0 : shippingMethod === 'express' ? 25 : 15;
       const total = subtotal - discount + shippingCost;
       const totalInCents = Math.round(total * 100);
 

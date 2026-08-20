@@ -184,7 +184,7 @@ export const ProductDetailPage: React.FC = () => {
                 ) : (
                   <span className="bg-emerald-950/90 backdrop-blur-md text-emerald-100 text-xs uppercase font-semibold tracking-widest px-3.5 py-1.5 rounded-xs border border-emerald-400/40 flex items-center gap-1.5 shadow-md">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>In Stock · Direct Norway 3PL Dispatch</span>
+                    <span>In Stock · Prepared in Oslo</span>
                   </span>
                 )}
               </div>
@@ -223,7 +223,13 @@ export const ProductDetailPage: React.FC = () => {
                       activeImageIdx === idx ? 'border-[#B5935A] shadow-xs' : 'border-transparent opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                    <SmartImage
+                      src={img}
+                      alt={`${product.title} — gallery view ${idx + 1}`}
+                      fallbackKind={fallbackFor(product.category)}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
                   </button>
                 ))}
               </div>
@@ -287,7 +293,7 @@ export const ProductDetailPage: React.FC = () => {
                   </p>
                   {product.isPreOrder && (
                     <p className="text-[11px] text-[#8E7348] font-medium pt-1">
-                      Orders close Sunday 23:59 CET → Handcrafted in Qingdao → Air transit → Oslo 3PL unboxing inspection.
+                      Orders close Sunday 23:59 CET → Prepared by hand → Inspected in Oslo → Dispatched to you.
                     </p>
                   )}
                 </div>
@@ -451,7 +457,7 @@ export const ProductDetailPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#141414]/8 text-[11px] text-stone-600 font-light">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-[#B5935A] shrink-0" />
-                  <span>14-Day Lace Guarantee</span>
+                  <span>14-Day Lace Inspection</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Package className="w-4 h-4 text-[#B5935A] shrink-0" />
@@ -471,7 +477,7 @@ export const ProductDetailPage: React.FC = () => {
             {[
               { id: 'details', label: 'Hair Specifications' },
               { id: 'unboxing', label: 'Luxury Unboxing Experience' },
-              { id: 'shipping', label: 'Weekly Batch & Norway 3PL Timeline' },
+              { id: 'shipping', label: 'Release & Oslo Preparation' },
               { id: 'care', label: 'Care & Maintenance Guide' }
             ].map((tab) => (
               <button
@@ -558,8 +564,8 @@ export const ProductDetailPage: React.FC = () => {
                       <span className="text-[11px] text-stone-600">Dispatched via express temperature-controlled air freight.</span>
                     </div>
                     <div className="p-3 bg-white/80 rounded-xs">
-                      <span className="font-semibold text-stone-900 block">3. Oslo 3PL & Packaging</span>
-                      <span className="text-[11px] text-stone-600">Conditioned, packaged into luxury boxes & sent via Posten.</span>
+                      <span className="font-semibold text-stone-900 block">3. Oslo Preparation</span>
+                      <span className="text-[11px] text-stone-600">Conditioned, placed in its keepsake box, and sent with care.</span>
                     </div>
                   </div>
                 </div>

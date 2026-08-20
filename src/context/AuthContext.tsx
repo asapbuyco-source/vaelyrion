@@ -67,9 +67,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setAuthError(null);
     try {
       const data = await api.auth.login(email, password);
-      if (data.session?.access_token) {
-        await setSessionFromMe(data.session.access_token);
+      if (!data.session?.access_token) {
+        throw new Error('We could not start your session. Please confirm your email address or try again.');
       }
+      await setSessionFromMe(data.session.access_token);
     } catch (err: any) {
       setAuthError(err.message || 'Login failed');
       throw err;
@@ -82,6 +83,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const res: any = await api.auth.register(data);
       if (res.session?.access_token) {
         await setSessionFromMe(res.session.access_token);
+      } else {
+        throw new Error('Your account was created. Please confirm your email address before signing in.');
       }
     } catch (err: any) {
       setAuthError(err.message || 'Registration failed');

@@ -99,13 +99,13 @@ export const OrderConfirmationPage: React.FC = () => {
             <div className="text-xs text-[#7A5B28] space-y-1">
               <h4 className="font-serif text-sm font-semibold text-stone-900">What Happens Next in the Batch Pipeline:</h4>
               <p className="font-light leading-relaxed">
-                1. On Sunday at 23:59 CET, all customer orders are locked into purchase order <strong>PO-VAE-2026-0834</strong> transmitted directly to our Qingdao atelier.
+                1. At the weekly release cut-off, customer orders are consolidated for atelier preparation.
               </p>
               <p className="font-light leading-relaxed">
                 2. After single-knot ventilation and quality inspection, units fly to Oslo Gardermoen for customs clearance.
               </p>
               <p className="font-light leading-relaxed">
-                3. At our Oslo 3PL facility, your hair is conditioned with organic argan oil, packaged in our signature magnetic black box with silk pouch, and delivered to your doorstep.
+                3. In Oslo, your piece is inspected and prepared in its Tanelia presentation box before dispatch.
               </p>
             </div>
           </div>
@@ -164,7 +164,7 @@ export const OrderConfirmationPage: React.FC = () => {
                 <span>Encrypted Credit Card Transaction (Paid)</span>
               </p>
               <p className="text-stone-500">14-Day Untouched Lace Return Policy</p>
-              <p className="text-stone-500">Tanelia Concierge: concierge@tanelia.shop</p>
+              <p className="text-stone-500">Tanelia Client Services: info@tanelia.shop</p>
             </div>
           </div>
 

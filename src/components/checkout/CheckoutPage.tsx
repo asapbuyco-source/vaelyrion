@@ -21,11 +21,10 @@ import { api } from '../../lib/api';
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 const CheckoutContent: React.FC = () => {
-  const { isAuthenticated, authUser } = useAuth();
+  const { isAuthenticated, isAuthLoading, authUser } = useAuth();
   const { 
     cart, 
     cartSubtotal, 
-    formatPrice, 
     setCurrentView, 
     clearCart,
     setSelectedOrder,
@@ -80,10 +79,23 @@ const CheckoutContent: React.FC = () => {
   const shippingCost = freeShipping ? 0 : (shippingMethod === 'express' ? 25 : 15);
   const totalAmount = cartSubtotal + shippingCost;
   const hasPreOrder = cart.some(i => i.isPreOrder);
+  // The payment API charges EUR. Keep checkout totals in the charged currency
+  // even when the storefront currency selector is set to another display currency.
+  const formatCheckoutPrice = (amount: number) => `€${amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (cart.length === 0 || !stripe || !elements) return;
+    if (cart.length === 0) return;
+    if (!stripe || !elements) {
+      setPaymentError('Secure card payments are still loading. Please wait a moment and try again.');
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      setPaymentError('Please enter your card details before continuing.');
+      return;
+    }
 
     setPaymentError(null);
     setIsSubmitting(true);
@@ -113,12 +125,12 @@ const CheckoutContent: React.FC = () => {
         city: formData.city,
         postalCode: formData.postalCode,
         country: formData.country
-      });
+      }, shippingMethod);
 
       // 3. Confirm the card payment with Stripe
       const result = await stripe.confirmCardPayment(res.clientSecret, {
         payment_method: {
-          card: elements.getElement(CardElement)!,
+          card: cardElement,
           billing_details: {
             name: formData.name,
             email: formData.email,
@@ -164,6 +176,17 @@ const CheckoutContent: React.FC = () => {
     }
   };
 
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center p-6" role="status" aria-live="polite">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 rounded-full border-2 border-[#B5935A]/30 border-t-[#B5935A] animate-spin" />
+          <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Preparing secure checkout</p>
+        </div>
+      </div>
+    );
+  }
+
   if (cart.length === 0) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center space-y-4">
@@ -188,7 +211,7 @@ const CheckoutContent: React.FC = () => {
         <Lock className="w-12 h-12 text-[#B5935A]" />
         <h2 className="font-serif text-2xl text-stone-900">Sign in to Checkout</h2>
         <p className="text-xs text-stone-500 font-light max-w-xs mb-4">
-          A Tanelia Society account is required to securely process your payment and track your luxury batch delivery.
+          Sign in to securely complete your order and follow its journey from preparation to arrival.
         </p>
         <button
           onClick={() => setCurrentView('account')}
@@ -214,9 +237,7 @@ const CheckoutContent: React.FC = () => {
             <span className="hidden sm:inline">Return to Collection</span>
           </button>
 
-          <span className="wordmark text-xl text-[#141414]">
-            TANE<span className="wordmark-diamond">■</span>LIA
-          </span>
+                  <img src="/brand/tanelia-logo.png" alt="Tanelia" className="brand-logo w-[130px] h-auto object-contain" />
 
           <div className="flex items-center gap-1.5 text-xs text-stone-500 font-light">
             <Lock className="w-3.5 h-3.5 text-[#B5935A]" />
@@ -395,8 +416,8 @@ const CheckoutContent: React.FC = () => {
                 <div className="p-3.5 bg-[#FAF5ED] rounded-xs border border-[#E5DAC8] text-xs text-[#7A5B28] flex items-start gap-2.5">
                   <Calendar className="w-4 h-4 text-[#8E7348] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold block">Weekly Batch #003 Consolidation Active:</span>
-                    <span>Orders close Sunday 23:59 CET. After artisan single-knot handcrafting, cargo is air freighted directly to our Oslo 3PL center for luxury boxed unboxing inspection.</span>
+                    <span className="font-semibold block">The Atelier Release:</span>
+                    <span>Orders close Sunday 23:59 CET. Your piece is then finished, inspected in Oslo, and prepared in its magnetic keepsake box.</span>
                   </div>
                 </div>
               )}
@@ -413,14 +434,14 @@ const CheckoutContent: React.FC = () => {
                 >
                   <div className="space-y-1">
                     <span className="font-semibold text-stone-900 block">
-                      Insured Batch Air Freight + Oslo 3PL Posten Delivery
+                      Insured Delivery + Oslo Preparation
                     </span>
                     <span className="text-stone-500 font-light">
                       Estimated delivery: {hasPreOrder ? '10–18 business days' : '2–4 business days'}
                     </span>
                   </div>
                   <span className="font-mono font-semibold text-stone-900">
-                    {freeShipping ? 'FREE' : formatPrice(15)}
+                    {freeShipping ? 'FREE' : formatCheckoutPrice(15)}
                   </span>
                 </button>
 
@@ -442,7 +463,7 @@ const CheckoutContent: React.FC = () => {
                     </span>
                   </div>
                   <span className="font-mono font-semibold text-stone-900">
-                    {formatPrice(25)}
+                    {freeShipping ? 'FREE' : formatCheckoutPrice(25)}
                   </span>
                 </button>
               </div>
@@ -552,7 +573,7 @@ const CheckoutContent: React.FC = () => {
                   <>
                     <span>Confirm & Pay</span>
                     <span className="hidden sm:inline">•</span>
-                    <span className="font-mono text-[#E8DFC8]">{formatPrice(totalAmount)}</span>
+                    <span className="font-mono text-[#E8DFC8]">{formatCheckoutPrice(totalAmount)}</span>
                   </>
                 )}
               </button>
@@ -588,7 +609,7 @@ const CheckoutContent: React.FC = () => {
                         </span>
                       </div>
                       <span className="font-mono font-semibold text-stone-900">
-                        {formatPrice(item.unitPrice * item.quantity)}
+                        {formatCheckoutPrice(item.unitPrice * item.quantity)}
                       </span>
                     </div>
                   </div>
@@ -599,12 +620,12 @@ const CheckoutContent: React.FC = () => {
               <div className="space-y-2 text-xs text-stone-600 font-light pt-2">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-mono font-medium text-stone-900">{formatPrice(cartSubtotal)}</span>
+                  <span className="font-mono font-medium text-stone-900">{formatCheckoutPrice(cartSubtotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Fulfillment & Air Cargo</span>
                   <span className="font-mono font-medium text-stone-900">
-                    {shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}
+                    {shippingCost === 0 ? 'FREE' : formatCheckoutPrice(shippingCost)}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -613,8 +634,9 @@ const CheckoutContent: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-base font-semibold text-stone-900 pt-3 border-t border-[#141414]/8">
                   <span>Total Amount</span>
-                  <span className="font-mono text-lg">{formatPrice(totalAmount)}</span>
+                  <span className="font-mono text-lg">{formatCheckoutPrice(totalAmount)}</span>
                 </div>
+                <p className="text-[11px] text-stone-400">Your card will be charged in EUR.</p>
               </div>
 
               {/* Trust Box */}

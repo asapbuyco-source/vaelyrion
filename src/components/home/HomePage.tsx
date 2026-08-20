@@ -38,49 +38,53 @@ export const HomePage: React.FC = () => {
       {/* 2. Category Visual Grid */}
       <CategoryVisuals />
 
-      {/* 2.5 Full-Bleed Atelier Band */}
-      <section className="relative h-[52vh] min-h-[360px] lg:h-[60vh] w-full overflow-hidden">
-        <div className="absolute inset-0">
-          <SmartImage
-            src="https://images.unsplash.com/photo-1522337660859-02fbefca4d79?auto=format&fit=crop&w=2400&q=80"
-            alt="Tanelia Atelier"
-            fallbackKind="editorial"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10" />
-        </div>
-        <div className="reveal relative z-10 h-full flex flex-col items-center justify-end text-center px-6 pb-12 lg:pb-16">
-          <span className="section-num text-[#C8AD7F]">ATELIER NOTE · 01</span>
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#FAF8F5] italic mt-4 max-w-3xl text-balance leading-tight">
-            "Hair that moves like it was never touched."
-          </h2>
-          <div className="w-12 h-px bg-[#B5935A] my-6" />
-          <p className="text-[#E8DFC8]/80 text-[11px] uppercase tracking-[0.3em] font-light">
-            Single-Donor · Hand-Ventilated · Oslo-Inspected
-          </p>
+      {/* 2.5 Atelier Note — an editorial split, not a generic full-bleed banner */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] min-h-[420px] shadow-2xl">
+          <div className="bg-[#171614] text-[#F7F5F0] p-8 sm:p-12 lg:p-16 flex flex-col justify-between">
+            <span className="section-num text-[#C8AD7F]">ATELIER NOTE · 01</span>
+            <div>
+              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl italic leading-[1.02] text-balance">
+                Hair that moves like it was never touched.
+              </h2>
+              <div className="w-12 h-px bg-[#B5935A] my-7" />
+              <p className="text-[#E8DFC8]/75 text-[11px] uppercase tracking-[0.26em] font-light">
+                Single-Donor · Hand-Ventilated · Prepared in Oslo
+              </p>
+            </div>
+          </div>
+          <div className="relative min-h-[320px] overflow-hidden bg-[#EDE8E1]">
+            <SmartImage
+              src="https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288705sGng7OjgwW8eKtnh.jpg?width=1600"
+              alt="Tanelia atelier hair campaign"
+              fallbackKind="editorial"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
         </div>
       </section>
 
       {/* 3. New Arrivals */}
       {newArrivals.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <div className="reveal flex items-end justify-between mb-10">
+          <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 01 · Just Arrived</p>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">New Arrivals</h2>
+              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 01 · The New Release</p>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">New from the Atelier</h2>
             </div>
             <button
               onClick={() => { setFilters(p => ({ ...p, category: 'all' })); setCurrentView('shop'); }}
               className="btn-text-arrow hidden sm:inline-flex cursor-pointer"
             >
-              <span>See All</span>
+              <span>View All Pieces</span>
               <ArrowRight className="w-4 h-4 text-[#B5935A] transition-transform duration-300" />
             </button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {newArrivals.map((p, i) => (
-              <div key={p.id} className={`reveal ${i % 2 === 1 ? 'lg:mt-10' : ''}`}>
-                <ProductCard product={p} animationDelay={i * 80} />
+              <div key={p.id} className={`${i === 1 ? 'lg:mt-12' : i === 3 ? 'lg:mt-6' : ''}`}>
+                <ProductCard product={p} animationDelay={i * 80} priority />
               </div>
             ))}
           </div>
@@ -91,8 +95,8 @@ export const HomePage: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 border-t border-[#141414]/8">
         <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 02 · Our Curations</p>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">Featured Collection</h2>
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 02 · House Curations</p>
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">The Signature Collection</h2>
           </div>
 
           {/* Filter pills */}
@@ -107,8 +111,8 @@ export const HomePage: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`py-2 px-5 text-xs uppercase tracking-wider font-semibold rounded-full transition-all duration-200 cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-[#141414] text-white shadow-sm'
-                    : 'glass text-stone-600 hover:text-stone-900 border border-[#141414]/10'
+                    ? 'bg-[#171614] text-white shadow-sm'
+                    : 'bg-transparent text-stone-600 hover:text-stone-900 border-b border-transparent hover:border-[#9B7A4A]'
                 }`}
               >
                 {tab.label}
@@ -128,7 +132,7 @@ export const HomePage: React.FC = () => {
             onClick={() => { setFilters(p => ({ ...p, category: 'all' })); setCurrentView('shop'); }}
             className="inline-flex items-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-white text-xs uppercase tracking-widest font-bold px-10 py-4 rounded-full transition-all duration-300 cursor-pointer shadow-lg group"
           >
-            <span>Explore Full Collection</span>
+            <span>View the Full Collection</span>
             <ArrowRight className="w-4 h-4 text-[#B5935A] group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -142,13 +146,15 @@ export const HomePage: React.FC = () => {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 border-t border-[#141414]/8">
           <div className="reveal flex items-end justify-between mb-10">
             <div>
-              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 03 · Most Loved</p>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">Trending Now</h2>
+              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 03 · Most Requested</p>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">House Favourites</h2>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {trending.map((p, i) => (
-              <ProductCard key={p.id} product={p} animationDelay={i * 80} />
+              <div key={p.id} className={`${i === 1 ? 'lg:mt-10' : i === 3 ? 'lg:mt-16' : ''}`}>
+                <ProductCard product={p} animationDelay={i * 80} />
+              </div>
             ))}
           </div>
         </section>
@@ -164,16 +170,16 @@ export const HomePage: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 04 · Editorial</p>
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 04 · The Journal</p>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
-              The Tanelia Gazette
+              The Tanelia Journal
             </h2>
           </div>
           <button
             onClick={() => setCurrentView('discover')}
             className="btn-text-arrow cursor-pointer"
           >
-            <span>View All Stories</span>
+            <span>Read the Journal</span>
             <ArrowRight className="w-4 h-4 text-[#B5935A] transition-transform duration-300" />
           </button>
         </div>
@@ -183,7 +189,7 @@ export const HomePage: React.FC = () => {
             <div
               key={story.id}
               onClick={() => { setSelectedArticleId(story.id); setCurrentView('discover-article'); }}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer card-float"
+              className={`group bg-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer card-float ${i === 1 ? 'md:mt-16' : ''}`}
             >
               <div className="aspect-[16/9] overflow-hidden bg-stone-100">
                 <img

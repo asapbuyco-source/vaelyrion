@@ -8,9 +8,10 @@ interface ProductCardProps {
   product: Product;
   onQuickView?: (product: Product) => void;
   animationDelay?: number;
+  priority?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDelay = 0 }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDelay = 0, priority = false }) => {
   const { 
     formatPrice, 
     toggleWishlist, 
@@ -65,14 +66,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
       style={{ animationDelay: `${animationDelay}ms` }}
     >
       {/* Image Frame */}
-      <div className="relative overflow-hidden bg-[#EFEAE4]" style={{ borderRadius: '20px 20px 0 0', aspectRatio: '3/4' }}>
+      <div className="relative overflow-hidden bg-[#EFEAE4]" style={{ borderRadius: '0', aspectRatio: '3/4' }}>
         <SmartImage
           src={activeImage}
           alt={product.title}
           fallbackKind={fallbackFor(product.category)}
           className="w-full h-full object-cover object-center transition-transform duration-700 ease-out will-change-transform"
           style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }}
-          loading="lazy"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
         />
 
         {/* Gradient overlay at bottom */}
@@ -102,7 +104,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
               toggleWishlist(product.id);
             }}
             aria-label="Save to wishlist"
-            className="p-2.5 rounded-full glass shadow-sm transition-all duration-200 cursor-pointer active:scale-90 hover:scale-110 shrink-0"
+            className="p-2.5 glass shadow-sm transition-all duration-200 cursor-pointer active:scale-90 hover:scale-110 shrink-0"
           >
             <Heart className={`w-4 h-4 transition-all duration-200 ${isSaved ? 'fill-[#B5935A] text-[#B5935A] scale-110' : 'text-[#3A382F]'}`} />
           </button>
@@ -118,7 +120,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
         >
           <button
             onClick={handleQuickAdd}
-            className={`w-full glass-dark text-[#FAF8F5] text-xs uppercase tracking-widest font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer border border-white/10 ${addedToBag ? 'bg-[#B5935A]/80' : ''}`}
+            className={`w-full glass-dark text-[#FAF8F5] text-xs uppercase tracking-widest font-semibold py-3 px-4 rounded-none transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer border border-white/10 ${addedToBag ? 'bg-[#B5935A]/80' : ''}`}
           >
             {addedToBag ? (
               <>
@@ -136,7 +138,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
       </div>
 
       {/* Product Information Panel */}
-      <div className="p-4 sm:p-5 flex flex-col flex-1 bg-white" style={{ borderRadius: '0 0 20px 20px' }}>
+      <div className="p-4 sm:p-5 flex flex-col flex-1 bg-white" style={{ borderRadius: '0' }}>
         {/* Hair Origin & Rating */}
         <div className="flex items-center justify-between text-[11px] text-stone-400 font-light mb-2">
           <span className="truncate max-w-[150px] uppercase tracking-wide text-[10px]">{product.hairOrigin?.split(' ').slice(0, 4).join(' ')}</span>

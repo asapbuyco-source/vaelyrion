@@ -13,17 +13,16 @@ export const FindThisHairBanner: React.FC = () => {
         <div className="relative z-10 flex-1 p-10 sm:p-14 flex flex-col justify-center">
           <div className="inline-flex items-center gap-2 bg-[#B5935A]/20 border border-[#B5935A]/30 text-[#C8AD7F] text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full w-fit mb-6">
             <Sparkles className="w-3 h-3" />
-            AI-Powered Match
+            The Tanelia Match Service
           </div>
 
           <h2 className="font-serif text-4xl sm:text-5xl font-normal text-white leading-tight mb-4">
-            Seen a look<br />
-            <span className="italic text-[#C8AD7F]">you love?</span>
+            Bring us the look<br />
+            <span className="italic text-[#C8AD7F]">you have in mind.</span>
           </h2>
 
           <p className="text-stone-400 font-light text-sm leading-relaxed max-w-xs mb-8">
-            Upload a screenshot, photo, or video frame. Our AI matches it to the exact hair texture, 
-            length, and style in our catalog.
+            Share a screenshot, photo, or video frame. We’ll help identify the closest texture, length, and finish from the collection.
           </p>
 
           <button
@@ -31,7 +30,7 @@ export const FindThisHairBanner: React.FC = () => {
             className="group flex items-center gap-2.5 bg-[#FAF8F5] hover:bg-white text-[#141414] text-xs uppercase tracking-widest font-bold py-4 px-7 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg w-fit active:scale-[0.98]"
           >
             <Camera className="w-4 h-4 text-[#8E7348]" />
-            <span>Find This Hair</span>
+            <span>Find Your Match</span>
             <ArrowRight className="w-4 h-4 text-[#8E7348] group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -52,18 +51,18 @@ export const FindThisHairBanner: React.FC = () => {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#B5935A]/15 border border-[#B5935A]/20 flex items-center justify-center group-hover:bg-[#B5935A]/25 transition-colors">
               <Upload className="w-7 h-7 text-[#C8AD7F] group-hover:scale-110 transition-transform" />
             </div>
-            <p className="text-white font-serif text-base mb-1">Drop your photo here</p>
-            <p className="text-stone-500 text-xs font-light mb-4">JPG, PNG, MP4 up to 20MB</p>
+            <p className="text-white font-serif text-base mb-1">Share a reference</p>
+            <p className="text-stone-500 text-xs font-light mb-4">JPG, PNG, MP4 · Up to 20MB</p>
             <div className="border border-dashed border-[#B5935A]/30 rounded-xl p-3 text-[11px] text-[#C8AD7F] uppercase tracking-widest font-semibold">
-              Browse Files
+              Choose a File
             </div>
           </div>
 
           {/* Floating match example */}
           <div className="absolute top-8 right-8 glass-gold rounded-2xl p-3 text-left shadow-lg hidden lg:block animate-float">
-            <p className="text-[10px] uppercase tracking-widest text-[#8E7348] font-bold mb-1">Match Found</p>
+            <p className="text-[10px] uppercase tracking-widest text-[#8E7348] font-bold mb-1">A Close Match</p>
             <p className="font-serif text-sm text-[#141414]">22" Body Wave</p>
-            <p className="text-[10px] text-stone-500">98% similarity</p>
+            <p className="text-[10px] text-stone-500">Body Wave · 22 inch</p>
           </div>
         </div>
 

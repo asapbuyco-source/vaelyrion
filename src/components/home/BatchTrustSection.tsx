@@ -8,23 +8,23 @@ export const BatchTrustSection: React.FC = () => {
   const pillars = [
     {
       icon: Package,
-      title: 'Premium Sourcing',
-      desc: 'Single-donor raw hair ethically procured from verified temple and heritage suppliers across Asia.',
+      title: 'Selected by Origin',
+      desc: 'Single-donor hair chosen for its natural movement, density, and aligned cuticle.',
     },
     {
       icon: Globe,
-      title: 'International Delivery',
-      desc: 'Air-freighted weekly from our atelier, inspected and dispatched from our Oslo 3PL facility.',
+      title: 'Prepared in Oslo',
+      desc: 'Each piece is inspected, conditioned, and prepared for its journey from our Oslo house.',
     },
     {
       icon: ShieldCheck,
-      title: 'Secure Checkout',
-      desc: 'Stripe-powered PCI-DSS Level 1 encryption. Pay with card, Apple Pay, or Klarna installments.',
+      title: 'Considered Service',
+      desc: 'Clear delivery timelines, protected payment, and support from selection through arrival.',
     },
     {
       icon: Clock,
-      title: 'Tracked Orders',
-      desc: 'Live batch tracking with SMS and push notifications at every fulfillment milestone.',
+      title: 'A Clear Journey',
+      desc: 'Follow your piece from atelier preparation to the moment it reaches your door.',
     },
   ];
 
@@ -35,21 +35,21 @@ export const BatchTrustSection: React.FC = () => {
         {/* Section header */}
         <div className="text-center mb-16">
           <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-3 inline-block">
-            Why Tanelia
+            The House Standard
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
-            The Tanelia Experience
+            From Selection to Arrival
           </h2>
           <p className="text-stone-500 font-light text-sm mt-3 max-w-md mx-auto">
-            Every detail of your order is curated for a seamless, premium experience from atelier to doorstep.
+            Every piece is selected, prepared, and presented with the same attention to detail—from first selection to final delivery.
           </p>
         </div>
 
         {/* Pillars grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {pillars.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-white rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow duration-300 group">
-              <div className="w-12 h-12 rounded-2xl bg-[#FAF5ED] border border-[#E8DFC8] flex items-center justify-center mb-5 group-hover:bg-[#B5935A]/10 transition-colors">
+            <div key={title} className="luxury-box p-7 transition-shadow duration-300 group">
+              <div className="w-12 h-12 bg-[#F4EBDD] border border-[#B5935A]/45 flex items-center justify-center mb-5 group-hover:bg-[#E8DFC8] transition-colors">
                 <Icon className="w-5 h-5 text-[#B5935A]" />
               </div>
               <h3 className="font-serif text-lg font-medium text-[#141414] mb-2">{title}</h3>
@@ -59,11 +59,11 @@ export const BatchTrustSection: React.FC = () => {
         </div>
 
         {/* Batch process timeline */}
-        <div className="mt-16 bg-white rounded-3xl p-8 sm:p-12 shadow-sm">
+        <div className="mt-16 luxury-box p-8 sm:p-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
             <div>
-              <p className="text-xs uppercase tracking-widest text-[#B5935A] font-semibold mb-1">How It Works</p>
-              <h3 className="font-serif text-2xl sm:text-3xl text-[#141414] font-medium">Weekly Batch Journey</h3>
+            <p className="text-xs uppercase tracking-widest text-[#B5935A] font-semibold mb-1">The Journey</p>
+              <h3 className="font-serif text-2xl sm:text-3xl text-[#141414] font-medium">From Atelier to Door</h3>
             </div>
             <button
               onClick={() => setCurrentView('shipping-policy')}
@@ -80,10 +80,10 @@ export const BatchTrustSection: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
               {[
-                { step: '01', label: 'Order Placed', desc: 'Pre-order joins Batch #003 pool' },
-                { step: '02', label: 'Atelier Crafting', desc: 'Hand-knotted by master wigmakers' },
-                { step: '03', label: 'Oslo QC Inspection', desc: '3PL quality check & luxury boxing' },
-                { step: '04', label: 'Doorstep Delivery', desc: 'Tracked courier to your address' },
+                { step: '01', label: 'Piece Selected', desc: 'Your order is reserved from the release' },
+                { step: '02', label: 'Atelier Preparation', desc: 'Finished and checked by hand' },
+                { step: '03', label: 'Oslo Inspection', desc: 'Conditioned and prepared for dispatch' },
+                { step: '04', label: 'Arrival', desc: 'Delivered with care to your door' },
               ].map(({ step, label, desc }) => (
                 <div key={step} className="relative flex flex-col items-start sm:items-center sm:text-center gap-3">
                   <div className="relative z-10 w-10 h-10 rounded-full bg-[#141414] border-4 border-[#F4EFEA] flex items-center justify-center text-[#B5935A] font-mono text-xs font-bold shrink-0">

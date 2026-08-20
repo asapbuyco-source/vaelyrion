@@ -11,6 +11,11 @@ import productRoutes from '../server/routes/product.routes';
 import cartRoutes from '../server/routes/cart.routes';
 import checkoutRoutes from '../server/routes/checkout.routes';
 import orderRoutes from '../server/routes/order.routes';
+import contactRoutes from '../server/routes/contact.routes';
+import adminRoutes from '../server/routes/admin.routes';
+import contentRoutes from '../server/routes/content.routes';
+import { AdminController } from '../server/controllers/admin.controller';
+import { supabase } from '../server/config/supabase';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -36,10 +41,32 @@ app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/checkout', checkoutRoutes);
 app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/contact', contactRoutes);
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/content', contentRoutes);
+app.post('/api/cron/generate-content', AdminController.generateScheduledDraft);
+app.get('/api/cron/generate-content', AdminController.generateScheduledDraft);
 
 // Health check
-app.get('/api/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', message: 'Tanelia backend is running', timestamp: new Date().toISOString() });
+app.get('/api/health', async (_req: Request, res: Response) => {
+  let database: 'ok' | 'error' = 'ok';
+  let databaseError: string | undefined;
+
+  try {
+    const { error } = await supabase.from('products').select('id', { count: 'exact', head: true });
+    if (error) throw error;
+  } catch (error: any) {
+    database = 'error';
+    databaseError = process.env.NODE_ENV === 'production' ? 'Database unavailable' : error.message;
+  }
+
+  res.status(database === 'ok' ? 200 : 503).json({
+    status: database === 'ok' ? 'ok' : 'degraded',
+    service: 'Tanelia API',
+    database,
+    ...(databaseError ? { databaseError } : {}),
+    timestamp: new Date().toISOString()
+  });
 });
 
 // 404 fallback

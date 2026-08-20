@@ -40,6 +40,33 @@ export const api = {
     getById: (id: string) => request<any>(`/products/${id}`),
   },
 
+  contact: {
+    submit: (data: { name: string; email: string; message: string }) =>
+      request<{ id: string; message: string }>('/contact', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+  },
+
+  admin: {
+    overview: () => request<any>('/admin/overview'),
+    products: (search?: string) => request<any[]>(`/admin/products${search ? `?search=${encodeURIComponent(search)}` : ''}`),
+    updateProduct: (id: string, data: Record<string, unknown>) => request<any>(`/admin/products/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    orders: () => request<any[]>('/admin/orders'),
+    updateOrder: (id: string, status: string) => request<any>(`/admin/orders/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+    customers: () => request<any[]>('/admin/customers'),
+    contacts: () => request<any[]>('/admin/contacts'),
+    updateContact: (id: string, status: string) => request<any>(`/admin/contacts/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+    articles: () => request<any[]>('/admin/articles'),
+    saveArticle: (data: Record<string, unknown>) => request<any>('/admin/articles', { method: 'POST', body: JSON.stringify(data) }),
+    generateArticle: (topic: string, focus_keyword?: string) => request<any>('/admin/ai/article-draft', { method: 'POST', body: JSON.stringify({ topic, focus_keyword }) }),
+  },
+
+  content: {
+    articles: () => request<any[]>('/content/articles'),
+    article: (slug: string) => request<any>(`/content/articles/${encodeURIComponent(slug)}`),
+  },
+
   // Cart
   cart: {
     get: () => request<any>('/cart'),
@@ -54,10 +81,10 @@ export const api = {
 
   // Checkout
   checkout: {
-    createPaymentIntent: (cartId: string, addressSnapshot: any, couponCode?: string) =>
+    createPaymentIntent: (cartId: string, addressSnapshot: any, shippingMethod: 'standard' | 'express' = 'standard', couponCode?: string) =>
       request<{ clientSecret: string; orderId: string; total: number }>('/checkout/payment-intent', {
         method: 'POST',
-        body: JSON.stringify({ cartId, addressSnapshot, couponCode }),
+        body: JSON.stringify({ cartId, addressSnapshot, shippingMethod, couponCode }),
       }),
   },
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { ArrowLeft, Clock, Share2, Sparkles, BookOpen, ShoppingBag } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { MOCK_ARTICLES } from '../../data/mockData';
 import { ProductCard } from '../shop/ProductCard';
+import { SmartImage } from '../common/SmartImage';
 
 export const ArticleDetailPage: React.FC = () => {
   const { 
@@ -10,10 +10,11 @@ export const ArticleDetailPage: React.FC = () => {
     setCurrentView, 
     products, 
     setSelectedProductId, 
-    showToast 
+    showToast,
+    articles
   } = useStore();
 
-  const article = MOCK_ARTICLES.find(a => a.id === selectedArticleId) || MOCK_ARTICLES[0];
+  const article = articles.find(a => a.id === selectedArticleId) || articles[0];
   const featuredProducts = products.filter(p => article.featuredProductIds.includes(p.id));
 
   const handleShare = () => {
@@ -78,10 +79,12 @@ export const ArticleDetailPage: React.FC = () => {
 
         {/* Hero Image */}
         <div className="aspect-16/9 rounded-sm overflow-hidden bg-stone-100 border border-[#141414]/8 shadow-sm">
-          <img
+          <SmartImage
             src={article.image}
             alt={article.title}
+            fallbackKind="editorial"
             className="w-full h-full object-cover"
+            loading="eager"
           />
         </div>
 

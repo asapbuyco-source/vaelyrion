@@ -24,7 +24,7 @@ export const ShopPage: React.FC = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const categories: { id: CategoryType; label: string }[] = [
-    { id: 'all', label: 'All Creations' },
+    { id: 'all', label: 'All Pieces' },
     { id: 'wigs', label: 'HD Wigs' },
     { id: 'bundles', label: 'Raw Bundles' },
     { id: 'frontals', label: '13x6 Frontals' },
@@ -61,7 +61,7 @@ export const ShopPage: React.FC = () => {
       <div className="bg-gradient-to-b from-[#F4EFEA] to-[#FAF8F5] border-b border-[#141414]/8 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center space-y-4">
           <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold inline-block">
-            Atelier Haute Coiffure
+            The Tanelia Collection
           </p>
           <h1 className="font-serif text-3xl sm:text-5xl font-medium text-[#141414]">
             {filters.category === 'all' && 'The Complete Collection'}
@@ -75,7 +75,7 @@ export const ShopPage: React.FC = () => {
             {filters.category === 'best-sellers' && 'Best Sellers'}
           </h1>
           <p className="text-sm text-stone-500 font-light max-w-md mx-auto">
-            Ethically sourced single-donor temple hair, Swiss HD lace, luxury unboxing.
+            Single-donor hair, hand-finished lace, and considered care from selection to arrival.
           </p>
 
           {/* Category pills */}

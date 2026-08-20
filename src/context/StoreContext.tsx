@@ -204,7 +204,9 @@ export type ViewType =
   | 'about'
   | 'faq'
   | 'shipping-policy'
-  | 'returns-policy';
+  | 'returns-policy'
+  | 'contact'
+  | 'admin';
 
 interface Toast {
   id: string;
@@ -232,6 +234,7 @@ interface StoreContextType {
   setSelectedProductId: (id: string | null) => void;
   selectedArticleId: string | null;
   setSelectedArticleId: (id: string | null) => void;
+  articles: DiscoverArticle[];
   selectedOrder: Order | null;
   setSelectedOrder: (order: Order | null) => void;
 
@@ -302,8 +305,52 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
+const PRODUCT_CATEGORIES = ['wigs', 'bundles', 'closures', 'frontals', 'extensions', 'accessories'] as const;
+
+const normalizeServerProduct = (raw: any): Product => {
+  const category = PRODUCT_CATEGORIES.includes(raw?.category) ? raw.category : 'wigs';
+  const safeArray = (value: unknown): string[] => Array.isArray(value) ? value.filter(Boolean).map(String) : [];
+  const title = raw?.title || raw?.name || 'Tanelia Creation';
+  const description = raw?.description || raw?.subtitle || 'A considered Tanelia creation.';
+
+  return {
+    ...raw,
+    id: String(raw?.id || raw?.slug || crypto.randomUUID()),
+    title,
+    slug: raw?.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    subtitle: raw?.subtitle || description.slice(0, 80),
+    category,
+    price: Number(raw?.price ?? raw?.selling_price ?? 0),
+    originalPrice: raw?.originalPrice == null ? undefined : Number(raw.originalPrice),
+    supplierCost: Number(raw?.supplierCost ?? 0),
+    rating: Number(raw?.rating ?? 5),
+    reviewCount: Number(raw?.reviewCount ?? 0),
+    images: safeArray(raw?.images),
+    isPreOrder: Boolean(raw?.isPreOrder ?? raw?.is_preorder),
+    estimatedDelivery: raw?.estimatedDelivery || '10–18 business days',
+    stockCount: Number(raw?.stockCount ?? 0),
+    textures: safeArray(raw?.textures) as Product['textures'],
+    lengths: safeArray(raw?.lengths),
+    densities: safeArray(raw?.densities) as Product['densities'],
+    laceTypes: safeArray(raw?.laceTypes) as Product['laceTypes'],
+    colors: safeArray(raw?.colors) as Product['colors'],
+    description,
+    hairOrigin: raw?.hairOrigin || '',
+    details: safeArray(raw?.details),
+    careInstructions: safeArray(raw?.careInstructions),
+    supplierId: raw?.supplierId || ''
+  };
+};
+
 export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentView, setCurrentView] = useState<ViewType>('home');
+  const [articles, setArticles] = useState<DiscoverArticle[]>(MOCK_ARTICLES);
+
+  useEffect(() => {
+    api.content.articles()
+      .then((data: any[]) => { if (data.length > 0) setArticles(data as DiscoverArticle[]); })
+      .catch(() => { /* Editorial fallback remains available if the content table is not deployed yet. */ });
+  }, []);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(INITIAL_ORDER_SAMPLE);
@@ -318,8 +365,13 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Fetch products from backend on mount
   useEffect(() => {
     api.products.list()
-      .then((data: any[]) => {
-        setProducts(data);
+      .then((response: any) => {
+        const data = Array.isArray(response) ? response : response?.products || response?.data || [];
+        if (data.length > 0) {
+          setProducts(data.map(normalizeServerProduct));
+          return;
+        }
+        throw new Error('The catalog API returned no active products.');
       })
       .catch((err) => {
         console.warn('Failed to load products from API, falling back to mock data:', err.message);
@@ -715,6 +767,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setSelectedProductId,
       selectedArticleId,
       setSelectedArticleId,
+      articles,
       selectedOrder,
       setSelectedOrder,
       currency,

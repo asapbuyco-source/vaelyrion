@@ -29,10 +29,11 @@ export const AccountPage: React.FC = () => {
     showToast
   } = useStore();
 
-  const { authUser, isAuthenticated, login, register, logout, authError } = useAuth();
+  const { authUser, isAuthenticated, isAuthLoading, isAdmin, login, register, logout, authError } = useAuth();
 
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [authForm, setAuthForm] = useState({ email: '', password: '', firstName: '', lastName: '' });
+  const [isAuthSubmitting, setIsAuthSubmitting] = useState(false);
 
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses' | 'notifications' | 'support'>('orders');
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
@@ -51,6 +52,8 @@ export const AccountPage: React.FC = () => {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isAuthSubmitting) return;
+    setIsAuthSubmitting(true);
     try {
       if (authMode === 'login') {
         await login(authForm.email, authForm.password);
@@ -66,6 +69,8 @@ export const AccountPage: React.FC = () => {
       }
     } catch (err) {
       // Error is handled in context
+    } finally {
+      setIsAuthSubmitting(false);
     }
   };
 
@@ -101,6 +106,17 @@ export const AccountPage: React.FC = () => {
     setIsCartDrawerOpen(true);
   };
 
+  if (isAuthLoading) {
+    return (
+      <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
+        <div className="text-center px-6" role="status" aria-live="polite">
+          <div className="mx-auto mb-4 h-8 w-8 rounded-full border-2 border-[#B5935A]/30 border-t-[#B5935A] animate-spin" />
+          <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Restoring your session</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
@@ -120,6 +136,8 @@ export const AccountPage: React.FC = () => {
               <div className="flex gap-4">
                 <input
                   type="text"
+                  name="given-name"
+                  autoComplete="given-name"
                   placeholder="First Name"
                   required
                   value={authForm.firstName}
@@ -128,6 +146,8 @@ export const AccountPage: React.FC = () => {
                 />
                 <input
                   type="text"
+                  name="family-name"
+                  autoComplete="family-name"
                   placeholder="Last Name"
                   required
                   value={authForm.lastName}
@@ -138,6 +158,8 @@ export const AccountPage: React.FC = () => {
             )}
             <input
               type="email"
+              name="email"
+              autoComplete="email"
               placeholder="Email Address"
               required
               value={authForm.email}
@@ -146,6 +168,8 @@ export const AccountPage: React.FC = () => {
             />
             <input
               type="password"
+              name="password"
+              autoComplete={authMode === 'login' ? 'current-password' : 'new-password'}
               placeholder="Password"
               required
               value={authForm.password}
@@ -154,9 +178,11 @@ export const AccountPage: React.FC = () => {
             />
             <button
               type="submit"
-              className="w-full bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs"
+              disabled={isAuthSubmitting}
+              aria-busy={isAuthSubmitting}
+              className="w-full bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {authMode === 'login' ? 'Sign In' : 'Create Account'}
+              {isAuthSubmitting ? 'Please wait…' : authMode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
           </form>
 
@@ -199,6 +225,14 @@ export const AccountPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 text-xs">
+            {isAdmin && (
+              <button
+                onClick={() => setCurrentView('admin')}
+                className="bg-[#141414] text-white px-3.5 py-2 rounded-xs font-medium transition-colors cursor-pointer"
+              >
+                Studio Dashboard
+              </button>
+            )}
             <button
               onClick={() => logout()}
               className="bg-white hover:bg-stone-50 border border-[#141414]/15 px-3.5 py-2 rounded-xs text-stone-700 font-medium transition-colors cursor-pointer flex items-center gap-2"

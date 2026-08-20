@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Sparkles, Camera, Heart, ShoppingBag } from 'lucide-react';
+import { Home, Store, Camera, Heart, ShoppingBag } from 'lucide-react';
 import { useStore, ViewType } from '../../context/StoreContext';
 
 export const MobileBottomNav: React.FC = () => {
@@ -38,8 +38,8 @@ export const MobileBottomNav: React.FC = () => {
             isShopActive ? 'text-[#141414]' : 'text-stone-400 hover:text-stone-700'
           }`}
         >
-          <Sparkles className={`w-5 h-5 transition-all ${isShopActive ? 'stroke-[2.5] text-[#B5935A]' : 'stroke-[1.5]'}`} />
-          <span className="text-[9px] font-semibold uppercase tracking-wide">Shop</span>
+          <Store className={`w-5 h-5 transition-all ${isShopActive ? 'stroke-[2.5] text-[#B5935A]' : 'stroke-[1.5]'}`} />
+          <span className="text-[10px] font-semibold uppercase tracking-wide">Shop</span>
         </button>
 
         {/* Find This Hair — Elevated center button */}
@@ -54,7 +54,7 @@ export const MobileBottomNav: React.FC = () => {
           }`} style={{ width: '52px', height: '52px' }}>
             <Camera className="w-5 h-5 text-[#E8DFC8]" />
           </div>
-          <span className={`text-[9px] font-bold uppercase tracking-wide ${isFindHairActive ? 'text-[#8E7348]' : 'text-stone-500'}`}>
+          <span className={`text-[10px] font-bold uppercase tracking-wide ${isFindHairActive ? 'text-[#8E7348]' : 'text-stone-500'}`}>
             Find Hair
           </span>
         </button>

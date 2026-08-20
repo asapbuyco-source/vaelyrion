@@ -102,7 +102,7 @@ export const CartDrawer: React.FC = () => {
             <div className="bg-[#FAF4EB] border-b border-[#E8DFC8] px-6 py-2.5 text-[11px] text-[#7A5B28] flex items-start gap-2">
               <Calendar className="w-3.5 h-3.5 shrink-0 mt-0.5" />
               <span>
-                <strong>Weekly Batch #003:</strong> Items marked <em>Pre-Order</em> will be crafted in this week's artisan batch and dispatched via Oslo 3PL. Estimated delivery: <strong>10–18 business days</strong>.
+                <strong>Atelier Release:</strong> Items marked <em>Pre-Order</em> are prepared to order and dispatched from Oslo. Estimated delivery: <strong>10–18 business days</strong>.
               </span>
             </div>
           )}
@@ -282,7 +282,7 @@ export const CartDrawer: React.FC = () => {
                   Stripe Encrypted
                 </span>
                 <span className="hidden sm:inline">•</span>
-                <span>Norway 3PL Assured</span>
+                <span>Oslo Inspected</span>
               </div>
 
             </div>

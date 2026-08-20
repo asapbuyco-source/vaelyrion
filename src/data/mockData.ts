@@ -3,9 +3,9 @@ import { Product, DiscoverArticle, Review, Order } from '../types';
 export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'prod-01',
-    title: 'The Sovereign HD Melt Lace Wig',
+    title: 'Sovereign HD Lace Wig',
     slug: 'sovereign-hd-melt-lace-wig',
-    subtitle: '13x6 Ultra-Thin Swiss HD Lace · Raw Virgin Hair',
+    subtitle: '13x6 Fine Swiss Lace · Single-Donor Hair',
     category: 'wigs',
     price: 420,
     originalPrice: 480,
@@ -26,13 +26,13 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['180%', '200%', '250%'],
     laceTypes: ['13x6 HD Lace', '13x4 HD Swiss Lace', 'Full Lace Invisible'],
     colors: ['Natural Black (#1B)', 'Jet Black (#1)', 'Rich Chestnut Brown', 'Honey Blonde Mix (#P4/27)'],
-    description: 'The pinnacle of undetectable lace craftsmanship. Sourced from single-donor raw virgin temple hair with cuticle alignment in one direction. Pre-plucked with ultra-fine single micro-knots that melt flawlessly into any skin tone.',
+    description: 'A considered 13x6 lace wig made from single-donor hair with aligned cuticle and a soft, natural-looking hairline. Fine single knots keep the finish light and discreet.',
     hairOrigin: '100% Raw Virgin Cambodian Temple Hair',
     details: [
       'Pre-plucked natural graduated hairline with delicate baby hairs',
       'Bleached micro-knots for invisible scalp simulation',
-      'Ventilated elastic luxury cap with adjustable silicone non-slip band',
-      'Can be dyed, heat-styled up to 230°C (450°F), and washed with premium hair care',
+      'Ventilated elastic cap with an adjustable silicone grip band',
+      'Can be dyed, heat-styled up to 230°C (450°F), and washed with a gentle hair-care routine',
       'Lifespan: 2–3+ years with proper maintenance'
     ],
     careInstructions: [
@@ -47,9 +47,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-02',
-    title: 'Aura Body Wave Raw Bundles (3-Piece)',
+    title: 'Aura Body Wave Bundles',
     slug: 'aura-body-wave-raw-bundles',
-    subtitle: 'Triple-Wefted Raw Virgin Hair · Natural High Luster',
+    subtitle: 'Three-Piece Set · Natural Movement and Soft Sheen',
     category: 'bundles',
     price: 290,
     originalPrice: 340,
@@ -69,12 +69,12 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['180%', '200%'],
     laceTypes: ['5x5 HD Closure'],
     colors: ['Natural Black (#1B)', 'Jet Black (#1)', 'Rich Chestnut Brown'],
-    description: 'Voluminous, lustrous body wave bundles with intact natural cuticles. Retains its deep S-curve wave pattern through multiple washes and heat restylings.',
+    description: 'A three-piece set with a deep, natural S-curve and soft movement. The aligned cuticle helps the wave retain its shape through wear and careful restyling.',
     hairOrigin: '100% Raw Virgin Brazilian Hair',
     details: [
       'Reinforced double-drawn machine wefts to prevent shedding',
       'Weight: 100g (±5g) per bundle — full thickness from root to tip',
-      'Holds curls effortlessly for over 72 hours without stiff hairspray',
+      'Holds a curl beautifully without relying on stiff hairspray',
       'Naturally soft bouncy texture with medium-high luster'
     ],
     careInstructions: [
@@ -88,9 +88,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-03',
-    title: 'Ethereal 13x6 HD Illusion Frontal',
+    title: 'Ethereal 13x6 HD Frontal',
     slug: 'ethereal-13x6-hd-illusion-frontal',
-    subtitle: 'Transparent Ultra-Fine Swiss Lace · Free Parting',
+    subtitle: 'Fine Swiss Lace · Open Parting',
     category: 'frontals',
     price: 185,
     originalPrice: 215,
@@ -109,7 +109,7 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['150%', '180%'],
     laceTypes: ['13x6 HD Lace', '13x4 HD Swiss Lace'],
     colors: ['Natural Black (#1B)', 'Honey Blonde Mix (#P4/27)'],
-    description: 'An expansive ear-to-ear frontal offering 6 inches of deep parting versatility. Hand-ventilated using genuine ultra-fine Swiss HD lace that becomes completely invisible upon contact.',
+    description: 'An ear-to-ear frontal with six inches of open parting and a fine Swiss lace base. Hand-ventilated for a soft transition at the hairline.',
     hairOrigin: '100% Virgin Hair Single Donor',
     details: [
       'Full 13" x 6" ear-to-ear perimeter allowing high ponytails and half-up styles',
@@ -127,9 +127,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-04',
-    title: 'Velvet Noir Deep Wave Glueless Wig',
+    title: 'Velvet Noir Deep Wave Wig',
     slug: 'velvet-noir-deep-wave-glueless-wig',
-    subtitle: 'Ready-to-Wear 3D Fitted Cap · Zero Glue Needed',
+    subtitle: 'Glueless Fit · Defined Deep Wave',
     category: 'wigs',
     price: 460,
     originalPrice: 510,
@@ -149,11 +149,11 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['200%', '250%'],
     laceTypes: ['13x4 HD Swiss Lace', '5x5 HD Closure'],
     colors: ['Natural Black (#1B)', 'Burgundy (#99J)', 'Rich Chestnut Brown'],
-    description: 'Designed for effortless luxury in under 3 minutes. Built on a tailored 3D ergonomic dome cap with an invisible piano elastic band for rock-solid security without glue or harsh edge gels.',
+    description: 'A defined deep wave on a tailored glueless cap. The adjustable band gives a secure, comfortable fit without adhesive or heavy edge products.',
     hairOrigin: '100% Cuticle-Aligned Peruvian Virgin Hair',
     details: [
       'Patented anti-slip silicone forehead grip & adjustable nape tension strap',
-      'Deep defined curl pattern with zero tangle formula',
+      'Deep defined curl pattern with considered care for easy detangling',
       'Pre-cut precision zig-zag hairline for natural irregular hairline look'
     ],
     careInstructions: [
@@ -167,9 +167,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-05',
-    title: 'Lumière Seamless Clip-In Extensions (7-Piece Set)',
+    title: 'Lumière Seamless Clip-Ins',
     slug: 'lumiere-seamless-clip-in-extensions',
-    subtitle: 'Ultra-Flat Silicone Wefts · Instant Volume & Length',
+    subtitle: 'Seven-Piece Set · Flat, Flexible Wefts',
     category: 'extensions',
     price: 240,
     originalPrice: 280,
@@ -188,7 +188,7 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['180%'],
     laceTypes: ['Transparent Lace'],
     colors: ['Natural Black (#1B)', 'Honey Blonde Mix (#P4/27)', 'Rich Chestnut Brown', 'Platinum Ash 613'],
-    description: 'Innovative polyurethane seamless bands that lay 50% flatter against the scalp than traditional stitched wefts. Invisible even in fine or thin hair.',
+    description: 'Seven flexible pieces with smooth polyurethane bands that sit close to the head for discreet volume and length, even through fine hair.',
     hairOrigin: '100% European Remy Human Hair',
     details: [
       '7 distinct pieces per set (180g total density)',
@@ -206,9 +206,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-06',
-    title: 'Artisan 5x5 HD Skin Closure',
+    title: 'Artisan 5x5 HD Closure',
     slug: 'artisan-5x5-hd-skin-closure',
-    subtitle: 'Natural Scalp Parting · High Density Base',
+    subtitle: 'Fine Lace · Natural Parting',
     category: 'closures',
     price: 135,
     originalPrice: 160,
@@ -227,7 +227,7 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['150%', '180%'],
     laceTypes: ['5x5 HD Closure'],
     colors: ['Natural Black (#1B)', 'Jet Black (#1)'],
-    description: 'Compact 5x5 inch HD lace closure offering side and middle partings with minimal maintenance. Ideal for natural everyday sew-ins and custom wig making.',
+    description: 'A compact 5x5 closure with flexible side and middle parting. Fine lace and a natural density transition make it an easy foundation for everyday styling.',
     hairOrigin: '100% Raw Virgin Cambodian Hair',
     details: [
       'Real micro-fine Swiss mesh lace',
@@ -244,9 +244,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-07',
-    title: 'Tanelia Mulberry Silk Care Kit',
+    title: 'Mulberry Silk Care Set',
     slug: 'tanelia-mulberry-silk-care-kit',
-    subtitle: 'Signature 22-Momme Silk Bonnet & Wide-Tooth Brass Comb',
+    subtitle: '22-Momme Silk Bonnet · Brass Comb',
     category: 'accessories',
     price: 65,
     originalPrice: 85,
@@ -265,7 +265,7 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['150%'],
     laceTypes: ['Transparent Lace'],
     colors: ['Rich Chestnut Brown', 'Natural Black (#1B)'],
-    description: 'Engineered specifically for preserving luxury hair bundles and lace wigs. Made from pure 22-momme Grade 6A mulberry silk to eliminate friction, split ends, and nocturnal moisture loss.',
+    description: 'A considered care set for protecting hair between wears. The 22-momme silk bonnet helps reduce friction, while the brass comb moves gently through the lengths.',
     hairOrigin: '100% Grade 6A Mulberry Silk & Gold Plated Brass',
     details: [
       'Extra-wide soft elastic band with zero forehead crease mark technology',
@@ -282,9 +282,9 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'prod-08',
-    title: 'Monarch Platinum 613 Raw Blonde Lace Wig',
+    title: 'Monarch Platinum 613 Wig',
     slug: 'monarch-platinum-613-raw-blonde-wig',
-    subtitle: 'Double-Processed Pure 613 Blonde · 13x6 HD Lace',
+    subtitle: 'Platinum Blonde · 13x6 Fine Lace',
     category: 'wigs',
     price: 495,
     originalPrice: 560,
@@ -303,7 +303,7 @@ export const MOCK_PRODUCTS: Product[] = [
     densities: ['180%', '200%'],
     laceTypes: ['13x6 HD Lace'],
     colors: ['Platinum Ash 613', 'Honey Blonde Mix (#P4/27)'],
-    description: 'Clean, radiant platinum blonde crafted with our gentle cold-bath lift process to maintain 100% cuticle integrity and silky soft tactile texture.',
+    description: 'A clean platinum blonde finished on fine 13x6 lace. Lifted with care to preserve a soft hand feel and natural movement through the lengths.',
     hairOrigin: '100% Raw Virgin Temple Hair (Cold Lifted 613)',
     details: [
       'Ready to accept custom pastels, warm caramels or vivid tones without bleach damage',
@@ -325,10 +325,10 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
   {
     id: 'art-01',
     title: 'The Art of the Undetectable Melt: Behind Our HD Swiss Lace',
-    subtitle: 'Why microscopic single knots and cuticle-aligned raw hair represent the new luxury standard.',
+    subtitle: 'A closer look at fine single knots, aligned cuticle, and a natural-looking hairline.',
     category: 'Editorial',
     readTime: '4 min read',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85',
+    image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288705sGng7OjgwW8eKtnh.jpg?width=1200',
     author: 'Elena Lindqvist, Head of Hair Craftsmanship',
     date: 'August 14, 2026',
     featuredProductIds: ['prod-01', 'prod-03'],
@@ -336,7 +336,7 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
     content: [
       'In traditional wig production, thick French lace and bulky double knots create an artificial ridge at the hairline. At Tanelia, we re-engineered the architecture from the ground up.',
       'We utilize ultra-fine 0.03mm Swiss HD mesh combined with single-hair hand ventilation. Each strand is knotted at an anatomical 45-degree angle, mimicking the natural whorl of human scalp growth.',
-      'Coupled with our raw Cambodian temple hair that has never undergone chemical acid baths, the hair retains natural elasticity, movement, and a high-end natural sheen that lasts years.'
+      'Paired with raw Cambodian temple hair, the lace retains a natural movement and soft sheen through careful wear and maintenance.'
     ],
     tags: ['HD Lace', 'Temple Hair', 'Craftsmanship', 'Hair Anatomy']
   },
@@ -346,7 +346,7 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
     subtitle: 'A transparent look into our sustainable pre-order logistics from artisan ateliers to Oslo fulfillment.',
     category: 'Trend Report',
     readTime: '3 min read',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85',
+    image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320104320507904WHhs8TJ151sL318C_e6a2c697-f41a-416a-9427-c6c0dd66181e.png?width=1200',
     author: 'Henrik Vang, Operations & Logistics',
     date: 'August 11, 2026',
     featuredProductIds: ['prod-02', 'prod-04'],
@@ -364,7 +364,7 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
     subtitle: 'From thermal protection to purple toning bath recipes for salon-level radiance.',
     category: 'Styling Masterclass',
     readTime: '5 min read',
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=85',
+    image: 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065155uX2AlAURXsvNKmbi_9bb3263a-0d58-4b95-ad73-44f519c0e731.png?width=1200',
     author: 'Astrid S., Celebrity Stylist',
     date: 'August 06, 2026',
     featuredProductIds: ['prod-08', 'prod-07'],

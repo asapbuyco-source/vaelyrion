@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Scan, ShieldCheck, Sparkles, Truck, Star } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Truck } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { SmartImage } from '../common/SmartImage';
 
@@ -13,16 +13,11 @@ export const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-[#FAF8F5] min-h-[90vh] flex items-center">
+    <section className="relative overflow-hidden bg-[#F7F5F0] min-h-[86vh] flex items-center border-b border-[#171614]/10">
 
-      {/* Background texture / warm gradient */}
+      {/* Warm, quiet foundation */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#F4EFEA] to-[#EDE8E1]" />
-        {/* Subtle noise texture for depth */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
-          backgroundSize: '200px 200px'
-        }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F7F5F0] via-[#F1EDE6] to-[#E5DED3]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0 w-full">
@@ -31,17 +26,16 @@ export const Hero: React.FC = () => {
           {/* LEFT: Editorial Text Column */}
           <div className="space-y-8 lg:py-24">
 
-            {/* Batch badge */}
+            {/* House mark */}
             <div 
-              className="inline-flex items-center gap-2.5 glass-gold px-4 py-2 rounded-full text-xs text-[#8E7348] font-semibold tracking-widest uppercase cursor-pointer"
+              className="inline-flex items-center gap-2.5 border-l-2 border-[#B5935A] pl-4 text-xs text-[#8E7348] font-semibold tracking-widest uppercase"
               style={{ 
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
                 transition: 'all 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s'
               }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#B5935A] animate-gold-pulse" />
-              Weekly Batch #003 · Allocations Open
+              Tanelia · Oslo, Norway
             </div>
 
             {/* Big headline */}
@@ -50,11 +44,11 @@ export const Hero: React.FC = () => {
               transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
               transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s'
             }}>
-              <p className="section-num mb-4">TANELIA · THE ATELIER</p>
-              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-normal text-[#141414] leading-[1.02] tracking-tight text-balance">
-                Discover Your<br />
-                <span className="italic text-[#8E7348]">Signature</span><br />
-                Look
+              <p className="section-num mb-5">THE CURRENT COLLECTION</p>
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-semibold text-[#141414] leading-[1.01] tracking-tight text-balance">
+                Hair with a<br />
+                <span className="italic text-[#8E7348]">natural point</span><br />
+                of view.
               </h1>
             </div>
 
@@ -64,8 +58,7 @@ export const Hero: React.FC = () => {
               transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.35s'
             }}>
               <p className="text-stone-500 font-light text-base leading-relaxed max-w-md">
-                Premium raw hair, ethically sourced worldwide. Handcrafted on demand,
-                inspected in Oslo, delivered to your door.
+                Single-donor hair and fine lace pieces selected for movement, density, and a natural finish. Each order is inspected and prepared in Oslo before it leaves us.
               </p>
             </div>
 
@@ -83,18 +76,18 @@ export const Hero: React.FC = () => {
                   setFilters(prev => ({ ...prev, category: 'all', searchQuery: '' }));
                   setCurrentView('shop');
                 }}
-                className="group flex items-center justify-center gap-2.5 bg-[#141414] hover:bg-[#2A2A2A] text-[#FAF8F5] text-xs uppercase tracking-widest font-bold py-4 px-10 rounded-full transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
+                className="group flex items-center justify-center gap-2.5 bg-[#171614] hover:bg-[#312c25] text-[#F7F5F0] text-xs uppercase tracking-widest font-bold py-4 px-10 rounded-none transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
               >
                 <span>Shop the Collection</span>
                 <ArrowRight className="w-4 h-4 text-[#B5935A] group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
-                onClick={() => setCurrentView('find-hair')}
+                onClick={() => setCurrentView('contact')}
                 className="btn-text-arrow py-4 px-2 cursor-pointer"
               >
-                <Scan className="w-4 h-4 text-[#B5935A]" />
-                <span>Find This Hair</span>
+                <MessageCircle className="w-4 h-4 text-[#B5935A]" />
+                <span>Speak with the house</span>
               </button>
             </div>
 
@@ -107,9 +100,9 @@ export const Hero: React.FC = () => {
               }}
             >
               {[
-                { icon: ShieldCheck, label: '100% Single Donor', sub: 'Cuticle Aligned' },
-                { icon: Sparkles, label: '0.03mm HD Lace', sub: 'Swiss Micro-Knot' },
-                { icon: Truck, label: 'Oslo QC Hub', sub: 'Norway Inspected' }
+                { icon: ShieldCheck, label: 'Single-Donor Hair', sub: 'Cuticle Aligned' },
+                { icon: Sparkles, label: '0.03mm Swiss Lace', sub: 'Hand-Ventilated' },
+                { icon: Truck, label: 'Prepared in Oslo', sub: 'Inspected by Hand' }
               ].map(({ icon: Icon, label, sub }) => (
                 <div key={label} className="space-y-1">
                   <Icon className="w-4 h-4 text-[#B5935A] mb-2" />
@@ -122,18 +115,22 @@ export const Hero: React.FC = () => {
 
           {/* RIGHT: Large editorial imagery with floating card */}
           <div 
-            className="relative block"
+            className="relative block lg:pl-8"
             style={{ 
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateX(0)' : 'translateX(32px)',
               transition: 'all 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s'
             }}
           >
+            <div className="hidden lg:flex absolute -right-2 top-10 z-10 [writing-mode:vertical-rl] rotate-180 text-[10px] uppercase tracking-[0.35em] text-[#765C35]">
+              TANELIA / OSLO / 01
+            </div>
+
             {/* Main hero image */}
-            <div className="animate-settle relative rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: '3/4' }}>
+            <div className="animate-settle relative overflow-hidden shadow-2xl ring-1 ring-[#9B7A4A]/45 ring-offset-8 ring-offset-[#F7F5F0]" style={{ aspectRatio: '4/5' }}>
               <SmartImage
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85"
-                alt="Tanelia Luxury Campaign"
+                src="https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065153v1aY413AR8x3UMJ1_9579f0ac-9a49-4d31-a5d7-1c0927f72b21.png?width=1200"
+                alt="Velvet Noir deep wave wig from the Tanelia collection"
                 fallbackKind="editorial"
                 className="w-full h-full object-cover object-center"
               />
@@ -141,40 +138,11 @@ export const Hero: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
-            {/* Floating product preview card */}
-            <div className="absolute -bottom-6 -left-8 glass rounded-2xl p-4 shadow-xl max-w-[200px] animate-float hidden sm:block">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-10 h-12 rounded-lg overflow-hidden bg-stone-200 shrink-0">
-                  <SmartImage 
-                    src="https://cdn.shopify.com/s/files/1/2465/8681/files/2080932979095207936xsrAfr1mIeIlZkLF.png"
-                    fallbackKind="hair"
-                    className="w-full h-full object-cover" 
-                    alt="Featured product"
-                  />
-                </div>
-                <div>
-                  <p className="font-serif text-xs font-medium leading-tight text-[#141414]">Signature HD Wig</p>
-                  <p className="text-[10px] text-stone-400">26" Body Wave</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-sm text-[#141414]">€395</span>
-                <div className="flex items-center gap-0.5">
-                  {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="w-2.5 h-2.5 fill-[#B5935A] text-[#B5935A]" />
-                  ))}
-                </div>
-              </div>
-            </div>
+            <div className="absolute -bottom-5 -left-3 lg:left-2 w-24 h-24 border-l border-b border-[#9B7A4A]/60 pointer-events-none" />
 
-            {/* Floating batch badge */}
-            <div className="absolute top-6 -right-4 glass-gold rounded-2xl p-3 shadow-lg hidden sm:block">
-              <p className="text-[10px] uppercase tracking-widest text-[#8E7348] font-bold">Batch #003</p>
-              <p className="font-serif text-sm font-medium text-[#141414] mt-0.5">Now Open</p>
-              <div className="mt-2 w-full bg-stone-200 rounded-full h-1">
-                <div className="bg-[#B5935A] h-1 rounded-full" style={{ width: '68%' }} />
-              </div>
-              <p className="text-[9px] text-stone-400 mt-1">68% allocated</p>
+            <div className="absolute bottom-0 left-0 right-0 bg-[#171614]/85 text-[#F7F5F0] px-5 py-4 flex items-center justify-between">
+              <span className="text-[10px] uppercase tracking-[0.22em]">Velvet Noir · Deep Wave</span>
+              <span className="text-[10px] text-[#C8AD7F]">Prepared in Oslo</span>
             </div>
           </div>
 

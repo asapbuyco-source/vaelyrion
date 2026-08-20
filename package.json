@@ -11,6 +11,7 @@
         "lint": "tsc --noEmit",
         "dev:api": "tsx watch api/index.ts",
         "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\"",
+        "seed": "tsx server/seed.ts",
         "scrape": "tsx server/scrape/index.ts",
         "promote": "tsx server/scrape/promote.ts"
     },
