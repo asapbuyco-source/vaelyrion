@@ -45,6 +45,8 @@ export interface Product {
   colors: HairColor[];
   description: string;
   hairOrigin: string; // e.g. "100% Raw Virgin Cambodian Hair" or "100% Cuticle-Aligned Brazilian Hair"
+  seoTitle?: string;
+  seoDescription?: string;
   details: string[];
   careInstructions: string[];
   isNew?: boolean;
@@ -145,6 +147,9 @@ export interface DiscoverArticle {
   content: string[];
   quote?: string;
   tags: string[];
+  slug?: string;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 export interface VisualMatchResult {

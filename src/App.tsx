@@ -27,7 +27,7 @@ import { ContactPage } from './components/pages/ContactPage';
 import { AdminPage } from './components/admin/AdminPage';
 
 const AppContent: React.FC = () => {
-  const { currentView, selectedProduct } = useStore();
+  const { currentView, selectedProduct, articles, selectedArticleId } = useStore();
 
   useEffect(() => {
     const pageMeta: Record<string, { title: string; description: string }> = {
@@ -61,16 +61,28 @@ const AppContent: React.FC = () => {
       }
     };
     const fallback = pageMeta[currentView] || pageMeta.home;
-    const title = currentView === 'product' && selectedProduct
-      ? `${selectedProduct.title} | Tanelia`
-      : fallback.title;
-    const description = currentView === 'product' && selectedProduct
-      ? selectedProduct.description
-      : fallback.description;
+    const selectedArticle = articles.find(a => a.id === selectedArticleId) || (currentView === 'discover-article' ? articles[0] : undefined);
+    const isProduct = currentView === 'product' && selectedProduct;
+    const isArticle = currentView === 'discover-article' && selectedArticle;
+
+    const title = isProduct
+      ? (selectedProduct.seoTitle || `${selectedProduct.title} | Tanelia`)
+      : isArticle
+        ? (selectedArticle.title || 'Tanelia Journal')
+        : fallback.title;
+    const description = isProduct
+      ? (selectedProduct.seoDescription || selectedProduct.description)
+      : isArticle
+        ? (selectedArticle.subtitle || 'A Tanelia Journal story on hair craft, care, and sourcing.')
+        : fallback.description;
 
     document.title = title;
     const descriptionTag = document.querySelector('meta[name="description"]');
     descriptionTag?.setAttribute('content', description);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    ogTitle?.setAttribute('content', title);
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    ogDescription?.setAttribute('content', description);
 
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) {
@@ -87,21 +99,54 @@ const AppContent: React.FC = () => {
       schema.type = 'application/ld+json';
       document.head.appendChild(schema);
     }
-    schema.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: 'Tanelia',
-      url: window.location.origin,
-      logo: `${window.location.origin}/brand/tanelia-favicon.png`,
-      email: 'info@tanelia.shop',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Oslo',
-        addressCountry: 'NO'
-      },
-      description: 'A modern hair house based in Oslo, dedicated to single-origin hair, fine Swiss lace, and considered care.'
-    });
-  }, [currentView, selectedProduct]);
+
+    const origin = window.location.origin;
+    if (isProduct) {
+      schema.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: selectedProduct.title,
+        description: selectedProduct.description,
+        image: selectedProduct.images?.[0] || `${origin}/brand/tanelia-favicon.png`,
+        brand: { '@type': 'Brand', name: 'Tanelia' },
+        sku: selectedProduct.slug,
+        offers: {
+          '@type': 'Offer',
+          url: canonical.href,
+          priceCurrency: 'EUR',
+          price: selectedProduct.price,
+          availability: selectedProduct.isPreOrder ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock'
+        }
+      });
+    } else if (isArticle) {
+      schema.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: selectedArticle.title,
+        description: selectedArticle.subtitle,
+        image: selectedArticle.image,
+        author: { '@type': 'Organization', name: selectedArticle.author || 'Tanelia Editorial' },
+        publisher: { '@type': 'Organization', name: 'Tanelia', url: origin },
+        datePublished: selectedArticle.date || undefined,
+        mainEntityOfPage: canonical.href
+      });
+    } else {
+      schema.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Tanelia',
+        url: origin,
+        logo: `${origin}/brand/tanelia-favicon.png`,
+        email: 'info@tanelia.shop',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Oslo',
+          addressCountry: 'NO'
+        },
+        description: 'A modern hair house based in Oslo, dedicated to single-origin hair, fine Swiss lace, and considered care.'
+      });
+    }
+  }, [currentView, selectedProduct, articles, selectedArticleId]);
 
   // Scroll to top upon navigation
   useEffect(() => {

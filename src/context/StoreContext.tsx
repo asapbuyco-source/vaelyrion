@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback, ReactNode } from 'react';
 import { 
   Product, 
   CartItem, 
@@ -334,8 +334,10 @@ const normalizeServerProduct = (raw: any): Product => {
     densities: safeArray(raw?.densities) as Product['densities'],
     laceTypes: safeArray(raw?.laceTypes) as Product['laceTypes'],
     colors: safeArray(raw?.colors) as Product['colors'],
-    description,
+description,
     hairOrigin: raw?.hairOrigin || '',
+    seoTitle: raw?.seoTitle || undefined,
+    seoDescription: raw?.seoDescription || undefined,
     details: safeArray(raw?.details),
     careInstructions: safeArray(raw?.careInstructions),
     supplierId: raw?.supplierId || ''
@@ -343,7 +345,30 @@ const normalizeServerProduct = (raw: any): Product => {
 };
 
 export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentView, setCurrentView] = useState<ViewType>('home');
+  const productIdRef = useRef<string | null>(null);
+  const articleIdRef = useRef<string | null>(null);
+  const pendingProductSlugRef = useRef<string | null>(null);
+  const pendingArticleSlugRef = useRef<string | null>(null);
+
+  const [currentView, setCurrentViewState] = useState<ViewType>(() => {
+    const [root, slug] = window.location.pathname.split('/').filter(Boolean);
+    if (root === 'products') {
+      if (slug) { pendingProductSlugRef.current = decodeURIComponent(slug); return 'product'; }
+      return 'shop';
+    }
+    if (root === 'journal') {
+      if (slug) { pendingArticleSlugRef.current = decodeURIComponent(slug); return 'discover-article'; }
+      return 'discover';
+    }
+    const staticViews: Record<string, ViewType> = {
+      'shop': 'shop', 'find-hair': 'find-hair', 'wishlist': 'wishlist',
+      'checkout': 'checkout', 'order-confirmation': 'order-confirmation',
+      'tracking': 'tracking', 'account': 'account', 'about': 'about',
+      'faq': 'faq', 'contact': 'contact', 'shipping-policy': 'shipping-policy',
+      'returns-policy': 'returns-policy', 'admin': 'admin'
+    };
+    return staticViews[root] || 'home';
+  });
   const [articles, setArticles] = useState<DiscoverArticle[]>(MOCK_ARTICLES);
 
   useEffect(() => {
@@ -351,8 +376,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       .then((data: any[]) => { if (data.length > 0) setArticles(data as DiscoverArticle[]); })
       .catch(() => { /* Editorial fallback remains available if the content table is not deployed yet. */ });
   }, []);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductIdState] = useState<string | null>(null);
+  const [selectedArticleId, setSelectedArticleIdState] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(INITIAL_ORDER_SAMPLE);
 
   // Currency
@@ -389,6 +414,101 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     load();
     return () => { cancelled = true; };
   }, []);
+
+  // ---- URL routing (every view gets a real path for SEO) ----
+  const setSelectedProductId = useCallback((id: string | null) => {
+    productIdRef.current = id;
+    setSelectedProductIdState(id);
+  }, []);
+
+  const setSelectedArticleId = useCallback((id: string | null) => {
+    articleIdRef.current = id;
+    setSelectedArticleIdState(id);
+  }, []);
+
+  const pathForView = (view: ViewType, productSlug?: string, articleSlug?: string): string => {
+    switch (view) {
+      case 'home': return '/';
+      case 'shop': return '/shop';
+      case 'product': return productSlug ? `/products/${productSlug}` : '/shop';
+      case 'discover': return '/journal';
+      case 'discover-article': return articleSlug ? `/journal/${articleSlug}` : '/journal';
+      case 'find-hair': return '/find-hair';
+      case 'wishlist': return '/wishlist';
+      case 'checkout': return '/checkout';
+      case 'order-confirmation': return '/order-confirmation';
+      case 'tracking': return '/tracking';
+      case 'account': return '/account';
+      case 'about': return '/about';
+      case 'faq': return '/faq';
+      case 'contact': return '/contact';
+      case 'shipping-policy': return '/shipping-policy';
+      case 'returns-policy': return '/returns-policy';
+      case 'admin': return '/admin';
+    }
+  };
+
+  const setCurrentView = useCallback((view: ViewType) => {
+    setCurrentViewState(view);
+    const productSlug = products.find(p => p.id === productIdRef.current)?.slug;
+    const articleSlug = articles.find(a => a.id === articleIdRef.current)?.slug;
+    const path = pathForView(view, productSlug, articleSlug);
+    if (path !== `${window.location.pathname}${window.location.search}`) {
+      window.history.pushState({}, '', path);
+    }
+  }, [products, articles]);
+
+  const resolvePendingSlug = useCallback(() => {
+    if (pendingProductSlugRef.current && products.length > 0) {
+      const match = products.find(p => p.slug === pendingProductSlugRef.current);
+      pendingProductSlugRef.current = null;
+      if (match) {
+        productIdRef.current = match.id;
+        setSelectedProductIdState(match.id);
+      } else {
+        setCurrentViewState('shop');
+        window.history.replaceState({}, '', '/shop');
+      }
+    }
+    if (pendingArticleSlugRef.current && articles.length > 0 && articles.some(a => 'slug' in a)) {
+      const match = articles.find(a => 'slug' in a && (a as any).slug === pendingArticleSlugRef.current);
+      pendingArticleSlugRef.current = null;
+      if (match) {
+        articleIdRef.current = match.id;
+        setSelectedArticleIdState(match.id);
+      } else {
+        setCurrentViewState('discover');
+        window.history.replaceState({}, '', '/journal');
+      }
+    }
+  }, [products, articles]);
+
+  useEffect(() => { resolvePendingSlug(); }, [resolvePendingSlug]);
+
+  useEffect(() => {
+    const parsePath = (pathname: string) => {
+      const [root, slug] = pathname.split('/').filter(Boolean);
+      if (root === 'products') {
+        if (slug) { pendingProductSlugRef.current = decodeURIComponent(slug); setCurrentViewState('product'); }
+        else setCurrentViewState('shop');
+      } else if (root === 'journal') {
+        if (slug) { pendingArticleSlugRef.current = decodeURIComponent(slug); setCurrentViewState('discover-article'); }
+        else setCurrentViewState('discover');
+      } else {
+        const staticViews: Record<string, ViewType> = {
+          'shop': 'shop', 'find-hair': 'find-hair', 'wishlist': 'wishlist',
+          'checkout': 'checkout', 'order-confirmation': 'order-confirmation',
+          'tracking': 'tracking', 'account': 'account', 'about': 'about',
+          'faq': 'faq', 'contact': 'contact', 'shipping-policy': 'shipping-policy',
+          'returns-policy': 'returns-policy', 'admin': 'admin'
+        };
+        setCurrentViewState(staticViews[root] || 'home');
+      }
+    };
+    const onPopState = () => { parsePath(window.location.pathname); resolvePendingSlug(); };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [resolvePendingSlug]);
 
   // Cart
   const [cart, setCart] = useState<CartItem[]>(() => {

@@ -40,6 +40,8 @@ const formatProduct = (p: any) => {
     colors: attrs.colors || [],
     description,
     hairOrigin: p.hair_origin || '',
+    seoTitle: p.seo_title || undefined,
+    seoDescription: p.seo_description || undefined,
     details: p.details || [],
     careInstructions: p.care_instructions || [],
     isNew: isRecent,
