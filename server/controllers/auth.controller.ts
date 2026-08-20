@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseAdmin } from '../config/supabase.js';
 
 export class AuthController {
   static async register(req: Request, res: Response) {
@@ -27,13 +27,18 @@ export class AuthController {
 
       // Create the user profile record
       if (data.user) {
-        const { error: profileError } = await supabase.from('users').insert([{
-          auth_user_id: data.user.id,
-          email,
-          first_name: firstName,
-          last_name: lastName,
-          phone
-        }]);
+        // Use the dedicated admin client for the profile insert (defensive:
+        // the client's void storage already prevents session persistence, but
+        // a signUp call just ran on the main client).
+        const { error: profileError } = await supabaseAdmin
+          .from('users')
+          .insert([{
+            auth_user_id: data.user.id,
+            email,
+            first_name: firstName,
+            last_name: lastName,
+            phone
+          }]);
 
         if (profileError) {
           console.error('Error creating profile:', profileError);

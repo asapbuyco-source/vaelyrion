@@ -1,301 +1,258 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════════════════════════
+   VAELYRION — Typography & Design System
+   Readability-first. Premium feel. Zero compromise.
+   ══════════════════════════════════════════════════════════════ */
+
 @layer base {
   :root {
-    --font-serif: 'Bodoni Moda', 'Times New Roman', serif;
-    --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-serif:   'Bodoni Moda', 'Times New Roman', serif;
+    --font-sans:    'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-display: 'Bodoni Moda', 'Times New Roman', serif;
 
-    /* Tanelia Design Tokens */
-    --color-ivory: #F7F5F0;
-    --color-ivory-warm: #EEEAE2;
-    --color-ivory-deep: #E4DED4;
-    --color-near-black: #171614;
-    --color-gold: #7A5B2A;
-    --color-gold-light: #BFA379;
-    --color-gold-pale: #E3D6C0;
-    --color-gold-bg: #FAF5ED;
-    --color-taupe: #765C35;
+    /* Palette */
+    --color-ivory:          #F7F5F0;
+    --color-ivory-warm:     #EEEAE2;
+    --color-ivory-deep:     #E4DED4;
+    --color-near-black:     #171614;
+    --color-ink-secondary:  #3D3A35;   /* body secondary — passes WCAG AA */
+    --color-ink-mute:       #6B6660;   /* replaces stone-400 — 4.6:1 on ivory */
+    --color-gold:           #7A5B2A;
+    --color-gold-light:     #BFA379;
+    --color-gold-pale:      #E3D6C0;
+    --color-gold-bg:        #FAF5ED;
+    --color-taupe:          #765C35;
+
+    /* Spacing / Radius */
     --radius-card: 2px;
     --radius-pill: 999px;
-    --shadow-card: 0 12px 30px rgba(20,20,20,0.10), 0 2px 8px rgba(20,20,20,0.05);
+
+    /* Shadows */
+    --shadow-card:       0 12px 30px rgba(20,20,20,0.10), 0 2px 8px rgba(20,20,20,0.05);
     --shadow-card-hover: 0 22px 46px rgba(20,20,20,0.18), 0 4px 12px rgba(20,20,20,0.08);
-    --shadow-float: 0 8px 32px rgba(20,20,20,0.12), 0 2px 8px rgba(20,20,20,0.08);
-    --shadow-glass: 0 2px 24px rgba(20,20,20,0.06);
+    --shadow-float:      0 8px 32px rgba(20,20,20,0.12), 0 2px 8px rgba(20,20,20,0.08);
+    --shadow-glass:      0 2px 24px rgba(20,20,20,0.06);
+
+    /* Easing */
     --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
+  /* ── Body ───────────────────────────────────────────────────
+     15px / 1.65 lh / weight 400 — the comfortable reading floor.
+     font-light (300) is ONLY acceptable at display sizes ≥22px.
+     We enforce this globally below. */
   body {
-    font-family: var(--font-sans);
-    color: var(--color-near-black);
-    background-color: var(--color-ivory);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    font-family:              var(--font-sans);
+    font-size:                0.9375rem;     /* 15px */
+    line-height:              1.65;
+    font-weight:              400;
+    color:                    var(--color-near-black);
+    background-color:         var(--color-ivory);
+    -webkit-font-smoothing:   antialiased;
+    -moz-osx-font-smoothing:  grayscale;
+    text-rendering:           optimizeLegibility;
   }
 
+  /* ── Headings ───────────────────────────────────────────────
+     Bodoni Moda is an optical-size display serif.
+     It shines large — tight tracking, confident weight. */
   h1, h2, h3, h4, .font-serif {
     font-family: var(--font-serif);
   }
+  h1 { font-weight: 600; letter-spacing: -0.03em;  line-height: 1.02; }
+  h2 { font-weight: 500; letter-spacing: -0.025em; line-height: 1.10; }
+  h3 { font-weight: 500; letter-spacing: -0.015em; line-height: 1.22; }
+  h4 { font-weight: 500; letter-spacing: -0.01em;  line-height: 1.35; }
 
-  h1, h2 { font-weight: 500; letter-spacing: -0.035em; }
-  h3, h4 { font-weight: 500; letter-spacing: -0.02em; }
+  .font-display { font-family: var(--font-display); }
 
-  .font-display {
-    font-family: var(--font-display);
-  }
-
-  ::selection {
-    background: var(--color-gold-pale);
-    color: var(--color-near-black);
-  }
+  ::selection { background: var(--color-gold-pale); color: var(--color-near-black); }
 }
 
-/* ─── Scrollbar ──────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--color-ivory); }
-::-webkit-scrollbar-thumb { background: #D9D2C7; border-radius: 3px; }
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-track  { background: var(--color-ivory); }
+::-webkit-scrollbar-thumb  { background: #D9D2C7; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #B8ADA0; }
 
-/* ─── Glass Utilities ────────────────────────────────────── */
+/* ── Glass ──────────────────────────────────────────────────── */
 .glass {
-  background: rgba(250, 248, 245, 0.75);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(247, 245, 240, 0.97);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(23, 22, 20, 0.11);
+  box-shadow: 0 10px 28px rgba(20,20,20,0.09);
 }
-
 .glass-dark {
-  background: rgba(20, 20, 20, 0.72);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background: rgba(20, 20, 20, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 .glass-gold {
-  background: rgba(250, 245, 237, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(181, 147, 90, 0.25);
+  background: #EEE7DC;
+  border: 1px solid rgba(155, 122, 74, 0.35);
+  box-shadow: 0 10px 28px rgba(109, 80, 37, 0.10);
 }
 
-/* ─── Card System ─────────────────────────────────────────── */
+/* ── Card System ────────────────────────────────────────────── */
 .card-float {
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
-  transition: transform 0.35s var(--transition-smooth),
-              box-shadow 0.35s var(--transition-smooth);
+  box-shadow:    var(--shadow-card);
+  transition: transform 0.38s var(--transition-smooth),
+              box-shadow 0.38s var(--transition-smooth);
   will-change: transform;
 }
 .card-float:hover {
-  transform: translateY(-5px);
+  transform:  translateY(-3px);
   box-shadow: var(--shadow-card-hover);
 }
 
-/* ─── Animations ──────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-@keyframes floatY {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-6px); }
-}
-@keyframes goldPulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes fadeUp     { from { opacity:0; transform:translateY(24px);  } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn     { from { opacity:0; }                               to { opacity:1; } }
+@keyframes shimmer    { 0% { background-position:-400px 0; }              100% { background-position:400px 0; } }
+@keyframes floatY     { 0%,100% { transform:translateY(0); }              50% { transform:translateY(-6px); } }
+@keyframes goldPulse  { 0%,100% { opacity:1; }                            50% { opacity:0.5; } }
+@keyframes settleZoom { from { transform:scale(1.07); }                   to  { transform:scale(1); } }
 
-.animate-fade-up {
-  animation: fadeUp 0.65s var(--transition-smooth) both;
-}
-.animate-fade-in {
-  animation: fadeIn 0.5s ease both;
-}
-.animate-float {
-  animation: floatY 4s ease-in-out infinite;
-}
-.animate-gold-pulse {
-  animation: goldPulse 2s ease-in-out infinite;
-}
+.animate-fade-up    { animation: fadeUp     0.65s var(--transition-smooth) both; }
+.animate-fade-in    { animation: fadeIn     0.50s ease both; }
+.animate-float      { animation: floatY     4.0s  ease-in-out infinite; }
+.animate-gold-pulse { animation: goldPulse  2.0s  ease-in-out infinite; }
+.animate-settle     { animation: settleZoom 1.6s  cubic-bezier(0.22,1,0.36,1) both; }
 
-/* Stagger delays */
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
 .delay-400 { animation-delay: 0.4s; }
 .delay-500 { animation-delay: 0.5s; }
 
-/* ─── Skeleton Loader ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+/* ── Skeleton ───────────────────────────────────────────────── */
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    #EDE8E1 25%,
-    #F4EFEA 50%,
-    #EDE8E1 75%
-  );
+  background: linear-gradient(90deg, #EDE8E1 25%, #F4EFEA 50%, #EDE8E1 75%);
   background-size: 400px 100%;
   animation: shimmer 1.4s ease-in-out infinite;
   border-radius: 8px;
 }
 
-/* ─── Utility Classes ─────────────────────────────────────── */
-.gold-accent  { color: var(--color-gold); }
-.gold-border  { border-color: var(--color-gold-light); }
-.bg-champagne { background-color: var(--color-ivory-warm); }
+/* ── Utilities ──────────────────────────────────────────────── */
+.gold-accent        { color: var(--color-gold); }
+.gold-border        { border-color: var(--color-gold-light); }
+.bg-champagne       { background-color: var(--color-ivory-warm); }
 .bg-champagne-light { background-color: #FAF6F0; }
+.text-balance       { text-wrap: balance; }
 
-.text-balance { text-wrap: balance; }
+/* ── Product Card Image ─────────────────────────────────────── */
+.product-image-wrap     { overflow: hidden; border-radius: var(--radius-card) var(--radius-card) 0 0; }
+.product-image-wrap img { transition: transform 0.7s var(--transition-smooth); will-change: transform; }
+.card-float:hover .product-image-wrap img { transform: scale(1.045); }
 
-/* ─── Product Card Image ──────────────────────────────────── */
-.product-image-wrap {
-  overflow: hidden;
-  border-radius: var(--radius-card) var(--radius-card) 0 0;
-}
-.product-image-wrap img {
-  transition: transform 0.7s var(--transition-smooth);
-  will-change: transform;
-}
-.card-float:hover .product-image-wrap img {
-  transform: scale(1.05);
-}
-
-/* ─── Floating Nav Pill ───────────────────────────────────── */
+/* ── Floating Nav Pill ──────────────────────────────────────── */
 .nav-pill {
   border-radius: var(--radius-pill);
   box-shadow: 0 8px 24px rgba(20,20,20,0.12), 0 2px 8px rgba(20,20,20,0.08);
 }
 
-/* ─── Section Gold Accent Line ────────────────────────────── */
+/* ── Section Label (gold rule + tracking) ───────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.18em;
+}
 .section-label::before {
   content: '';
   display: inline-block;
-  width: 24px;
-  height: 1px;
+  width: 32px; height: 1px;
   background: var(--color-gold);
-  vertical-align: middle;
-  margin-right: 10px;
+  margin-right: 14px;
+  flex-shrink: 0;
 }
 
-/* ─── Brand Wordmark ──────────────────────────────────────── */
-.wordmark {
-  font-family: var(--font-display);
-  letter-spacing: 0.22em;
-  font-weight: 600;
-}
-.wordmark .wordmark-diamond {
-  display: inline-block;
-  font-size: 0.4em;
-  vertical-align: 0.34em;
-  margin: 0 0.4em;
-  color: var(--color-gold);
-  transform: rotate(45deg);
-}
+/* ── Wordmark ───────────────────────────────────────────────── */
+.wordmark { font-family: var(--font-display); letter-spacing: 0.28em; font-weight: 500; }
 
-/* ─── Editorial Numeral ───────────────────────────────────── */
-.section-num {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  letter-spacing: 0.32em;
-  color: var(--color-gold);
-}
+/* ── Section Numeral ────────────────────────────────────────── */
+.section-num { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.28em; color: var(--color-gold); }
 
-/* ─── Reveal on Scroll ────────────────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
-}
-.reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ── Reveal on Scroll ───────────────────────────────────────── */
+.reveal         { opacity:0; transform:translateY(26px); transition:opacity 0.8s var(--transition-smooth),transform 0.8s var(--transition-smooth); }
+.reveal-visible { opacity:1; transform:translateY(0); }
 
-/* ─── Text-Arrow CTA ──────────────────────────────────────── */
+/* ── Text-Arrow CTA ─────────────────────────────────────────── */
 .btn-text-arrow {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--color-near-black);
+  position: relative; display: inline-flex; align-items: center;
+  gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.15em;
+  font-size: 0.78rem; font-weight: 600; color: var(--color-near-black);
 }
 .btn-text-arrow::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -5px;
-  height: 1px;
-  width: 100%;
-  background: var(--color-gold);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.45s var(--transition-smooth);
+  content:''; position:absolute; left:0; bottom:-5px;
+  height:1px; width:100%; background:var(--color-gold);
+  transform:scaleX(0); transform-origin:right;
+  transition:transform 0.45s var(--transition-smooth);
 }
-.btn-text-arrow:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-.btn-text-arrow:hover {
-  color: var(--color-taupe);
-}
+.btn-text-arrow:hover::after { transform:scaleX(1); transform-origin:left; }
+.btn-text-arrow:hover        { color: var(--color-taupe); }
 
-/* ─── Hero Settle Zoom ────────────────────────────────────── */
-@keyframes settleZoom {
-  from { transform: scale(1.07); }
-  to   { transform: scale(1); }
-}
-.animate-settle {
-  animation: settleZoom 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.brand-logo { display: block; }
+/* ── Luxury box ─────────────────────────────────────────────── */
+.luxury-box       { background:#fff; border:1px solid rgba(23,22,20,.10); box-shadow:var(--shadow-card); }
+.luxury-box:hover { box-shadow:var(--shadow-card-hover); }
+.gold-rule        { border-color: rgba(155,122,74,.30); }
+
+/* ── Brand logo ─────────────────────────────────────────────── */
+.brand-logo        { display: block; }
 .brand-logo-header { max-height: 54px; }
 .brand-logo-footer { filter: brightness(0) invert(1); max-height: 46px; }
 
-/* ─── Quiet luxury refinements ───────────────────────────── */
-body { letter-spacing: -0.01em; }
-button { letter-spacing: inherit; }
-.text-xs { font-size: 0.8rem; line-height: 1.45; }
-.text-\[11px\] { font-size: 0.74rem; line-height: 1.4; }
-.text-\[10px\] { font-size: 0.7rem; line-height: 1.35; }
-.text-\[9px\] { font-size: 0.66rem; line-height: 1.3; }
-.wordmark { letter-spacing: 0.3em; font-weight: 500; }
-.section-label { letter-spacing: 0.2em !important; }
-.section-label::before { width: 34px; margin-right: 14px; }
-.btn-text-arrow { letter-spacing: 0.16em; font-size: 0.72rem; }
-.glass, .glass-gold, .glass-dark { backdrop-filter: none; -webkit-backdrop-filter: none; border-radius: 2px; }
-.glass { background: rgba(247,245,240,.98); border-color: rgba(23,22,20,.12); box-shadow: 0 12px 28px rgba(20,20,20,.10); }
-.glass-gold { background: #eee7dc; border-color: rgba(155,122,74,.35); box-shadow: 0 12px 28px rgba(109,80,37,.12); }
-.card-float { border-radius: 2px; box-shadow: var(--shadow-card); }
-.card-float:hover { transform: translateY(-3px); }
-.luxury-box { background: #fff; border: 1px solid rgba(23,22,20,.10); box-shadow: var(--shadow-card); }
-.luxury-box:hover { box-shadow: var(--shadow-card-hover); }
-.gold-rule { border-color: rgba(155,122,74,.35); }
-/* Accent text is intentionally darker than the metallic surface color so small labels remain readable. */
-.text-\[\#8E7348\] { color: #765C35 !important; }
+/* ══════════════════════════════════════════════════════════════
+   TYPOGRAPHY READABILITY PATCHES
+   ══════════════════════════════════════════════════════════════
+   These rules fix the four biggest legibility problems:
+
+   PROBLEM 1 — font-light (300) at small sizes is nearly unreadable
+               on a warm ivory surface. Bodily text must be ≥400.
+   PROBLEM 2 — Classes like text-[9px], text-[10px] produce sub-12px
+               text, which strains vision especially on non-Retina screens.
+   PROBLEM 3 — stone-400 (#a8a29e) on ivory (#F7F5F0) has a contrast
+               ratio of ~2.8:1 — fails WCAG AA (needs 4.5:1 for small text).
+   PROBLEM 4 — Gold accent colour #B5935A at 11–12px is too light.
+   ══════════════════════════════════════════════════════════════ */
+
+/* FIX 1 ─ font-light maps to 400 (Regular) for all body contexts */
 .font-light { font-weight: 400; }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* FIX 2 ─ Sub-pixel classes bumped to a 12px hard floor */
+.text-xs            { font-size: 0.8125rem; line-height: 1.55; }  /* 13px */
+.text-\[11px\]      { font-size: 0.78rem;   line-height: 1.5;  }  /* 12.5px */
+.text-\[10\.5px\]   { font-size: 0.78rem;   line-height: 1.5;  }  /* 12.5px */
+.text-\[10px\]      { font-size: 0.75rem;   line-height: 1.45; }  /* 12px floor */
+.text-\[9\.5px\]    { font-size: 0.75rem;   line-height: 1.45; }
+.text-\[9px\]       { font-size: 0.75rem;   line-height: 1.45; }
+.text-\[8px\]       { font-size: 0.75rem;   line-height: 1.45; }
+
+/* FIX 3 ─ stone-400 → ink-mute (#6B6660) — 4.6:1 contrast on ivory */
+.text-stone-400 { color: var(--color-ink-mute) !important; }
+/* stone-500 (#78716c) passes — intentionally not overridden */
+
+/* FIX 4 ─ Gold accent at small sizes must be darker to remain readable */
+.text-\[\#B5935A\] { color: #8A6D38 !important; }
+.text-\[\#8E7348\] { color: #6B5025 !important; }
+.text-\[\#7A5B2A\] { color: #6B5025 !important; }
+.text-\[\#BFA379\] { color: #8A6D38 !important; }
+
+/* FIX 5 ─ Buttons inherit letter-spacing from parent (avoids cramped labels) */
+button { letter-spacing: inherit; }
+
+/* FIX 6 ─ Tabular numbers for price figures (clean alignment) */
+.font-mono { font-feature-settings: "tnum" 1; }
+
+/* FIX 7 ─ Mobile body — already comfortable, just ensure consistency */
 @media (max-width: 640px) {
-  body { font-size: 15px; }
-  body { line-height: 1.55; }
-  .text-xs { font-size: 0.82rem; }
-  .text-\[11px\] { font-size: 0.76rem; }
-  .text-\[10px\] { font-size: 0.72rem; }
-  .text-\[9px\] { font-size: 0.68rem; }
-  .btn-text-arrow { font-size: 0.72rem; letter-spacing: 0.14em; }
+  body { font-size: 0.9375rem; line-height: 1.62; }
 }
+
