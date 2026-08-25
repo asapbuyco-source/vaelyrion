@@ -24,7 +24,38 @@ export class ContactController {
         .select('id, created_at')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error saving contact request to database:', error);
+        throw error;
+      }
+
+      // Send email notification via EmailJS
+      try {
+        const emailjsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            service_id: 'service_6spz37t',
+            template_id: 'template_zm5dgmb',
+            user_id: 'VwG3UpqiiqDYbjQuO',
+            template_params: {
+              name: name,
+              email: email,
+              message: message
+            }
+          })
+        });
+
+        if (!emailjsResponse.ok) {
+          const errorText = await emailjsResponse.text();
+          console.error('EmailJS Error:', errorText);
+        }
+      } catch (emailErr) {
+        console.error('Failed to trigger EmailJS:', emailErr);
+      }
+
       res.status(201).json({ id: data.id, message: 'Your enquiry has been received.' });
     } catch (error: any) {
       res.status(500).json({ error: error.message || 'Unable to submit enquiry.' });
