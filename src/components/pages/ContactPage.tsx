@@ -13,7 +13,8 @@ export const ContactPage: React.FC = () => {
     event.preventDefault();
     setError('');
     setSubmitting(true);
-    const form = new FormData(event.currentTarget);
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     const payload = {
       name: String(form.get('name') || ''),
       email: String(form.get('email') || ''),
@@ -23,10 +24,10 @@ export const ContactPage: React.FC = () => {
     try {
       await api.contact.submit(payload);
       setSent(true);
-      event.currentTarget.reset();
+      formEl.reset();
       showToast('Enquiry received', 'Thank you. Your note has been sent to the Tanelia client service team.', 'gold');
     } catch (submitError: any) {
-      setError(submitError.message || 'We could not submit your enquiry. Please email info@tanelia.shop directly.');
+      setError(submitError.message || 'We could not submit your enquiry. Please email taneliashop17@gmail.com directly.');
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +50,7 @@ export const ContactPage: React.FC = () => {
           <div className="luxury-box p-6 space-y-4">
             <div className="w-11 h-11 bg-[#F4EBDD] flex items-center justify-center"><Mail className="w-5 h-5 text-[#8E7348]" /></div>
             <h2 className="font-serif text-xl text-stone-900">Email the house</h2>
-            <a className="text-sm text-[#8E7348] underline underline-offset-4" href="mailto:info@tanelia.shop">info@tanelia.shop</a>
+            <a className="text-sm text-[#8E7348] underline underline-offset-4" href="mailto:taneliashop17@gmail.com">taneliashop17@gmail.com</a>
             <p className="text-xs text-stone-500 leading-relaxed">For direct assistance, email us and include your order number where relevant.</p>
           </div>
           <div className="luxury-box p-6 space-y-4">
@@ -67,7 +68,7 @@ export const ContactPage: React.FC = () => {
             <label className="space-y-1.5 text-xs uppercase tracking-widest font-semibold text-stone-600">Email<input required type="email" name="email" className="w-full border border-[#141414]/15 px-3 py-3 text-sm normal-case tracking-normal font-normal focus:outline-none focus:border-[#B5935A]" /></label>
           </div>
           <label className="block space-y-1.5 text-xs uppercase tracking-widest font-semibold text-stone-600">How can we help?<textarea required name="message" rows={6} className="w-full border border-[#141414]/15 px-3 py-3 text-sm normal-case tracking-normal font-normal resize-y focus:outline-none focus:border-[#B5935A]" placeholder="Tell us what you are looking for…" /></label>
-          {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">{error} <a className="underline font-semibold" href="mailto:info@tanelia.shop">Email info@tanelia.shop</a></p>}
+          {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">{error} <a className="underline font-semibold" href="mailto:taneliashop17@gmail.com">Email taneliashop17@gmail.com</a></p>}
           {sent && <p className="text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-2" role="status">Your enquiry has been received by Tanelia.</p>}
           <button type="submit" disabled={submitting} className="inline-flex items-center gap-2 bg-[#141414] text-white px-6 py-3 text-xs uppercase tracking-widest font-semibold hover:bg-[#302a23] transition-colors disabled:opacity-60 disabled:cursor-wait">{submitting ? 'Sending…' : sent ? 'Send another enquiry' : 'Send enquiry'}<ArrowRight className="w-4 h-4 text-[#B5935A]" /></button>
         </form>

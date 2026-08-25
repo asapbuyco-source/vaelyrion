@@ -251,7 +251,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a 
-                  href="mailto:info@tanelia.shop"
+                  href="mailto:taneliashop17@gmail.com"
                   className="hover:text-white transition-colors cursor-pointer"
                 >
                   Bespoke Stylist Concierge
@@ -262,11 +262,11 @@ export const Footer: React.FC = () => {
                   <p className="text-stone-300 font-medium">Oslo Fulfillment HQ:</p>
                   <p>Tanelia Nordic Logistics Hub</p>
                   <p>Karenslyst Allé 16, 0278 Oslo, Norway</p>
-                  <p className="mt-1 text-[#B5935A]">info@tanelia.shop</p>
+                  <p className="mt-1 text-[#B5935A]">taneliashop17@gmail.com</p>
                 </div>
               </li>
             </ul>
-            <a href="mailto:info@tanelia.shop" className="inline-block text-xs text-[#B5935A] hover:text-white transition-colors">info@tanelia.shop</a>
+            <a href="mailto:taneliashop17@gmail.com" className="inline-block text-xs text-[#B5935A] hover:text-white transition-colors">taneliashop17@gmail.com</a>
           </div>
 
         </div>

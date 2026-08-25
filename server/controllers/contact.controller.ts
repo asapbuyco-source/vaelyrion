@@ -40,6 +40,7 @@ export class ContactController {
             service_id: 'service_6spz37t',
             template_id: 'template_zm5dgmb',
             user_id: 'VwG3UpqiiqDYbjQuO',
+            ...(process.env.EMAILJS_PRIVATE_KEY ? { accessToken: process.env.EMAILJS_PRIVATE_KEY } : {}),
             template_params: {
               name: name,
               email: email,

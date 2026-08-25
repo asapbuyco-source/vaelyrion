@@ -81,7 +81,7 @@ const CheckoutContent: React.FC = () => {
   const hasPreOrder = cart.some(i => i.isPreOrder);
   // The payment API charges EUR. Keep checkout totals in the charged currency
   // even when the storefront currency selector is set to another display currency.
-  const formatCheckoutPrice = (amount: number) => `€${amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  const formatCheckoutPrice = (amount: number) => `€${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();

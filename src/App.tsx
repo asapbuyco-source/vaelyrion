@@ -57,7 +57,7 @@ const AppContent: React.FC = () => {
       },
       contact: {
         title: 'Contact Tanelia | Client Services in Oslo',
-        description: 'Contact Tanelia at info@tanelia.shop for help with textures, lace, sizing, delivery, and your order.'
+        description: 'Contact Tanelia at taneliashop17@gmail.com for help with textures, lace, sizing, delivery, and your order.'
       }
     };
     const fallback = pageMeta[currentView] || pageMeta.home;
@@ -137,7 +137,7 @@ const AppContent: React.FC = () => {
         name: 'Tanelia',
         url: origin,
         logo: `${origin}/brand/tanelia-favicon.png`,
-        email: 'info@tanelia.shop',
+        email: 'taneliashop17@gmail.com',
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Oslo',

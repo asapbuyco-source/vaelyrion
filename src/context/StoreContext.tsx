@@ -381,7 +381,20 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(INITIAL_ORDER_SAMPLE);
 
   // Currency
-  const [currency, setCurrency] = useState<Currency>('EUR');
+  const [currency, setCurrency] = useState<Currency>(() => {
+    try {
+      const saved = localStorage.getItem('tanelia_currency');
+      return saved === 'EUR' || saved === 'USD' || saved === 'NOK' || saved === 'GBP' ? saved : 'EUR';
+    } catch {
+      return 'EUR';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('tanelia_currency', currency);
+    } catch { /* storage unavailable */ }
+  }, [currency]);
 
   // Products - start empty, load from API
   const [products, setProducts] = useState<Product[]>([]);
@@ -679,7 +692,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (currency === 'NOK') {
       return `${Math.round(converted).toLocaleString('no-NO')} ${symbol.trim()}`;
     }
-    return `${symbol}${converted.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    return `${symbol}${converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   const resetFilters = () => {
