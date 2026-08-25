@@ -91,6 +91,10 @@ export const api = {
     article: (slug: string) => request<any>(`/content/articles/${encodeURIComponent(slug)}`),
   },
 
+  settings: {
+    get: () => request<Record<string, string>>('/settings'),
+  },
+
   // Cart
   cart: {
     get: () => request<any>('/cart'),

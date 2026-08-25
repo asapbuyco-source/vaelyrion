@@ -33,7 +33,8 @@ export const ProductDetailPage: React.FC = () => {
     toggleWishlist, 
     isInWishlist, 
     products,
-    showToast
+    showToast,
+    siteSettings
   } = useStore();
 
   const product = selectedProduct || products[0];
@@ -179,7 +180,7 @@ export const ProductDetailPage: React.FC = () => {
                 {product.isPreOrder ? (
                   <span className="bg-[#141414]/90 backdrop-blur-md text-[#FAF8F5] text-xs uppercase font-semibold tracking-widest px-3.5 py-1.5 rounded-xs border border-[#B5935A]/40 flex items-center gap-1.5 shadow-md">
                     <Calendar className="w-3.5 h-3.5 text-[#B5935A]" />
-                    <span>Pre-Order Allocation · Batch #003</span>
+                    <span>Pre-Order Allocation · {siteSettings.preorderBatch}</span>
                   </span>
                 ) : (
                   <span className="bg-emerald-950/90 backdrop-blur-md text-emerald-100 text-xs uppercase font-semibold tracking-widest px-3.5 py-1.5 rounded-xs border border-emerald-400/40 flex items-center gap-1.5 shadow-md">
@@ -286,7 +287,7 @@ export const ProductDetailPage: React.FC = () => {
                 )}
                 <div className="text-xs space-y-1">
                   <p className="font-semibold text-stone-900">
-                    {product.isPreOrder ? 'Weekly Batch #003 Pre-Order Item' : 'In Stock in Oslo Warehouse'}
+                    {product.isPreOrder ? `Weekly ${siteSettings.preorderBatch} Pre-Order Item` : 'In Stock in Oslo Warehouse'}
                   </p>
                   <p className="text-stone-600 font-light leading-relaxed">
                     {product.estimatedDelivery}

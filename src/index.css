@@ -28,6 +28,19 @@
     --radius-card: 2px;
     --radius-pill: 999px;
 
+    /* Radius scale — remap Tailwind's default pill radii onto the house scale,
+       so rounded-xl / rounded-2xl / rounded-3xl read as softly squared, not pill.
+       (rounded-xs = 2px, rounded-sm = 4px are untouched.) */
+    --radius-xl:  6px;
+    --radius-2xl: 8px;
+    --radius-3xl: 12px;
+
+    /* Letter-spacing scale for uppercase micro-labels.
+       Convention: 0.12em dense · 0.18em standard · 0.24em airy. */
+    --track-tight: 0.12em;
+    --track-label: 0.18em;
+    --track-airy:  0.24em;
+
     /* Shadows */
     --shadow-card:       0 12px 30px rgba(20,20,20,0.10), 0 2px 8px rgba(20,20,20,0.05);
     --shadow-card-hover: 0 22px 46px rgba(20,20,20,0.18), 0 4px 12px rgba(20,20,20,0.08);

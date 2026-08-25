@@ -29,7 +29,8 @@ const CheckoutContent: React.FC = () => {
     clearCart,
     setSelectedOrder,
     savedAddresses,
-    showToast
+    showToast,
+    siteSettings
   } = useStore();
 
   const stripe = useStripe();
@@ -605,7 +606,7 @@ const CheckoutContent: React.FC = () => {
                           {item.selectedLength} · {item.selectedDensity} · Qty: {item.quantity}
                         </p>
                         <span className="text-[10px] text-[#8E7348] font-mono">
-                          {item.isPreOrder ? 'Pre-Order (Batch #003)' : 'In Stock Oslo'}
+                          {item.isPreOrder ? `Pre-Order (${siteSettings.preorderBatch})` : 'In Stock Oslo'}
                         </span>
                       </div>
                       <span className="font-mono font-semibold text-stone-900">

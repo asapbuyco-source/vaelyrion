@@ -29,6 +29,20 @@ interface CurrencyRate {
   label: string;
 }
 
+export interface SiteSettings {
+  announcementPrimary: string;
+  announcementSecondary: string;
+  preorderBatch: string;
+  newsletterBatch: string;
+}
+
+const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  announcementPrimary: 'The Current Atelier Collection',
+  announcementSecondary: 'Complimentary insured delivery over €250 · Europe & Norway',
+  preorderBatch: 'Batch #003',
+  newsletterBatch: 'Batch #004',
+};
+
 const TRACKING_STEPS: OrderStatusStep[] = [
   'payment_confirmed',
   'order_received',
@@ -301,6 +315,9 @@ interface StoreContextType {
 
   // Quick Action
   openProductQuickView: (productId: string) => void;
+
+  // Site Settings (announcement bar, batch labels)
+  siteSettings: SiteSettings;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -395,6 +412,24 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       localStorage.setItem('tanelia_currency', currency);
     } catch { /* storage unavailable */ }
   }, [currency]);
+
+  // Site settings (announcement bar, batch labels) — editable in DB, graceful defaults
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
+
+  useEffect(() => {
+    api.settings.get()
+      .then((data: any) => {
+        if (data && typeof data === 'object') {
+          setSiteSettings({
+            announcementPrimary: data.announcement_primary || DEFAULT_SITE_SETTINGS.announcementPrimary,
+            announcementSecondary: data.announcement_secondary || DEFAULT_SITE_SETTINGS.announcementSecondary,
+            preorderBatch: data.preorder_batch_label || DEFAULT_SITE_SETTINGS.preorderBatch,
+            newsletterBatch: data.newsletter_batch_label || DEFAULT_SITE_SETTINGS.newsletterBatch,
+          });
+        }
+      })
+      .catch(() => { /* fall back to defaults */ });
+  }, []);
 
   // Products - start empty, load from API
   const [products, setProducts] = useState<Product[]>([]);
@@ -947,7 +982,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       toasts,
       showToast,
       removeToast,
-      openProductQuickView
+      openProductQuickView,
+      siteSettings
     }}>
       {children}
     </StoreContext.Provider>

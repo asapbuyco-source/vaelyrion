@@ -14,7 +14,7 @@ import {
 import { useStore } from '../../context/StoreContext';
 
 export const OrderConfirmationPage: React.FC = () => {
-  const { selectedOrder, setCurrentView, formatPrice, showToast } = useStore();
+  const { selectedOrder, setCurrentView, formatPrice, showToast, siteSettings } = useStore();
 
   const order = selectedOrder;
 
@@ -81,7 +81,7 @@ export const OrderConfirmationPage: React.FC = () => {
             </div>
             <div>
               <span className="text-stone-400 text-[11px] block">Weekly Batch</span>
-              <strong className="text-[#8E7348] font-medium">Batch #003</strong>
+              <strong className="text-[#8E7348] font-medium">{siteSettings.preorderBatch}</strong>
             </div>
             <div>
               <span className="text-stone-400 text-[11px] block">Estimated Delivery</span>

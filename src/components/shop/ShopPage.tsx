@@ -18,7 +18,8 @@ export const ShopPage: React.FC = () => {
     filteredProducts, 
     filters, 
     setFilters, 
-    resetFilters 
+    resetFilters,
+    siteSettings
   } = useStore();
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -78,21 +79,23 @@ export const ShopPage: React.FC = () => {
             Single-donor hair, hand-finished lace, and considered care from selection to arrival.
           </p>
 
-          {/* Category pills */}
-          <div className="pt-6 flex items-center justify-center gap-2 flex-wrap pb-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setFilters(prev => ({ ...prev, category: cat.id }))}
-                className={`py-2 px-5 text-xs tracking-wider uppercase font-semibold rounded-full transition-all duration-200 whitespace-nowrap cursor-pointer ${
-                  filters.category === cat.id
-                    ? 'bg-[#141414] text-white shadow-sm'
-                    : 'glass border border-[#141414]/10 text-stone-600 hover:text-stone-900 hover:border-[#141414]/20'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+          {/* Category pills — scrollable row on mobile, centered wrap on desktop */}
+          <div className="pt-6 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:justify-center lg:overflow-visible">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setFilters(prev => ({ ...prev, category: cat.id }))}
+                  className={`shrink-0 py-2.5 px-5 text-xs tracking-wider uppercase font-semibold rounded-full transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    filters.category === cat.id
+                      ? 'bg-[#141414] text-white shadow-sm'
+                      : 'glass border border-[#141414]/10 text-stone-600 hover:text-stone-900 hover:border-[#141414]/20'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -170,7 +173,7 @@ export const ShopPage: React.FC = () => {
                 {[
                   { id: 'all', label: 'All Items' },
                   { id: 'in-stock', label: 'In Stock (2–4d Oslo 3PL)' },
-                  { id: 'pre-order', label: 'Pre-Order (Batch #003)' }
+                    { id: 'pre-order', label: `Pre-Order (${siteSettings.preorderBatch})` }
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -353,6 +356,24 @@ export const ShopPage: React.FC = () => {
                 </button>
               </div>
 
+              {/* Mobile Category */}
+              <div className="space-y-2">
+                <h4 className="text-xs uppercase tracking-widest font-semibold text-stone-900">Category</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setFilters(prev => ({ ...prev, category: cat.id }))}
+                      className={`py-1.5 px-3 text-xs rounded-xs border cursor-pointer ${
+                        filters.category === cat.id ? 'bg-[#141414] text-white' : 'bg-white text-stone-700'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Mobile Availability */}
               <div className="space-y-2">
                 <h4 className="text-xs uppercase tracking-widest font-semibold text-stone-900">Fulfillment Status</h4>
@@ -360,7 +381,7 @@ export const ShopPage: React.FC = () => {
                   {[
                     { id: 'all', label: 'All Items' },
                     { id: 'in-stock', label: 'In Stock (2–4d Oslo 3PL)' },
-                    { id: 'pre-order', label: 'Pre-Order (Batch #003)' }
+                  { id: 'pre-order', label: `Pre-Order (${siteSettings.preorderBatch})` }
                   ].map((opt) => (
                     <button
                       key={opt.id}

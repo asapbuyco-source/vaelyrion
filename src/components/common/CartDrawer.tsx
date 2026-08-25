@@ -25,7 +25,8 @@ export const CartDrawer: React.FC = () => {
     formatPrice,
     setCurrentView,
     toggleWishlist,
-    isInWishlist
+    isInWishlist,
+    siteSettings
   } = useStore();
 
   const [promoCode, setPromoCode] = useState('');
@@ -161,7 +162,7 @@ export const CartDrawer: React.FC = () => {
                       <div className="mt-1.5">
                         {item.isPreOrder ? (
                           <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-[#8E7348] bg-[#FAF4EB] px-2 py-0.5 rounded-xs border border-[#E8DFC8]">
-                            Pre-Order (Batch #003)
+                            Pre-Order ({siteSettings.preorderBatch})
                           </span>
                         ) : (
                           <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-xs border border-emerald-200">

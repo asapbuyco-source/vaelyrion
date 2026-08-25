@@ -3,7 +3,7 @@ import { ArrowRight, ShieldCheck, Truck, RefreshCw, Sparkles } from 'lucide-reac
 import { useStore, ViewType } from '../../context/StoreContext';
 
 export const Footer: React.FC = () => {
-  const { setCurrentView, setFilters, showToast } = useStore();
+  const { setCurrentView, setFilters, showToast, siteSettings } = useStore();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     e.preventDefault();
     if (email) {
       setSubscribed(true);
-      showToast('Welcome to the Circle', 'You have been granted priority access to Batch #004 allocations.', 'gold');
+      showToast('Welcome to the Circle', `You have been granted priority access to ${siteSettings.newsletterBatch} allocations.`, 'gold');
       setEmail('');
     }
   };
@@ -191,7 +191,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setCurrentView('home')}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  The Unboxing Experience
+                  The Collection
                 </button>
               </li>
               <li>
@@ -199,7 +199,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setCurrentView('shipping-policy')}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Weekly Batch Schedule
+                  Shipping & Delivery
                 </button>
               </li>
               <li>
@@ -266,7 +266,6 @@ export const Footer: React.FC = () => {
                 </div>
               </li>
             </ul>
-            <a href="mailto:taneliashop17@gmail.com" className="inline-block text-xs text-[#B5935A] hover:text-white transition-colors">taneliashop17@gmail.com</a>
           </div>
 
         </div>
@@ -279,13 +278,11 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2 text-[11px]">
-          <span className="text-stone-400">Stripe Encrypted</span>
+          <span className="text-stone-400">Stripe Encrypted Payments</span>
           <span>•</span>
-          <span className="text-stone-400">Apple Pay</span>
+          <span className="text-stone-400">Insured Tracked Delivery</span>
           <span>•</span>
-          <span className="text-stone-400">Klarna Verified</span>
-          <span>•</span>
-          <span className="text-stone-400">Posten / Bring</span>
+          <span className="text-stone-400">14-Day Lace Inspection</span>
         </div>
       </div>
     </footer>

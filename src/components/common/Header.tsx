@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
   const { 
     currentView, setCurrentView, cartCount, wishlist,
     setIsCartDrawerOpen, currency, setCurrency,
-    filters, setFilters
+    filters, setFilters, siteSettings
   } = useStore();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -50,10 +50,10 @@ export const Header: React.FC = () => {
       <div className="bg-[#171614] text-[#F7F5F0] px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] flex items-center justify-between">
         <div className="hidden md:flex items-center gap-2 text-[#B5935A]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#B5935A] animate-pulse" />
-          <span className="text-[#E8DFC8] font-medium">THE AUGUST ATELIER RELEASE · ORDERS CLOSE SUNDAY</span>
+          <span className="text-[#E8DFC8] font-medium">{siteSettings.announcementPrimary}</span>
         </div>
         <div className="w-full md:w-auto text-center font-light flex items-center justify-center gap-2">
-          <span>COMPLIMENTARY INSURED DELIVERY OVER €250 · EUROPE & NORWAY</span>
+          <span>{siteSettings.announcementSecondary}</span>
         </div>
       </div>
 

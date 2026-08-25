@@ -14,6 +14,7 @@ import orderRoutes from '../server/routes/order.routes.js';
 import contactRoutes from '../server/routes/contact.routes.js';
 import adminRoutes from '../server/routes/admin.routes.js';
 import contentRoutes from '../server/routes/content.routes.js';
+import settingsRoutes from '../server/routes/settings.routes.js';
 import { AdminController } from '../server/controllers/admin.controller.js';
 import { supabase } from '../server/config/supabase.js';
 
@@ -44,6 +45,7 @@ app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/content', contentRoutes);
+app.use('/api/v1/settings', settingsRoutes);
 app.post('/api/cron/generate-content', AdminController.generateScheduledDraft);
 app.get('/api/cron/generate-content', AdminController.generateScheduledDraft);
 

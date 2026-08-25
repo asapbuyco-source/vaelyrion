@@ -24,7 +24,7 @@ export const Hero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center lg:min-h-[90vh]">
           
           {/* LEFT: Editorial Text Column */}
-          <div className="space-y-8 lg:py-24">
+          <div className="space-y-8 lg:py-24 order-2 lg:order-1">
 
             {/* House mark */}
             <div 
@@ -115,7 +115,7 @@ export const Hero: React.FC = () => {
 
           {/* RIGHT: Large editorial imagery with floating card */}
           <div 
-            className="relative block lg:pl-8"
+            className="relative block lg:pl-8 order-1 lg:order-2"
             style={{ 
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateX(0)' : 'translateX(32px)',
