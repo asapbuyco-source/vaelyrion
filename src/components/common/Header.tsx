@@ -39,6 +39,7 @@ export const Header: React.FC = () => {
     { label: 'Wigs', view: 'shop', category: 'wigs' },
     { label: 'Bundles', view: 'shop', category: 'bundles' },
     { label: 'About Tanelia', view: 'about' },
+    { label: 'Client Services', view: 'contact' },
   ];
 
   return (
