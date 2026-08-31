@@ -29,7 +29,7 @@ export const WishlistPage: React.FC = () => {
             YOUR SAVED WISHLIST
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-md mx-auto">
-            Review your shortlisted raw hair bundles, HD lace wigs, and silk accessories before batch lock-in.
+            Review your shortlisted raw hair bundles, HD lace wigs, and silk accessories.
           </p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export const WishlistPage: React.FC = () => {
             </div>
             <h3 className="font-serif text-2xl text-stone-900 font-medium">Your Wishlist is Empty</h3>
             <p className="text-xs sm:text-sm text-stone-500 font-light max-w-sm mx-auto leading-relaxed">
-              Explore our single-donor temple wigs, HD closures, and silk kits. Tap the heart icon to save creations for upcoming batch allocations.
+              Explore our single-donor temple wigs, HD closures, and silk kits. Tap the heart icon to save creations for later.
             </p>
             <button
               onClick={() => setCurrentView('shop')}

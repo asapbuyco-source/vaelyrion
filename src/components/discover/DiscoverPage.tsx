@@ -152,25 +152,25 @@ export const DiscoverPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Find This Hair Signature Interactive Teaser */}
+        {/* Journal CTA */}
         <div className="bg-[#141414] text-[#FAF8F5] p-8 sm:p-12 rounded-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-xl text-center sm:text-left">
             <span className="text-xs uppercase tracking-widest text-[#B5935A] font-semibold">
-              Signature Visual Search
+              The Tanelia Journal
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl text-white font-medium">
-              Seen a look you love on social media?
+              Considered guidance, from our house to yours.
             </h3>
             <p className="text-xs text-stone-300 font-light leading-relaxed">
-              Upload any screenshot from Instagram or TikTok. Our visual search engine analyzes hair wave pattern, density, and lace transparency to recommend the exact atelier piece.
+              Read our editorial guides on hair care, lace craftsmanship, styling, and the quiet art of choosing well.
             </p>
           </div>
 
           <button
-            onClick={() => setCurrentView('find-hair')}
+            onClick={() => setCurrentView('about')}
             className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-4 px-8 rounded-2xl transition-all shrink-0 shadow-lg cursor-pointer active:scale-[0.98]"
           >
-            Launch Visual Search
+            About Tanelia
           </button>
         </div>
 

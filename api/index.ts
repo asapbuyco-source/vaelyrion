@@ -15,7 +15,9 @@ import contactRoutes from '../server/routes/contact.routes.js';
 import adminRoutes from '../server/routes/admin.routes.js';
 import contentRoutes from '../server/routes/content.routes.js';
 import settingsRoutes from '../server/routes/settings.routes.js';
+import { analyticsRouter } from '../server/routes/analytics.routes.js';
 import { AdminController } from '../server/controllers/admin.controller.js';
+import { CheckoutController } from '../server/controllers/checkout.controller.js';
 import { supabase } from '../server/config/supabase.js';
 
 const app = express();
@@ -46,8 +48,11 @@ app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/content', contentRoutes);
 app.use('/api/v1/settings', settingsRoutes);
+app.use('/api/v1/analytics', analyticsRouter);
 app.post('/api/cron/generate-content', AdminController.generateScheduledDraft);
 app.get('/api/cron/generate-content', AdminController.generateScheduledDraft);
+app.post('/api/cron/cleanup-stale-orders', CheckoutController.cleanupStaleOrders as any);
+app.get('/api/cron/cleanup-stale-orders', CheckoutController.cleanupStaleOrders as any);
 
 // Health check
 app.get('/api/health', async (_req: Request, res: Response) => {
@@ -86,7 +91,6 @@ app.get('/sitemap.xml', async (_req: Request, res: Response) => {
       { loc: `${origin}/`, priority: '1.0', freq: 'daily' },
       { loc: `${origin}/shop`, priority: '0.8', freq: 'daily' },
       { loc: `${origin}/journal`, priority: '0.7', freq: 'weekly' },
-      { loc: `${origin}/find-hair`, priority: '0.6', freq: 'weekly' },
       { loc: `${origin}/about`, priority: '0.4', freq: 'monthly' },
       { loc: `${origin}/faq`, priority: '0.4', freq: 'monthly' },
       { loc: `${origin}/contact`, priority: '0.4', freq: 'monthly' },

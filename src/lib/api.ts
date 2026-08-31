@@ -52,6 +52,12 @@ export const api = {
     login: (email: string, password: string) =>
       request<{ user: any; session: any }>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
     logout: () => request('/auth/logout', { method: 'POST' }),
+    forgotPassword: (email: string) => request<{ message: string }>('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
+    resetPassword: (password: string, token?: string, isCode?: boolean) => request<{ message: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ password, ...(isCode && token ? { code: token } : {}) }),
+      ...(token && !isCode ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+    }),
     getMe: () => request<{ user: any }>('/auth/me'),
   },
 
@@ -110,9 +116,19 @@ export const api = {
   // Checkout
   checkout: {
     createPaymentIntent: (cartId: string, addressSnapshot: any, shippingMethod: 'standard' | 'express' = 'standard', couponCode?: string) =>
-      request<{ clientSecret: string; orderId: string; total: number }>('/checkout/payment-intent', {
+      request<{ clientSecret: string; orderId: string; orderNumber: string; total: number; subtotal: number; discount: number; shippingCost: number }>('/checkout/payment-intent', {
         method: 'POST',
         body: JSON.stringify({ cartId, addressSnapshot, shippingMethod, couponCode }),
+      }),
+    validateCoupon: (code: string, subtotal: number) =>
+      request<{ valid: boolean; discount: number; couponId?: string; message?: string }>('/checkout/validate-coupon', {
+        method: 'POST',
+        body: JSON.stringify({ code, subtotal }),
+      }),
+    pricingPreview: (shippingMethod: 'standard' | 'express' = 'standard', couponCode?: string) =>
+      request<{ subtotal: number; discount: number; couponValid: boolean; shippingCost: number; total: number }>('/checkout/pricing-preview', {
+        method: 'POST',
+        body: JSON.stringify({ shippingMethod, couponCode }),
       }),
   },
 

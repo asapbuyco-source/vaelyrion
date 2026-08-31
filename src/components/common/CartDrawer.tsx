@@ -26,11 +26,16 @@ export const CartDrawer: React.FC = () => {
     setCurrentView,
     toggleWishlist,
     isInWishlist,
-    siteSettings
+    siteSettings,
+    couponCode,
+    couponDiscount,
+    applyCoupon,
+    clearCoupon
   } = useStore();
 
   const [promoCode, setPromoCode] = useState('');
-  const [promoApplied, setPromoApplied] = useState(false);
+  const [promoError, setPromoError] = useState('');
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
   if (!isCartDrawerOpen) return null;
 
@@ -40,14 +45,25 @@ export const CartDrawer: React.FC = () => {
 
   const hasPreOrder = cart.some(item => item.isPreOrder);
 
-  const handleApplyPromo = (e: React.FormEvent) => {
+  const handleApplyPromo = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (promoCode.trim().toUpperCase() === 'VAELUXE' || promoCode.trim().toUpperCase() === 'OSLO') {
-      setPromoApplied(true);
+    if (!promoCode.trim() || promoError || isApplyingPromo) return;
+    setIsApplyingPromo(true);
+    setPromoError('');
+    try {
+      // Server is the single source of truth for coupons.
+      const result = await applyCoupon(promoCode, cartSubtotal);
+      if (!result.valid) {
+        setPromoError(result.message || 'This code is not recognised.');
+      }
+    } catch (err: any) {
+      setPromoError(err.message || 'Unable to validate this code.');
+    } finally {
+      setIsApplyingPromo(false);
     }
   };
 
-  const discountAmount = promoApplied ? cartSubtotal * 0.1 : 0;
+  const discountAmount = couponDiscount || 0;
   const finalTotal = cartSubtotal - discountAmount;
 
   return (
@@ -98,12 +114,12 @@ export const CartDrawer: React.FC = () => {
             </div>
           </div>
 
-          {/* Pre-order Batch Alert (if applicable) */}
+          {/* Made to Order notice (if applicable) */}
           {hasPreOrder && (
             <div className="bg-[#FAF4EB] border-b border-[#E8DFC8] px-6 py-2.5 text-[11px] text-[#7A5B28] flex items-start gap-2">
               <Calendar className="w-3.5 h-3.5 shrink-0 mt-0.5" />
               <span>
-                <strong>Atelier Release:</strong> Items marked <em>Pre-Order</em> are prepared to order and dispatched from Oslo. Estimated delivery: <strong>10–18 business days</strong>.
+                <strong>Made to Order:</strong> These pieces are finished by hand in the atelier. Estimated delivery: <strong>10–18 business days</strong>.
               </span>
             </div>
           )}
@@ -162,7 +178,7 @@ export const CartDrawer: React.FC = () => {
                       <div className="mt-1.5">
                         {item.isPreOrder ? (
                           <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-[#8E7348] bg-[#FAF4EB] px-2 py-0.5 rounded-xs border border-[#E8DFC8]">
-                            Pre-Order ({siteSettings.preorderBatch})
+                            Made to Order
                           </span>
                         ) : (
                           <span className="inline-block text-[10px] uppercase tracking-wider font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-xs border border-emerald-200">
@@ -222,26 +238,37 @@ export const CartDrawer: React.FC = () => {
             <div className="p-4 sm:p-6 border-t border-[#141414]/10 bg-[#FAF8F5] space-y-4 sticky bottom-0 z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] pb-[calc(env(safe-area-inset-bottom)+1rem)] sm:pb-6">
               
               {/* Promo Code Input */}
-              <form onSubmit={handleApplyPromo} className="flex gap-2">
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  placeholder="Promo Code (e.g. VAELUXE)"
-                  className="bg-white border border-[#141414]/15 px-3 py-2 text-[16px] sm:text-xs rounded-sm focus:outline-none focus:border-[#B5935A] flex-1 uppercase tracking-wider font-light"
-                />
-                <button
-                  type="submit"
-                  className="bg-[#EFEAE4] text-[#141414] hover:bg-[#E2D9CE] px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-sm transition-colors cursor-pointer"
-                >
-                  Apply
-                </button>
-              </form>
-
-              {promoApplied && (
+              {!couponCode ? (
+                <form onSubmit={handleApplyPromo} className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      placeholder="Promo Code"
+                      className="bg-white border border-[#141414]/15 px-3 py-2 text-[16px] sm:text-xs rounded-sm focus:outline-none focus:border-[#B5935A] flex-1 uppercase tracking-wider font-light"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isApplyingPromo}
+                      className="bg-[#EFEAE4] text-[#141414] hover:bg-[#E2D9CE] px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-sm transition-colors cursor-pointer disabled:opacity-60"
+                    >
+                      {isApplyingPromo ? '…' : 'Apply'}
+                    </button>
+                  </div>
+                  {promoError && (
+                    <p className="text-[11px] text-red-700">{promoError}</p>
+                  )}
+                </form>
+              ) : (
                 <div className="text-[11px] text-emerald-800 bg-emerald-50 p-2 rounded-xs border border-emerald-200 flex justify-between items-center">
-                  <span>VIP 'VAELUXE' Applied</span>
-                  <span className="font-semibold">-{formatPrice(discountAmount)}</span>
+                  <span>Code {couponCode} applied</span>
+                  <button
+                    onClick={() => { clearCoupon(); setPromoCode(''); }}
+                    className="underline cursor-pointer font-semibold"
+                  >
+                    Remove
+                  </button>
                 </div>
               )}
 
@@ -251,6 +278,12 @@ export const CartDrawer: React.FC = () => {
                   <span>Subtotal</span>
                   <span className="font-mono text-black font-medium">{formatPrice(cartSubtotal)}</span>
                 </div>
+                {couponCode && discountAmount > 0 && (
+                  <div className="flex justify-between text-emerald-800">
+                    <span>Discount</span>
+                    <span className="font-mono font-medium">-{formatPrice(discountAmount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Estimated Shipping</span>
                   <span className="font-mono text-black font-medium">

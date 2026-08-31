@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Heart, 
   Star, 
@@ -20,9 +20,10 @@ import {
 } from 'lucide-react';
 import { Product, HairDensity, LaceType, HairColor } from '../../types';
 import { useStore } from '../../context/StoreContext';
-import { MOCK_REVIEWS } from '../../data/mockData';
 import { ProductCard } from './ProductCard';
 import { SmartImage } from '../common/SmartImage';
+import { lengthSurchargeEuros } from '../../lib/pricing';
+import { track } from '../../lib/analytics';
 
 export const ProductDetailPage: React.FC = () => {
   const { 
@@ -33,11 +34,14 @@ export const ProductDetailPage: React.FC = () => {
     toggleWishlist, 
     isInWishlist, 
     products,
-    showToast,
-    siteSettings
+    showToast
   } = useStore();
 
   const product = selectedProduct || products[0];
+
+  useEffect(() => {
+    if (product?.id) track('product_view', { productId: product.id });
+  }, [product?.id]);
 
   // Variant States
   const [activeImageIdx, setActiveImageIdx] = useState(0);
@@ -77,13 +81,8 @@ export const ProductDetailPage: React.FC = () => {
     }
   };
 
-  // Length price calculation
-  let lengthOffset = 0;
-  const numLength = parseInt(selectedLength);
-  if (numLength > 20) {
-    lengthOffset = (numLength - 20) * 15;
-  }
-  const currentUnitPrice = product.price + lengthOffset;
+  // Length price calculation — mirrors the server rule (server/lib/pricing.ts)
+  const currentUnitPrice = product.price + lengthSurchargeEuros(selectedLength);
   const isSaved = isInWishlist(product.id);
 
   const handleAddToBag = () => {
@@ -180,7 +179,7 @@ export const ProductDetailPage: React.FC = () => {
                 {product.isPreOrder ? (
                   <span className="bg-[#141414]/90 backdrop-blur-md text-[#FAF8F5] text-xs uppercase font-semibold tracking-widest px-3.5 py-1.5 rounded-xs border border-[#B5935A]/40 flex items-center gap-1.5 shadow-md">
                     <Calendar className="w-3.5 h-3.5 text-[#B5935A]" />
-                    <span>Pre-Order Allocation · {siteSettings.preorderBatch}</span>
+                    <span>Made to Order</span>
                   </span>
                 ) : (
                   <span className="bg-emerald-950/90 backdrop-blur-md text-emerald-100 text-xs uppercase font-semibold tracking-widest px-3.5 py-1.5 rounded-xs border border-emerald-400/40 flex items-center gap-1.5 shadow-md">
@@ -270,14 +269,14 @@ export const ProductDetailPage: React.FC = () => {
                 </span>
                 {product.originalPrice && (
                   <span className="font-mono text-sm text-stone-400 line-through">
-                    {formatPrice(product.originalPrice + lengthOffset)}
+                    {formatPrice(product.originalPrice + lengthSurchargeEuros(selectedLength))}
                   </span>
                 )}
                 <span className="text-xs text-stone-500 font-light">VAT included · Duty-Free to EU & Norway</span>
               </div>
             </div>
 
-            {/* Batch / Fulfillment Status Box */}
+            {/* Delivery Status Box */}
             <div className={`p-4 rounded-2xl border ${product.isPreOrder ? 'bg-[#FAF5ED] border-[#E5DAC8]' : 'bg-emerald-50/50 border-emerald-200'} shadow-sm`}>
               <div className="flex items-start gap-3">
                 {product.isPreOrder ? (
@@ -287,14 +286,14 @@ export const ProductDetailPage: React.FC = () => {
                 )}
                 <div className="text-xs space-y-1">
                   <p className="font-semibold text-stone-900">
-                    {product.isPreOrder ? `Weekly ${siteSettings.preorderBatch} Pre-Order Item` : 'In Stock in Oslo Warehouse'}
+                    {product.isPreOrder ? 'Made to Order' : 'In Stock — Ships from Oslo'}
                   </p>
                   <p className="text-stone-600 font-light leading-relaxed">
                     {product.estimatedDelivery}
                   </p>
                   {product.isPreOrder && (
                     <p className="text-[11px] text-[#8E7348] font-medium pt-1">
-                      Orders close Sunday 23:59 CET → Prepared by hand → Inspected in Oslo → Dispatched to you.
+                      Finished by hand in the atelier, then dispatched from Oslo.
                     </p>
                   )}
                 </div>
@@ -445,12 +444,12 @@ export const ProductDetailPage: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Buy Now Express */}
+                {/* Buy Now */}
                 <button
                   onClick={handleBuyNow}
                   className="w-full bg-[#B5935A] hover:bg-[#C5A880] text-black py-4 px-6 rounded-2xl text-xs uppercase tracking-widest font-bold transition-all cursor-pointer shadow-sm active:scale-[0.98]"
                 >
-                  Buy Now — Express Allocation
+                  Buy Now
                 </button>
               </div>
 
@@ -478,7 +477,7 @@ export const ProductDetailPage: React.FC = () => {
             {[
               { id: 'details', label: 'Hair Specifications' },
               { id: 'unboxing', label: 'Luxury Unboxing Experience' },
-              { id: 'shipping', label: 'Release & Oslo Preparation' },
+              { id: 'shipping', label: 'Delivery & Preparation' },
               { id: 'care', label: 'Care & Maintenance Guide' }
             ].map((tab) => (
               <button
@@ -542,7 +541,7 @@ export const ProductDetailPage: React.FC = () => {
                   <div className="w-8 h-8 rounded-full bg-[#FAF5ED] flex items-center justify-center text-[#B5935A] font-serif font-bold">3</div>
                   <h5 className="font-serif text-base text-stone-900">Certificate of Authenticity & QR</h5>
                   <p className="text-xs text-stone-600 font-light">
-                    Numbered batch certificate of origin, wide-tooth detangling comb, and stylist masterclass link.
+                    Numbered certificate of origin, wide-tooth detangling comb, and stylist masterclass link.
                   </p>
                 </div>
               </div>
@@ -551,18 +550,18 @@ export const ProductDetailPage: React.FC = () => {
             {activeTab === 'shipping' && (
               <div className="space-y-6 text-xs text-stone-700">
                 <div className="bg-[#FAF5ED] p-6 rounded-sm border border-[#E5DAC8] space-y-3">
-                  <h4 className="font-serif text-lg text-stone-900">The Tanelia Weekly Batch Fulfillment Promise</h4>
+                  <h4 className="font-serif text-lg text-stone-900">The Tanelia Delivery Promise</h4>
                   <p className="font-light leading-relaxed">
-                    To maintain strict salon-grade hair freshness and prevent warehouse dry-out, we operate on a Weekly Batch consolidation schedule.
+                    To maintain the quality of every piece, your order is finished by hand and dispatched fresh — nothing sits in a warehouse.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     <div className="p-3 bg-white/80 rounded-xs">
-                      <span className="font-semibold text-stone-900 block">1. Cut-off Sunday 23:59</span>
-                      <span className="text-[11px] text-stone-600">Weekly customer orders are grouped into direct artisan POs.</span>
+                      <span className="font-semibold text-stone-900 block">1. Atelier Preparation</span>
+                      <span className="text-[11px] text-stone-600">Your piece is finished by hand and inspected.</span>
                     </div>
                     <div className="p-3 bg-white/80 rounded-xs">
-                      <span className="font-semibold text-stone-900 block">2. Air Cargo to Norway</span>
-                      <span className="text-[11px] text-stone-600">Dispatched via express temperature-controlled air freight.</span>
+                      <span className="font-semibold text-stone-900 block">2. Journey to Oslo</span>
+                      <span className="text-[11px] text-stone-600">Temperature-controlled transit to the Tanelia house.</span>
                     </div>
                     <div className="p-3 bg-white/80 rounded-xs">
                       <span className="font-semibold text-stone-900 block">3. Oslo Preparation</span>
@@ -591,48 +590,22 @@ export const ProductDetailPage: React.FC = () => {
 
         {/* Customer Reviews Section */}
         <div className="mt-16 pt-12 border-t border-[#141414]/10">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-            <div>
-              <h3 className="font-serif text-2xl text-stone-900">Client Reviews & Experiences</h3>
-              <p className="text-xs text-stone-500 font-light mt-1">Verified purchases from Norway, Scandinavia & Europe</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex text-[#B5935A]">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-[#B5935A]" />
-                ))}
-              </div>
-              <span className="text-sm font-semibold text-stone-900">{product.rating} out of 5</span>
-            </div>
+          <div className="mb-8">
+            <h3 className="font-serif text-2xl text-stone-900">Client Reviews</h3>
+            <p className="text-xs text-stone-500 font-light mt-1">Reviews from verified Tanelia clients</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {MOCK_REVIEWS.map((rev) => (
-              <div key={rev.id} className="p-6 bg-white border border-[#141414]/10 rounded-sm space-y-3">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-stone-900">{rev.author}</span>
-                  <span className="text-stone-400 text-[11px]">{rev.date}</span>
-                </div>
-                <div className="flex items-center gap-2 text-[11px] text-stone-500">
-                  <span className="text-[#8E7348] font-medium">✓ Verified Purchase</span>
-                  <span>•</span>
-                  <span>{rev.location}</span>
-                </div>
-                <div className="flex text-[#B5935A]">
-                  {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-[#B5935A]" />
-                  ))}
-                </div>
-                <h5 className="font-serif text-sm font-semibold text-stone-900">"{rev.title}"</h5>
-                <p className="text-xs text-stone-600 font-light leading-relaxed">
-                  {rev.content}
-                </p>
-                <div className="pt-2 text-[10px] text-stone-400 font-mono">
-                  Length tested: {rev.hairLength} · Texture: {rev.hairTexture}
-                </div>
-              </div>
-            ))}
-          </div>
+          {(product.reviewCount || 0) > 0 && (product.rating || 0) > 0 ? (
+            <p className="text-xs text-stone-500">Reviews will appear here once clients share their experience.</p>
+          ) : (
+            <div className="p-10 bg-white border border-[#141414]/10 rounded-sm text-center space-y-3">
+              <Star className="w-6 h-6 text-[#B5935A] mx-auto" />
+              <p className="font-serif text-lg text-stone-900">No reviews yet</p>
+              <p className="text-xs text-stone-500 font-light max-w-xs mx-auto">
+                This piece is new to the collection. Once clients share their experience, their verified reviews will appear here.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Related Products */}
@@ -661,17 +634,16 @@ export const ProductDetailPage: React.FC = () => {
 
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => toggleWishlist(product.id)}
-            className="p-2 rounded-xs border border-[#141414]/20 text-stone-700 bg-white"
-            aria-label="Save to wishlist"
-          >
-            <Heart className={`w-4 h-4 ${isSaved ? 'fill-[#B5935A] text-[#B5935A]' : ''}`} />
-          </button>
-          <button
             onClick={handleAddToBag}
             className="bg-[#141414] hover:bg-black text-[#FAF8F5] text-[11px] uppercase tracking-widest font-semibold py-2.5 px-4 rounded-xs active:scale-98 transition-transform"
           >
             Add to Bag
+          </button>
+          <button
+            onClick={handleBuyNow}
+            className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-[11px] uppercase tracking-widest font-bold py-2.5 px-4 rounded-xs active:scale-98 transition-transform"
+          >
+            Buy Now
           </button>
         </div>
       </div>

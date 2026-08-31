@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     e.preventDefault();
     if (email) {
       setSubscribed(true);
-      showToast('Welcome to the Circle', `You have been granted priority access to ${siteSettings.newsletterBatch} allocations.`, 'gold');
+      showToast('Welcome to the Circle', `You have been granted priority access to ${siteSettings.newsletterBatch}.`, 'gold');
       setEmail('');
     }
   };
@@ -36,9 +36,9 @@ export const Footer: React.FC = () => {
             <div className="w-10 h-10 rounded-full bg-[#242424] flex items-center justify-center text-[#B5935A] mb-1">
               <Truck className="w-5 h-5" />
             </div>
-            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Curated Weekly Batches</h4>
+            <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Curated Collections</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              Orders consolidated weekly for fresh handcrafting in China, followed by air freight to our Oslo fulfillment hub.
+              Each piece is selected with intention, then finished and inspected by hand before it reaches you.
             </p>
           </div>
 
@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
             </div>
             <h4 className="font-serif text-lg tracking-wide text-[#FAF8F5]">Prepared in Oslo</h4>
             <p className="text-xs text-stone-400 leading-relaxed max-w-xs font-light">
-              Every unit is meticulously inspected, botanical-conditioned, and nestled into signature magnetic unboxing.
+              Every piece is inspected, conditioned, and presented in signature magnetic packaging.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
             {/* Newsletter */}
             <div className="pt-2">
               <p className="text-xs uppercase tracking-wider font-semibold text-[#FAF8F5] mb-2">
-                Join the Private Pre-Order Circle
+                Join the Private Circle
               </p>
               <p className="text-xs text-stone-400 mb-3 font-light">
                 Receive release notes, private lookbooks, and early access to new pieces.
@@ -172,10 +172,10 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs text-stone-400 font-light">
               <li>
                 <button 
-                  onClick={() => setCurrentView('find-hair')}
+                  onClick={() => setCurrentView('about')}
                   className="hover:text-white transition-colors cursor-pointer text-[#E8DFC8]"
                 >
-                  Find Your Match
+                  About Tanelia
                 </button>
               </li>
               <li>
@@ -207,7 +207,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setCurrentView('tracking')}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Live Batch Tracking
+                  Order Tracking
                 </button>
               </li>
             </ul>

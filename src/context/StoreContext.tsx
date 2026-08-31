@@ -11,15 +11,15 @@ import {
   LaceType,
   HairDensity,
   HairColor,
-  VisualMatchResult,
   AppNotification,
   UserAddress
 } from '../types';
 import { 
-  MOCK_ARTICLES, 
-  INITIAL_ORDER_SAMPLE 
+  MOCK_ARTICLES
 } from '../data/mockData';
 import { api } from '../lib/api';
+import { lengthSurchargeEuros } from '../lib/pricing';
+import { track } from '../lib/analytics';
 
 export type Currency = 'EUR' | 'USD' | 'NOK' | 'GBP';
 
@@ -39,8 +39,8 @@ export interface SiteSettings {
 const DEFAULT_SITE_SETTINGS: SiteSettings = {
   announcementPrimary: 'The Current Atelier Collection',
   announcementSecondary: 'Complimentary insured delivery over €250 · Europe & Norway',
-  preorderBatch: 'Batch #003',
-  newsletterBatch: 'Batch #004',
+  preorderBatch: 'Made to Order',
+  newsletterBatch: 'the next collection',
 };
 
 const TRACKING_STEPS: OrderStatusStep[] = [
@@ -59,17 +59,17 @@ const TRACKING_STEPS: OrderStatusStep[] = [
 ];
 
 const TRACKING_TEMPLATE: Array<{ step: OrderStatusStep; title: string; description: string; location: string }> = [
-  { step: 'payment_confirmed', title: 'Payment Confirmed', description: 'Secure transaction processed via Stripe Gateway.', location: 'Tanelia Commerce Engine' },
-  { step: 'order_received', title: 'Order Allocated to Weekly Batch', description: 'Order registered into this week\'s supplier batch pool.', location: 'Tanelia Operations Hub' },
-  { step: 'weekly_batch_created', title: 'Weekly Batch PO Generated', description: 'Consolidated purchase order transmitted to Qingdao atelier.', location: 'Operations · Oslo' },
-  { step: 'supplier_processing', title: 'Artisan Custom Handcrafting', description: 'Single-knot ventilation & cuticle alignment inspection in progress.', location: 'Qingdao Atelier, China' },
-  { step: 'shipped_china', title: 'Dispatched from Supplier Atelier', description: 'Handed over to International Air Freight.', location: 'Qingdao Airport (TAO), China' },
-  { step: 'international_transit', title: 'International Air Transit', description: 'Flight in transit toward Scandinavian Hub.', location: 'In Flight · International Air Corridor' },
-  { step: 'arrived_norway', title: 'Customs Clearance & Arrival in Norway', description: 'Batch arrives at Gardermoen Cargo & enters bonded transfer.', location: 'Oslo Gardermoen (OSL), Norway' },
-  { step: 'fulfillment_center', title: 'Received by Oslo 3PL Center', description: 'Quality QC, argan conditioning & placement into luxury box.', location: 'Tanelia 3PL Center, Oslo' },
-  { step: 'preparing_shipment', title: 'Branded Luxury Packaging Sealed', description: 'Silk bonnet, brass comb, authenticity card & ribbon secured.', location: 'Fulfillment Logistics, Oslo' },
-  { step: 'shipped_customer', title: 'Dispatched with Posten / Bring Norway', description: 'Local tracking number assigned.', location: 'Posten Hub, Oslo' },
-  { step: 'out_for_delivery', title: 'Out for Courier Delivery', description: 'Courier on route to your specified address.', location: 'Destination Route' },
+  { step: 'payment_confirmed', title: 'Payment Confirmed', description: 'Secure transaction processed.', location: 'Tanelia' },
+  { step: 'order_received', title: 'Order Received', description: 'Your order has been reserved for you.', location: 'Tanelia Client Services' },
+  { step: 'weekly_batch_created', title: 'Allocated to the Atelier', description: 'Your piece is now in preparation.', location: 'Tanelia Atelier' },
+  { step: 'supplier_processing', title: 'Handcrafting in Progress', description: 'Single-knot ventilation and quality inspection in progress.', location: 'Tanelia Atelier' },
+  { step: 'shipped_china', title: 'Atelier Work Complete', description: 'Your piece has left the atelier.', location: 'Tanelia Atelier' },
+  { step: 'international_transit', title: 'In Transit', description: 'Your piece is travelling to Oslo.', location: 'International Transit' },
+  { step: 'arrived_norway', title: 'Arrived in Oslo', description: 'Your piece has reached the Tanelia house.', location: 'Oslo, Norway' },
+  { step: 'fulfillment_center', title: 'Final Inspection', description: 'Quality check, conditioning, and preparation of your box.', location: 'Tanelia, Oslo' },
+  { step: 'preparing_shipment', title: 'Luxury Packaging Sealed', description: 'Silk bonnet, brass comb, authenticity card, and ribbon secured.', location: 'Tanelia, Oslo' },
+  { step: 'shipped_customer', title: 'Dispatched', description: 'Tracking number assigned.', location: 'Oslo, Norway' },
+  { step: 'out_for_delivery', title: 'Out for Delivery', description: 'Courier on route to your specified address.', location: 'Destination Route' },
   { step: 'delivered', title: 'Delivered', description: 'Package handed to recipient.', location: 'Recipient Address' }
 ];
 
@@ -209,7 +209,6 @@ export type ViewType =
   | 'product'
   | 'discover'
   | 'discover-article'
-  | 'find-hair'
   | 'wishlist'
   | 'checkout'
   | 'order-confirmation'
@@ -293,11 +292,11 @@ interface StoreContextType {
   // Orders & Tracking
   orders: Order[];
 
-  // Visual Search / Find This Hair
-  visualSearchResults: VisualMatchResult[] | null;
-  isSearchingImage: boolean;
-  performVisualSearch: (imageSrc: string) => Promise<void>;
-  clearVisualSearch: () => void;
+  // Coupon (single source of truth is the server; code + validated discount kept here for display)
+  couponCode: string;
+  couponDiscount: number | null;
+  applyCoupon: (code: string, subtotal: number) => Promise<{ valid: boolean; discount: number; message?: string }>;
+  clearCoupon: () => void;
 
   // User Addresses
   savedAddresses: UserAddress[];
@@ -378,7 +377,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return 'discover';
     }
     const staticViews: Record<string, ViewType> = {
-      'shop': 'shop', 'find-hair': 'find-hair', 'wishlist': 'wishlist',
+      'shop': 'shop', 'wishlist': 'wishlist',
       'checkout': 'checkout', 'order-confirmation': 'order-confirmation',
       'tracking': 'tracking', 'account': 'account', 'about': 'about',
       'faq': 'faq', 'contact': 'contact', 'shipping-policy': 'shipping-policy',
@@ -395,7 +394,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
   const [selectedProductId, setSelectedProductIdState] = useState<string | null>(null);
   const [selectedArticleId, setSelectedArticleIdState] = useState<string | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(INITIAL_ORDER_SAMPLE);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Currency
   const [currency, setCurrency] = useState<Currency>(() => {
@@ -481,7 +480,6 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       case 'product': return productSlug ? `/products/${productSlug}` : '/shop';
       case 'discover': return '/journal';
       case 'discover-article': return articleSlug ? `/journal/${articleSlug}` : '/journal';
-      case 'find-hair': return '/find-hair';
       case 'wishlist': return '/wishlist';
       case 'checkout': return '/checkout';
       case 'order-confirmation': return '/order-confirmation';
@@ -504,6 +502,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (path !== `${window.location.pathname}${window.location.search}`) {
       window.history.pushState({}, '', path);
     }
+    track('page_view', { path });
+    if (view === 'checkout') track('begin_checkout');
   }, [products, articles]);
 
   const resolvePendingSlug = useCallback(() => {
@@ -544,7 +544,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         else setCurrentViewState('discover');
       } else {
         const staticViews: Record<string, ViewType> = {
-          'shop': 'shop', 'find-hair': 'find-hair', 'wishlist': 'wishlist',
+          'shop': 'shop', 'wishlist': 'wishlist',
           'checkout': 'checkout', 'order-confirmation': 'order-confirmation',
           'tracking': 'tracking', 'account': 'account', 'about': 'about',
           'faq': 'faq', 'contact': 'contact', 'shipping-policy': 'shipping-policy',
@@ -636,7 +636,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   });
 
   // Orders
-  const [orders, setOrders] = useState<Order[]>([INITIAL_ORDER_SAMPLE]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   // Sync orders from API if authenticated
   useEffect(() => {
@@ -653,26 +653,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       .catch(() => {});
   }, []);
 
-  // Notifications
-  const [notifications, setNotifications] = useState<AppNotification[]>([
-    {
-      id: 'notif-01',
-      title: 'Weekly Batch #002 In Transit ✈',
-      message: 'Your Sovereign HD Wig is currently aboard flight EN-882 en route to our Oslo fulfillment center.',
-      timestamp: '2 hours ago',
-      type: 'batch',
-      read: false,
-      orderId: 'ord-10245'
-    },
-    {
-      id: 'notif-02',
-      title: 'New Drop: Monarch Platinum 613',
-      message: 'Cold-lifted raw temple blonde wigs are now available for Batch #003 pre-orders.',
-      timestamp: '1 day ago',
-      type: 'drop',
-      read: true
-    }
-  ]);
+  // Notifications — empty for new customers; server rows may fill this later.
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
 
   // Toasts
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -691,9 +673,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     searchQuery: ''
   });
 
-  // Visual search
-  const [visualSearchResults, setVisualSearchResults] = useState<VisualMatchResult[] | null>(null);
-  const [isSearchingImage, setIsSearchingImage] = useState(false);
+  // Coupon (server is the single source of truth)
+  const [couponCode, setCouponCode] = useState('');
+  const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
 
   // Sync to local storage
   useEffect(() => {
@@ -792,13 +774,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     quantity?: number;
   }) => {
     const qty = options.quantity || 1;
-    // Calculate length price offset if length > 20"
-    let lengthOffset = 0;
-    const numLength = parseInt(options.length);
-    if (numLength > 20) {
-      lengthOffset = (numLength - 20) * 15;
-    }
-    const unitPrice = product.price + lengthOffset;
+    // Display pricing mirrors the server rule (src/lib/pricing.ts ↔ server/lib/pricing.ts).
+    const unitPrice = product.price + lengthSurchargeEuros(options.length);
     
     const itemId = `${product.id}-${options.length}-${options.density}-${options.lace}-${options.color}`.replace(/\s+/g, '-');
     
@@ -823,6 +800,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     showToast('Added to Bag', `${product.title} (${options.length}) placed in shopping bag.`, 'gold');
     setIsCartDrawerOpen(true);
+    track('add_to_cart', { productId: product.id, value: unitPrice * qty, currency: 'EUR' });
   };
 
   const removeFromCart = (cartItemId: string) => {
@@ -850,6 +828,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setWishlist(prev => {
       const exists = prev.includes(productId);
       const prod = products.find(p => p.id === productId);
+      track('wishlist', { productId, value: exists ? 0 : 1 });
       if (exists) {
         showToast('Removed from Wishlist', `${prod?.title || 'Item'} removed.`, 'info');
         return prev.filter(id => id !== productId);
@@ -862,47 +841,21 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
-  // Visual Search Simulation
-  const performVisualSearch = async (imageSrc: string) => {
-    setIsSearchingImage(true);
-    // Simulate AI Vision recognition
-    await new Promise(res => setTimeout(res, 1800));
-
-    // Curated high similarity matches based on image analysis
-    const matches: VisualMatchResult[] = [
-      {
-        product: products[0], // Sovereign HD
-        similarityScore: 98,
-        matchReasons: ['Cuticle-aligned flow pattern', 'Undetectable HD lace gradient', 'Silky body wave geometry'],
-        detectedTexture: 'Body Wave / Straight',
-        detectedLength: '24-28 inch',
-        detectedColor: 'Natural Black (#1B)'
-      },
-      {
-        product: products[3], // Velvet Noir Glueless
-        similarityScore: 92,
-        matchReasons: ['Deep wave natural coil curvature', 'Natural high luster', '3D dome hairline shape'],
-        detectedTexture: 'Deep Wave',
-        detectedLength: '24 inch',
-        detectedColor: 'Natural Black (#1B)'
-      },
-      {
-        product: products[1], // Aura bundles
-        similarityScore: 87,
-        matchReasons: ['Lustrous wave frequency', 'Triple weft thickness match'],
-        detectedTexture: 'Body Wave',
-        detectedLength: '22-26 inch',
-        detectedColor: 'Natural Black (#1B)'
-      }
-    ];
-
-    setVisualSearchResults(matches);
-    setIsSearchingImage(false);
-    showToast('Visual Matches Found', 'Found 3 high-affinity Tanelia matching styles.', 'gold');
+  const applyCoupon = async (code: string, subtotal: number) => {
+    const data: any = await api.checkout.validateCoupon(code, subtotal);
+    if (data.valid) {
+      setCouponCode(code.trim().toUpperCase());
+      setCouponDiscount(data.discount);
+    } else {
+      setCouponCode('');
+      setCouponDiscount(null);
+    }
+    return data;
   };
 
-  const clearVisualSearch = () => {
-    setVisualSearchResults(null);
+  const clearCoupon = () => {
+    setCouponCode('');
+    setCouponDiscount(null);
   };
 
   const addSavedAddress = (addressData: Omit<UserAddress, 'id'>) => {
@@ -970,10 +923,10 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       toggleWishlist,
       isInWishlist,
       orders,
-      visualSearchResults,
-      isSearchingImage,
-      performVisualSearch,
-      clearVisualSearch,
+      couponCode,
+      couponDiscount,
+      applyCoupon,
+      clearCoupon,
       savedAddresses,
       addSavedAddress,
       notifications,

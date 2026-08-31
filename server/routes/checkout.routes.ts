@@ -9,5 +9,7 @@ router.post('/webhook', CheckoutController.handleWebhook as any);
 
 // Authenticated routes
 router.post('/payment-intent', requireAuth, CheckoutController.createPaymentIntent as any);
+router.post('/validate-coupon', requireAuth, CheckoutController.validateCoupon as any);
+router.post('/pricing-preview', requireAuth, CheckoutController.pricingPreview as any);
 
 export default router;

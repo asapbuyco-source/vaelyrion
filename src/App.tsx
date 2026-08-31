@@ -11,7 +11,6 @@ import { MobileBottomNav } from './components/common/MobileBottomNav';
 import { HomePage } from './components/home/HomePage';
 import { ShopPage } from './components/shop/ShopPage';
 import { ProductDetailPage } from './components/shop/ProductDetailPage';
-import { FindThisHairPage } from './components/findhair/FindThisHairPage';
 import { DiscoverPage } from './components/discover/DiscoverPage';
 import { ArticleDetailPage } from './components/discover/ArticleDetailPage';
 import { WishlistPage } from './components/wishlist/WishlistPage';
@@ -42,10 +41,6 @@ const AppContent: React.FC = () => {
       discover: {
         title: 'The Tanelia Journal | Hair Craft, Care & Sourcing',
         description: 'Read the Tanelia Journal for thoughtful guidance on hair craft, lace construction, sourcing, styling, and care.'
-      },
-      'find-hair': {
-        title: 'Find Your Hair Match | Tanelia',
-        description: 'Share a reference image and discover the closest Tanelia texture, length, and finish for the look you have in mind.'
       },
       about: {
         title: 'About Tanelia | Hair, Considered',
@@ -166,7 +161,6 @@ const AppContent: React.FC = () => {
         {currentView === 'home' && <HomePage />}
         {currentView === 'shop' && <ShopPage />}
         {currentView === 'product' && <ProductDetailPage />}
-        {currentView === 'find-hair' && <FindThisHairPage />}
         {currentView === 'discover' && <DiscoverPage />}
         {currentView === 'discover-article' && <ArticleDetailPage />}
         {currentView === 'wishlist' && <WishlistPage />}

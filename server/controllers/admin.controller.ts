@@ -4,14 +4,85 @@ import { AuthRequest } from '../middleware/auth.middleware.js';
 
 const clean = (value: unknown, max = 5000) => String(value ?? '').trim().slice(0, max);
 
+const EDITORIAL_SYSTEM_PROMPT =
+  'You are Tanelia\'s senior editorial assistant. Tanelia is a premium Oslo hair house. Write precise, tactile, original editorial copy. Never invent certifications, customer results, suppliers, medical claims, prices, guarantees, or delivery promises. Avoid generic AI phrases, hype, keyword stuffing, and repetitive headings. Return valid JSON with exactly: title, excerpt, content, seo_title, seo_description, focus_keyword. Content should be 700-1000 words in Markdown with useful subheadings.';
+
+// OpenAI-compatible LLM backend (OpenRouter). JSON structured output is requested
+// via the `response_format` hint and validated by the caller.
+const LLM_API_KEY = process.env.OPENROUTER_API_KEY || '';
+const LLM_BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+const LLM_MODEL = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct';
+
+interface LLMResult { ok: boolean; error?: string; content?: string; }
+const callOpenRouter = async (systemPrompt: string, userPrompt: string): Promise<LLMResult> => {
+  try {
+    const response = await fetch(`${LLM_BASE}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${LLM_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': process.env.SITE_URL || 'https://www.tanelia.shop',
+        'X-Title': 'Tanelia',
+      },
+      body: JSON.stringify({
+        model: LLM_MODEL,
+        temperature: 0.65,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+      }),
+    });
+    const payload: any = await response.json().catch(() => ({}));
+    if (!response.ok) return { ok: false, error: payload?.error?.message || 'The AI drafting service was unavailable.' };
+    const raw = payload?.choices?.[0]?.message?.content;
+    if (!raw) return { ok: false, error: 'The AI drafting service returned no content.' };
+    return { ok: true, content: raw };
+  } catch (e: any) {
+    return { ok: false, error: e?.message || 'The AI drafting service was unavailable.' };
+  }
+};
+
+// Models sometimes wrap their JSON in markdown code fences and/or emit RAW
+// control characters (literal newlines/tabs) inside string values. Strip fences,
+// then JSON-escape stray control chars ONLY inside string literals so that
+// JSON.parse succeeds without corrupting structural whitespace.
+const parseLLMJson = (content: string): any => {
+  let target = String(content || '').trim();
+  const fenced = target.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (fenced) target = fenced[1].trim();
+
+  let inString = false;
+  let escaped = false;
+  let clean = '';
+  for (let i = 0; i < target.length; i++) {
+    const ch = target[i];
+    if (inString) {
+      if (escaped) { clean += ch; escaped = false; continue; }
+      if (ch === '\\') { clean += ch; escaped = true; continue; }
+      if (ch === '"') { inString = false; clean += ch; continue; }
+      const code = ch.charCodeAt(0);
+      if (code < 0x20 || code === 0x7f) {
+        clean += '\\u' + code.toString(16).padStart(4, '0');
+        continue;
+      }
+      clean += ch;
+    } else {
+      if (ch === '"') { inString = true; clean += ch; continue; }
+      clean += ch;
+    }
+  }
+  return JSON.parse(clean || '{}');
+};
+
 export class AdminController {
   static async generateScheduledDraft(req: Request, res: Response) {
     try {
       const configuredSecret = process.env.CRON_SECRET;
       const suppliedSecret = req.headers.authorization?.replace(/^Bearer\s+/i, '') || req.headers['x-cron-secret'];
       if (!configuredSecret || suppliedSecret !== configuredSecret) return res.status(401).json({ error: 'Unauthorized cron request' });
-      const apiKey = process.env.GROQ_API_KEY;
-      if (!apiKey) return res.status(503).json({ error: 'GROQ_API_KEY is not configured' });
+      if (!LLM_API_KEY) return res.status(503).json({ error: 'OPENROUTER_API_KEY is not configured' });
 
       const { data: topics, error: topicError } = await supabase
         .from('content_topics')
@@ -26,24 +97,15 @@ export class AdminController {
         return res.status(200).json({ skipped: true, message: 'The selected topic was generated recently' });
       }
 
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
-          temperature: 0.65,
-          response_format: { type: 'json_object' },
-          messages: [
-            { role: 'system', content: 'You are Tanelia\'s senior editorial assistant. Tanelia is a premium Oslo hair house. Write precise, tactile, original editorial copy. Never invent certifications, customer results, suppliers, medical claims, prices, guarantees, or delivery promises. Avoid generic AI phrases, hype, keyword stuffing, and repetitive headings. Return valid JSON with exactly: title, excerpt, content, seo_title, seo_description, focus_keyword. Content should be 700-1000 words in Markdown with useful subheadings.' },
-            { role: 'user', content: `Create a draft Journal article about: ${topic.topic}. Primary SEO phrase: ${topic.focus_keyword || 'choose a natural phrase'}. The reader should learn something genuinely useful while feeling the Tanelia point of view.` }
-          ]
-        })
-      });
-      const payload: any = await response.json().catch(() => ({}));
-      if (!response.ok) return res.status(502).json({ error: payload?.error?.message || 'Groq request failed' });
-      const draft = JSON.parse(payload?.choices?.[0]?.message?.content || '{}');
+      const result = await callOpenRouter(
+        EDITORIAL_SYSTEM_PROMPT,
+        `Create a draft Journal article about: ${topic.topic}. Primary SEO phrase: ${topic.focus_keyword || 'choose a natural phrase'}. The reader should learn something genuinely useful while feeling the Tanelia point of view.`
+      );
+      if (!result.ok) return res.status(502).json({ error: result.error || 'Article generation failed' });
+      const draft = parseLLMJson(result.content || '{}');
       const title = clean(draft.title, 255);
-      if (!title) return res.status(502).json({ error: 'Groq returned an empty article' });
+      if (!title) return res.status(502).json({ error: 'The AI editor returned an empty article' });
+
       const { data: article, error: articleError } = await supabase.from('journal_articles').insert({
         title,
         slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + `-${Date.now().toString(36)}`,
@@ -66,30 +128,17 @@ export class AdminController {
 
   static async generateArticle(req: Request, res: Response) {
     try {
-      const apiKey = process.env.GROQ_API_KEY;
-      if (!apiKey) return res.status(503).json({ error: 'AI drafting is not configured. Add GROQ_API_KEY on the server.' });
+      if (!LLM_API_KEY) return res.status(503).json({ error: 'AI drafting is not configured. Add OPENROUTER_API_KEY on the server.' });
       const topic = clean(req.body?.topic, 240);
       const keyword = clean(req.body?.focus_keyword, 160);
       if (!topic) return res.status(400).json({ error: 'Enter an article topic first.' });
 
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
-          temperature: 0.65,
-          response_format: { type: 'json_object' },
-          messages: [
-            { role: 'system', content: 'You are Tanelia\'s senior editorial assistant. Tanelia is a premium Oslo hair house. Write precise, tactile, original editorial copy. Never invent certifications, customer results, suppliers, medical claims, prices, guarantees, or delivery promises. Avoid generic AI phrases, hype, keyword stuffing, and repetitive headings. Return valid JSON with exactly: title, excerpt, content, seo_title, seo_description, focus_keyword. Content should be 700-1000 words in Markdown with useful subheadings.' },
-            { role: 'user', content: `Create a draft Journal article about: ${topic}. Primary SEO phrase: ${keyword || 'choose a natural phrase'}. The reader should learn something genuinely useful while feeling the Tanelia point of view.` }
-          ]
-        })
-      });
-      const payload: any = await response.json().catch(() => ({}));
-      if (!response.ok) return res.status(502).json({ error: payload?.error?.message || 'The AI drafting service was unavailable.' });
-      const raw = payload?.choices?.[0]?.message?.content;
-      if (!raw) return res.status(502).json({ error: 'The AI drafting service returned no content.' });
-      const draft = JSON.parse(raw);
+      const result = await callOpenRouter(
+        EDITORIAL_SYSTEM_PROMPT,
+        `Create a draft Journal article about: ${topic}. Primary SEO phrase: ${keyword || 'choose a natural phrase'}. The reader should learn something genuinely useful while feeling the Tanelia point of view.`
+      );
+      if (!result.ok) return res.status(502).json({ error: result.error || 'The AI drafting service was unavailable.' });
+      const draft = parseLLMJson(result.content || '{}');
       res.json({
         title: clean(draft.title, 255),
         excerpt: clean(draft.excerpt, 1000),

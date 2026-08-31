@@ -4,6 +4,7 @@ import {
   X, Menu, ChevronDown, Globe
 } from 'lucide-react';
 import { useStore, Currency, ViewType } from '../../context/StoreContext';
+import { track } from '../../lib/analytics';
 
 export const Header: React.FC = () => {
   const { 
@@ -26,18 +27,18 @@ export const Header: React.FC = () => {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (filters.searchQuery.trim()) {
+      track('search', { value: filters.searchQuery.trim().slice(0, 80) });
       setCurrentView('shop');
       setIsSearchOpen(false);
     }
   };
 
   const navItems: { label: string; view: ViewType; category?: string }[] = [
-    { label: 'Collections', view: 'shop' },
+    { label: 'New Arrivals', view: 'shop', category: 'new-arrivals' },
+    { label: 'Collection', view: 'shop' },
     { label: 'Wigs', view: 'shop', category: 'wigs' },
     { label: 'Bundles', view: 'shop', category: 'bundles' },
-    { label: 'Discover', view: 'discover' },
-    { label: 'Find Your Match', view: 'find-hair' },
-    { label: 'Contact', view: 'contact' },
+    { label: 'About Tanelia', view: 'about' },
   ];
 
   return (
@@ -47,14 +48,8 @@ export const Header: React.FC = () => {
         : 'bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#141414]/6'
     }`}>
       {/* Announcement bar */}
-      <div className="bg-[#171614] text-[#F7F5F0] px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] flex items-center justify-between">
-        <div className="hidden md:flex items-center gap-2 text-[#B5935A]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#B5935A] animate-pulse" />
-          <span className="text-[#E8DFC8] font-medium">{siteSettings.announcementPrimary}</span>
-        </div>
-        <div className="w-full md:w-auto text-center font-light flex items-center justify-center gap-2">
-          <span>{siteSettings.announcementSecondary}</span>
-        </div>
+      <div className="bg-[#171614] text-[#F7F5F0] px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] flex items-center justify-center text-center">
+        <span className="font-light text-[#E8DFC8]">{siteSettings.announcementSecondary}</span>
       </div>
 
       {/* Main header */}
@@ -264,6 +259,18 @@ export const Header: React.FC = () => {
                 ))}
               </div>
             </div>
+            <button
+              onClick={() => { setCurrentView('discover'); setIsMobileMenuOpen(false); }}
+              className="w-full text-left py-3 px-4 text-sm font-medium text-stone-700 hover:text-[#141414] hover:bg-[#EFEAE4]/60 rounded-xl transition-all uppercase tracking-widest"
+            >
+              The Journal
+            </button>
+            <button
+              onClick={() => { setCurrentView('contact'); setIsMobileMenuOpen(false); }}
+              className="w-full text-left py-3 px-4 text-sm font-medium text-stone-700 hover:text-[#141414] hover:bg-[#EFEAE4]/60 rounded-xl transition-all uppercase tracking-widest"
+            >
+              Client Services
+            </button>
             <button
               onClick={() => { setCurrentView('account'); setIsMobileMenuOpen(false); }}
               className="w-full text-left py-3 px-4 text-sm font-medium text-stone-700 hover:text-[#141414] hover:bg-[#EFEAE4]/60 rounded-xl transition-all uppercase tracking-widest"

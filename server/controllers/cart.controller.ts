@@ -2,6 +2,7 @@
 import { Response } from 'express';
 import { supabase } from '../config/supabase.js';
 import { AuthRequest } from '../middleware/auth.middleware.js';
+import { lengthSurchargeEuros } from '../lib/pricing.js';
 
 const getOrCreateCart = async (userId: string) => {
   // Look for existing active cart
@@ -56,8 +57,9 @@ export class CartController {
       if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
       const { productId, variantId, quantity } = req.body;
+      const options = req.body?.options && typeof req.body.options === 'object' ? req.body.options : null;
 
-      // NEVER trust client-side price. Always recalculate from DB.
+      // NEVER trust client-side price. Always recalculate from DB + pricing rules.
       const { data: product, error: productError } = await supabase
         .from('products')
         .select('id, selling_price, status')
@@ -87,21 +89,38 @@ export class CartController {
         unitPrice += (variant.price_adjustment || 0);
       }
 
+      // Length surcharge — server rule (mirrored in src/lib/pricing.ts for display)
+      unitPrice += lengthSurchargeEuros(options?.length);
+
       const cart = await getOrCreateCart(userId);
 
-      // Check if same item already in cart
-      const { data: existing } = await supabase
+      // Dedup key includes the full variant options so that the same product with
+      // different lengths/colors/densities/laces stays as separate line items
+      // (each with its own length-surcharged unit price).
+      let query = supabase
         .from('cart_items')
         .select('id, quantity')
         .eq('cart_id', cart.id)
-        .eq('product_id', productId)
-        .eq('variant_id', variantId || null)
-        .single();
+        .eq('product_id', productId);
+
+      if (variantId) {
+        query = query.eq('variant_id', variantId);
+      } else {
+        query = query.is('variant_id', null);
+      }
+
+      if (options) {
+        query = query.eq('options', JSON.stringify(options));
+      } else {
+        query = query.is('options', null);
+      }
+
+      const { data: existing } = await query.single();
 
       if (existing) {
         const { data } = await supabase
           .from('cart_items')
-          .update({ quantity: existing.quantity + quantity })
+          .update({ quantity: existing.quantity + quantity, unit_price: unitPrice, options, updated_at: new Date().toISOString() })
           .eq('id', existing.id)
           .select()
           .single();
@@ -116,6 +135,7 @@ export class CartController {
           variant_id: variantId || null,
           quantity,
           unit_price: unitPrice,
+          options,
         })
         .select()
         .single();

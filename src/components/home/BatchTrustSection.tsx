@@ -1,5 +1,5 @@
 import React from 'react';
-import { Package, Globe, ShieldCheck, Star, ArrowRight, Truck, Sparkles, Clock } from 'lucide-react';
+import { Package, ShieldCheck, Star, ArrowRight, Sparkles } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const BatchTrustSection: React.FC = () => {
@@ -7,24 +7,24 @@ export const BatchTrustSection: React.FC = () => {
 
   const pillars = [
     {
-      icon: Package,
-      title: 'Selected by Origin',
-      desc: 'Single-donor hair chosen for its natural movement, density, and aligned cuticle.',
+      icon: Sparkles,
+      title: 'Exceptional Quality',
+      desc: 'Carefully selected hair chosen for its texture, longevity, and natural appearance.',
     },
     {
-      icon: Globe,
-      title: 'Prepared in Oslo',
-      desc: 'Each piece is inspected, conditioned, and prepared for its journey from our Oslo house.',
+      icon: Star,
+      title: 'Curated Collections',
+      desc: 'Every Tanelia piece is selected with intention, never assembled at random.',
+    },
+    {
+      icon: Package,
+      title: 'Effortless Ordering',
+      desc: 'A seamless shopping experience from selection to delivery.',
     },
     {
       icon: ShieldCheck,
-      title: 'Considered Service',
-      desc: 'Clear delivery timelines, protected payment, and support from selection through arrival.',
-    },
-    {
-      icon: Clock,
-      title: 'A Clear Journey',
-      desc: 'Follow your piece from atelier preparation to the moment it reaches your door.',
+      title: 'The Tanelia Standard',
+      desc: 'Every order reflects the quality and elegance of the brand.',
     },
   ];
 
@@ -38,10 +38,10 @@ export const BatchTrustSection: React.FC = () => {
             The House Standard
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">
-            From Selection to Arrival
+            Why Tanelia
           </h2>
           <p className="text-stone-500 font-light text-sm mt-3 max-w-md mx-auto">
-            Every piece is selected, prepared, and presented with the same attention to detail—from first selection to final delivery.
+            A considered standard — from first selection to the moment it arrives.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export const BatchTrustSection: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
               {[
-                { step: '01', label: 'Piece Selected', desc: 'Your order is reserved from the release' },
+                { step: '01', label: 'Order Confirmed', desc: 'Your selection is reserved for you' },
                 { step: '02', label: 'Atelier Preparation', desc: 'Finished and checked by hand' },
                 { step: '03', label: 'Oslo Inspection', desc: 'Conditioned and prepared for dispatch' },
                 { step: '04', label: 'Arrival', desc: 'Delivered with care to your door' },

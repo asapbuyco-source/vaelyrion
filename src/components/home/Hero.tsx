@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Truck } from 'lucide-react';
+import { ArrowRight, MessageCircle } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { SmartImage } from '../common/SmartImage';
 
@@ -22,33 +22,32 @@ export const Hero: React.FC = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center lg:min-h-[90vh]">
-          
+
           {/* LEFT: Editorial Text Column */}
           <div className="space-y-8 lg:py-24 order-2 lg:order-1">
 
             {/* House mark */}
-            <div 
+            <div
               className="inline-flex items-center gap-2.5 border-l-2 border-[#B5935A] pl-4 text-xs text-[#8E7348] font-semibold tracking-widest uppercase"
-              style={{ 
+              style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
                 transition: 'all 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s'
               }}
             >
-              Tanelia · Oslo, Norway
+              Tanelia · Oslo
             </div>
 
             {/* Big headline */}
-            <div style={{ 
+            <div style={{
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
               transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s'
             }}>
-              <p className="section-num mb-5">THE CURRENT COLLECTION</p>
               <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-semibold text-[#141414] leading-[1.01] tracking-tight text-balance">
-                Hair with a<br />
-                <span className="italic text-[#8E7348]">natural point</span><br />
-                of view.
+                Luxury hair.<br />
+                <span className="italic text-[#8E7348]">Effortlessly</span><br />
+                yours.
               </h1>
             </div>
 
@@ -58,14 +57,14 @@ export const Hero: React.FC = () => {
               transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.35s'
             }}>
               <p className="text-stone-500 font-light text-base leading-relaxed max-w-md">
-                Single-donor hair and fine lace pieces selected for movement, density, and a natural finish. Each order is inspected and prepared in Oslo before it leaves us.
+                Exceptional hair crafted for women who expect nothing less. Fine lace, single-donor textures, and a considered arrival — every time.
               </p>
             </div>
 
             {/* CTAs */}
             <div
               className="flex flex-col sm:flex-row gap-3"
-              style={{ 
+              style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(16px)',
                 transition: 'all 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.45s'
@@ -83,40 +82,18 @@ export const Hero: React.FC = () => {
               </button>
 
               <button
-                onClick={() => setCurrentView('contact')}
+                onClick={() => setCurrentView('about')}
                 className="btn-text-arrow py-4 px-2 cursor-pointer"
               >
-                <MessageCircle className="w-4 h-4 text-[#B5935A]" />
-                <span>Speak with the house</span>
+                <span>Discover Tanelia</span>
               </button>
-            </div>
-
-            {/* Trust stats */}
-            <div 
-              className="pt-6 border-t border-[#141414]/8 grid grid-cols-3 gap-4"
-              style={{ 
-                opacity: isVisible ? 1 : 0,
-                transition: 'opacity 0.7s ease 0.6s'
-              }}
-            >
-              {[
-                { icon: ShieldCheck, label: 'Single-Donor Hair', sub: 'Cuticle Aligned' },
-                { icon: Sparkles, label: '0.03mm Swiss Lace', sub: 'Hand-Ventilated' },
-                { icon: Truck, label: 'Prepared in Oslo', sub: 'Inspected by Hand' }
-              ].map(({ icon: Icon, label, sub }) => (
-                <div key={label} className="space-y-1">
-                  <Icon className="w-4 h-4 text-[#B5935A] mb-2" />
-                  <p className="font-serif text-sm font-medium text-[#141414]">{label}</p>
-                  <p className="text-[11px] text-stone-400 font-light">{sub}</p>
-                </div>
-              ))}
             </div>
           </div>
 
           {/* RIGHT: Large editorial imagery with floating card */}
-          <div 
+          <div
             className="relative block lg:pl-8 order-1 lg:order-2"
-            style={{ 
+            style={{
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateX(0)' : 'translateX(32px)',
               transition: 'all 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s'
@@ -130,7 +107,7 @@ export const Hero: React.FC = () => {
             <div className="animate-settle relative overflow-hidden shadow-2xl ring-1 ring-[#9B7A4A]/45 ring-offset-8 ring-offset-[#F7F5F0]" style={{ aspectRatio: '4/5' }}>
               <SmartImage
                 src="https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065153v1aY413AR8x3UMJ1_9579f0ac-9a49-4d31-a5d7-1c0927f72b21.png?width=1200"
-                alt="Velvet Noir deep wave wig from the Tanelia collection"
+                alt="Tanelia luxury hair piece from the collection"
                 fallbackKind="editorial"
                 className="w-full h-full object-cover object-center"
               />
@@ -141,7 +118,7 @@ export const Hero: React.FC = () => {
             <div className="absolute -bottom-5 -left-3 lg:left-2 w-24 h-24 border-l border-b border-[#9B7A4A]/60 pointer-events-none" />
 
             <div className="absolute bottom-0 left-0 right-0 bg-[#171614]/85 text-[#F7F5F0] px-5 py-4 flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-[0.22em]">Velvet Noir · Deep Wave</span>
+              <span className="text-[10px] uppercase tracking-[0.22em]">The Tanelia Collection</span>
               <span className="text-[10px] text-[#C8AD7F]">Prepared in Oslo</span>
             </div>
           </div>

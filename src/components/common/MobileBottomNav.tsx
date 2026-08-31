@@ -1,6 +1,6 @@
 import React from 'react';
-import { Home, Store, Camera, Heart, ShoppingBag } from 'lucide-react';
-import { useStore, ViewType } from '../../context/StoreContext';
+import { Home, Store, Heart, ShoppingBag } from 'lucide-react';
+import { useStore } from '../../context/StoreContext';
 
 export const MobileBottomNav: React.FC = () => {
   const { 
@@ -10,7 +10,6 @@ export const MobileBottomNav: React.FC = () => {
 
   const isShopActive = currentView === 'shop' || currentView === 'product';
   const isWishlistActive = currentView === 'wishlist';
-  const isFindHairActive = currentView === 'find-hair';
 
   return (
     <nav 
@@ -44,18 +43,14 @@ export const MobileBottomNav: React.FC = () => {
 
         {/* Find This Hair — Elevated center button */}
         <button
-          onClick={() => setCurrentView('find-hair')}
+          onClick={() => setCurrentView('shop')}
           className="flex flex-col items-center gap-1 -mt-4 cursor-pointer group"
         >
-          <div className={`w-13 h-13 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 group-active:scale-95 border-2 ${
-            isFindHairActive
-              ? 'bg-[#141414] text-[#FAF8F5] border-[#B5935A] ring-4 ring-[#B5935A]/15'
-              : 'bg-[#141414] text-[#FAF8F5] border-stone-800 group-hover:border-[#B5935A]/50'
-          }`} style={{ width: '52px', height: '52px' }}>
-            <Camera className="w-5 h-5 text-[#E8DFC8]" />
+          <div className="flex items-center justify-center shadow-lg transition-all duration-200 group-active:scale-95 border-2 bg-[#141414] text-[#FAF8F5] border-stone-800 group-hover:border-[#B5935A]/50 rounded-2xl" style={{ width: '52px', height: '52px' }}>
+            <Store className="w-5 h-5 text-[#E8DFC8] stroke-[2]" />
           </div>
-          <span className={`text-[10px] font-bold uppercase tracking-wide ${isFindHairActive ? 'text-[#8E7348]' : 'text-stone-500'}`}>
-            Find Hair
+          <span className="text-[10px] font-bold uppercase tracking-wide text-stone-500">
+            Collection
           </span>
         </button>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Package, 
   MapPin, 
@@ -29,11 +29,78 @@ export const AccountPage: React.FC = () => {
     showToast
   } = useStore();
 
-  const { authUser, isAuthenticated, isAuthLoading, isAdmin, login, register, logout, authError } = useAuth();
+  const { authUser, isAuthenticated, isAuthLoading, isAdmin, login, register, logout, authError, forgotPassword, resetPassword } = useAuth();
 
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authView, setAuthView] = useState<'auth' | 'forgot' | 'reset'>('auth');
   const [authForm, setAuthForm] = useState({ email: '', password: '', firstName: '', lastName: '' });
   const [isAuthSubmitting, setIsAuthSubmitting] = useState(false);
+  const [resetToken, setResetToken] = useState('');
+  const [resetIsCode, setResetIsCode] = useState(false);
+  const [resetPasswordVal, setResetPasswordVal] = useState('');
+  const [resetPasswordConfirm, setResetPasswordConfirm] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
+  const [forgotSent, setForgotSent] = useState(false);
+
+  // Detect the Supabase recovery link (access_token in implicit flow, code in PKCE flow)
+  useEffect(() => {
+    const hash = window.location.hash || '';
+    const params = new URLSearchParams(hash.replace(/^#/, ''));
+    if (params.get('type') === 'recovery') {
+      const isCode = !!params.get('code') && !params.get('access_token');
+      const token = params.get('access_token') || params.get('code') || '';
+      if (token) {
+        setResetToken(token);
+        setResetIsCode(isCode);
+        setAuthView('reset');
+        // Clear the token from the URL without breaking history
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+  }, []);
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isAuthSubmitting) return;
+    setIsAuthSubmitting(true);
+    setResetMessage('');
+    try {
+      await forgotPassword(authForm.email);
+      setForgotSent(true);
+    } catch {
+      // context sets authError
+    } finally {
+      setIsAuthSubmitting(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isAuthSubmitting) return;
+    setResetMessage('');
+    if (resetPasswordVal !== resetPasswordConfirm) {
+      setResetMessage('Passwords do not match.');
+      return;
+    }
+    if (resetPasswordVal.length < 8) {
+      setResetMessage('Your new password must be at least 8 characters.');
+      return;
+    }
+    setIsAuthSubmitting(true);
+    try {
+      await resetPassword(resetPasswordVal, resetToken, resetIsCode);
+      setResetMessage('Your password has been updated. You can now sign in.');
+      setAuthView('auth');
+      setResetPasswordVal('');
+      setResetPasswordConfirm('');
+      setResetToken('');
+      setResetIsCode(false);
+    } catch {
+      // context sets authError
+    } finally {
+      setIsAuthSubmitting(false);
+    }
+  };
 
   const [activeTab, setActiveTab] = useState<'orders' | 'addresses' | 'notifications' | 'support'>('orders');
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
@@ -118,6 +185,100 @@ export const AccountPage: React.FC = () => {
   }
 
   if (!isAuthenticated) {
+    if (authView === 'forgot') {
+      return (
+        <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
+          <div className="max-w-md w-full p-8 bg-white border border-[#141414]/10 rounded-sm shadow-xs mt-12">
+            <h2 className="font-serif text-3xl font-medium text-center mb-2">Reset Your Password</h2>
+            <p className="text-xs text-stone-500 font-light text-center mb-6">
+              Enter your email address and we will send you a secure reset link.
+            </p>
+            {authError && (
+              <div className="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded border border-red-200">{authError}</div>
+            )}
+            {forgotSent && (
+              <div className="mb-4 p-3 bg-emerald-50 text-emerald-800 text-xs rounded border border-emerald-200">
+                If an account exists for this email, a reset link has been sent. Please check your inbox.
+              </div>
+            )}
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <input
+                type="email"
+                name="email"
+                autoComplete="email"
+                placeholder="Email Address"
+                required
+                value={authForm.email}
+                onChange={e => setAuthForm({ ...authForm, email: e.target.value })}
+                className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+              />
+              <button
+                type="submit"
+                disabled={isAuthSubmitting}
+                className="w-full bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isAuthSubmitting ? 'Sending…' : 'Send Reset Link'}
+              </button>
+            </form>
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => { setAuthView('auth'); setForgotSent(false); }}
+                className="text-xs text-stone-500 hover:text-stone-900 underline underline-offset-4 cursor-pointer"
+              >
+                Back to Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (authView === 'reset') {
+      return (
+        <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
+          <div className="max-w-md w-full p-8 bg-white border border-[#141414]/10 rounded-sm shadow-xs mt-12">
+            <h2 className="font-serif text-3xl font-medium text-center mb-2">Choose a New Password</h2>
+            <p className="text-xs text-stone-500 font-light text-center mb-6">
+              Enter a new password for your Tanelia account.
+            </p>
+            {authError && (
+              <div className="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded border border-red-200">{authError}</div>
+            )}
+            {resetMessage && (
+              <div className="mb-4 p-3 bg-emerald-50 text-emerald-800 text-xs rounded border border-emerald-200">{resetMessage}</div>
+            )}
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <input
+                type="password"
+                autoComplete="new-password"
+                placeholder="New Password (min 8 characters)"
+                required
+                value={resetPasswordVal}
+                onChange={e => setResetPasswordVal(e.target.value)}
+                className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+              />
+              <input
+                type="password"
+                autoComplete="new-password"
+                placeholder="Confirm New Password"
+                required
+                value={resetPasswordConfirm}
+                onChange={e => setResetPasswordConfirm(e.target.value)}
+                className="w-full bg-[#FAF8F5] border border-[#141414]/15 px-4 py-3 rounded-xs text-[16px] sm:text-sm"
+              />
+              <button
+                type="submit"
+                disabled={isAuthSubmitting}
+                className="w-full bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold py-4 rounded-xs disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isAuthSubmitting ? 'Updating…' : 'Update Password'}
+              </button>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
         <div className="max-w-md w-full p-8 bg-white border border-[#141414]/10 rounded-sm shadow-xs mt-12">
@@ -194,6 +355,17 @@ export const AccountPage: React.FC = () => {
               {authMode === 'login' ? 'Need an account? Register' : 'Already have an account? Sign In'}
             </button>
           </div>
+
+          {authMode === 'login' && (
+            <div className="mt-2 text-center">
+              <button
+                onClick={() => setAuthView('forgot')}
+                className="text-xs text-stone-400 hover:text-stone-900 underline underline-offset-4 cursor-pointer"
+              >
+                Forgot your password?
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -249,7 +421,7 @@ export const AccountPage: React.FC = () => {
         {/* Navigation Tabs */}
         <div className="flex border-b border-[#141414]/10 gap-8 overflow-x-auto">
           {[
-            { id: 'orders', label: 'Order History & Batch Tracking', icon: Package, count: orders.length },
+            { id: 'orders', label: 'Order History & Tracking', icon: Package, count: orders.length },
             { id: 'addresses', label: 'Saved Addresses', icon: MapPin, count: savedAddresses.length },
             { id: 'notifications', label: 'Notifications', icon: Bell, count: notifications.filter(n => !n.read).length },
             { id: 'support', label: 'Stylist Concierge Support', icon: Headphones }
@@ -290,7 +462,7 @@ export const AccountPage: React.FC = () => {
                 <div className="bg-white border border-[#141414]/10 rounded-sm p-12 text-center space-y-3">
                   <Package className="w-10 h-10 text-stone-300 mx-auto" />
                   <h3 className="font-serif text-lg text-stone-900">No previous orders</h3>
-                  <p className="text-xs text-stone-500 font-light">Explore our raw hair collections to make your first batch reservation.</p>
+                  <p className="text-xs text-stone-500 font-light">Explore our collections to begin yours.</p>
                   <button
                     onClick={() => setCurrentView('shop')}
                     className="bg-[#141414] text-white text-xs uppercase tracking-widest px-6 py-2.5 rounded-xs"
@@ -311,7 +483,7 @@ export const AccountPage: React.FC = () => {
                             ORDER #{ord.orderNumber}
                           </h3>
                           <span className="bg-[#FAF5ED] text-[#8E7348] text-xs font-semibold px-2.5 py-0.5 rounded-xs border border-[#E8DFC8]">
-                            {ord.batchId.toUpperCase()}
+                            {ord.batchId ? `Order ${ord.batchId.toUpperCase()}` : 'Made to Order'}
                           </span>
                         </div>
                         <p className="text-xs text-stone-500 font-light mt-1">
@@ -533,7 +705,7 @@ export const AccountPage: React.FC = () => {
                     required
                     value={supportMessage}
                     onChange={(e) => setSupportMessage(e.target.value)}
-                    placeholder="Ask about lace custom tinting, batch dispatch dates, hair density advice, or custom order inquiries..."
+                    placeholder="Ask about lace custom tinting, delivery dates, hair density advice, or custom order inquiries..."
                     className="w-full bg-[#FAF8F5] border border-[#141414]/15 p-3 rounded-xs focus:outline-none focus:border-[#B5935A] font-light"
                   ></textarea>
                 </div>

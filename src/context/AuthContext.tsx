@@ -21,6 +21,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (data: { email: string; password: string; firstName: string; lastName: string; phone?: string }) => Promise<void>;
   logout: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (password: string, token?: string, isCode?: boolean) => Promise<void>;
   authError: string | null;
   clearAuthError: () => void;
 }
@@ -98,6 +100,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setAuthUser(null);
   };
 
+  const forgotPassword = async (email: string) => {
+    setAuthError(null);
+    try {
+      await api.auth.forgotPassword(email);
+    } catch (err: any) {
+      setAuthError(err.message || 'Unable to request a password reset');
+      throw err;
+    }
+  };
+
+  const resetPassword = async (password: string, token?: string, isCode?: boolean) => {
+    setAuthError(null);
+    try {
+      await api.auth.resetPassword(password, token, isCode);
+    } catch (err: any) {
+      setAuthError(err.message || 'Unable to reset your password');
+      throw err;
+    }
+  };
+
   const clearAuthError = () => setAuthError(null);
 
   const isAdmin = authUser?.profile?.role === 'admin' || authUser?.profile?.role === 'staff';
@@ -111,6 +133,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       login,
       register,
       logout,
+      forgotPassword,
+      resetPassword,
       authError,
       clearAuthError,
     }}>

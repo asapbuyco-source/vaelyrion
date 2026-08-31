@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ArrowRight, Sparkles, Star } from 'lucide-react';
 import { Hero } from './Hero';
 import { CategoryVisuals } from './CategoryVisuals';
-import { FindThisHairBanner } from './FindThisHairBanner';
 import { BatchTrustSection } from './BatchTrustSection';
 import { PackagingUnboxingShowcase } from './PackagingUnboxingShowcase';
 import { ProductCard } from '../shop/ProductCard';
@@ -38,29 +37,34 @@ export const HomePage: React.FC = () => {
       {/* 2. Category Visual Grid */}
       <CategoryVisuals />
 
-      {/* 2.5 Atelier Note — an editorial split, not a generic full-bleed banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] min-h-[420px] shadow-2xl">
-          <div className="bg-[#171614] text-[#F7F5F0] p-8 sm:p-12 lg:p-16 flex flex-col justify-between">
-            <span className="section-num text-[#C8AD7F]">ATELIER NOTE · 01</span>
-            <div>
-              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl italic leading-[1.02] text-balance">
-                Hair that moves like it was never touched.
-              </h2>
-              <div className="w-12 h-px bg-[#B5935A] my-7" />
-              <p className="text-[#E8DFC8]/75 text-[11px] uppercase tracking-[0.26em] font-light">
-                Single-Donor · Hand-Ventilated · Prepared in Oslo
-              </p>
-            </div>
-          </div>
-          <div className="relative min-h-[320px] overflow-hidden bg-[#EDE8E1]">
+      {/* 2.5 Brand Story — Beauty, Refined. */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="relative aspect-[4/5] overflow-hidden bg-[#EDE8E1] order-2 lg:order-1 shadow-xl ring-1 ring-[#141414]/8">
             <SmartImage
               src="https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288705sGng7OjgwW8eKtnh.jpg?width=1600"
-              alt="Tanelia atelier hair campaign"
+              alt="Tanelia luxury hair campaign"
               fallbackKind="editorial"
               className="w-full h-full object-cover"
               loading="lazy"
             />
+          </div>
+          <div className="space-y-6 order-1 lg:order-2 lg:pl-6">
+            <p className="section-num">THE HOUSE</p>
+            <h2 className="font-serif text-4xl sm:text-5xl leading-[1.05] text-balance">
+              Beauty, <span className="italic text-[#8E7348]">Refined.</span>
+            </h2>
+            <div className="w-12 h-px bg-[#B5935A]" />
+            <p className="text-sm sm:text-base text-stone-600 font-light leading-relaxed">
+              Tanelia was founded on a simple belief — that exceptional hair should feel effortless. We select rare textures, pair them with fine Swiss lace, and finish every piece by hand, so that what arrives feels less like a purchase and more like a quiet luxury you keep.
+            </p>
+            <button
+              onClick={() => setCurrentView('about')}
+              className="btn-text-arrow cursor-pointer"
+            >
+              <span>Our Story</span>
+              <ArrowRight className="w-4 h-4 text-[#B5935A] transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
           </div>
         </div>
       </section>
@@ -70,11 +74,11 @@ export const HomePage: React.FC = () => {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 01 · The New Release</p>
+              <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">New Arrivals</p>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">New from the Atelier</h2>
             </div>
             <button
-              onClick={() => { setFilters(p => ({ ...p, category: 'all' })); setCurrentView('shop'); }}
+              onClick={() => { setFilters(p => ({ ...p, category: 'new-arrivals' })); setCurrentView('shop'); }}
               className="btn-text-arrow hidden sm:inline-flex cursor-pointer"
             >
               <span>View All Pieces</span>
@@ -91,12 +95,44 @@ export const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* 4. Featured Hair Architecture (with tabs) */}
+      {/* 3.5 Featured Editorial — Made to Be Seen. */}
+      <section className="relative py-24 sm:py-36 overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://cdn.shopify.com/s/files/1/2465/8681/files/2085320187267063808XAthZtraG4AWmex5_59fc5448-331b-4270-8cd2-8dfbc8c32be3.png?width=2000"
+            alt="Tanelia editorial campaign"
+            className="w-full h-full object-cover object-center"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#141414]/80 via-[#141414]/40 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-xl">
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#C8AD7F] font-semibold mb-3">Editorial</p>
+            <h2 className="font-serif text-4xl sm:text-6xl text-[#F7F5F0] leading-[1.05] text-balance">
+              Made to Be Seen.
+            </h2>
+            <p className="text-sm sm:text-base text-[#E8DFC8]/85 font-light leading-relaxed mt-5 max-w-sm">
+              Hair should not simply complement your look. It should become part of it.
+            </p>
+            <button
+              onClick={() => { setFilters(p => ({ ...p, category: 'all' })); setCurrentView('shop'); }}
+              className="mt-8 inline-flex items-center gap-2.5 border border-[#C8AD7F] text-[#F7F5F0] text-xs uppercase tracking-widest font-semibold py-4 px-10 hover:bg-[#F7F5F0] hover:text-[#141414] transition-all duration-300 cursor-pointer group"
+            >
+              <span>Explore Tanelia</span>
+              <ArrowRight className="w-4 h-4 text-[#C8AD7F] group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. The Tanelia Collection (Signature, with tabs) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 border-t border-[#141414]/8">
         <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">No. 02 · House Curations</p>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">The Signature Collection</h2>
+            <p className="section-label text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold mb-2">Signature Collection</p>
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#141414] font-medium">The Tanelia Collection</h2>
+            <p className="text-sm text-stone-500 font-light mt-2">Curated textures. Exceptional quality. Timeless beauty.</p>
           </div>
 
           {/* Filter pills */}
@@ -137,9 +173,6 @@ export const HomePage: React.FC = () => {
           </button>
         </div>
       </section>
-
-      {/* 5. Find This Hair — Major Feature */}
-      <FindThisHairBanner />
 
       {/* 6. Trending Now */}
       {trending.length > 0 && (

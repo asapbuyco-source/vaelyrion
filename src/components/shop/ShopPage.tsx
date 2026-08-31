@@ -172,8 +172,8 @@ export const ShopPage: React.FC = () => {
               <div className="space-y-1.5 text-xs text-stone-700">
                 {[
                   { id: 'all', label: 'All Items' },
-                  { id: 'in-stock', label: 'In Stock (2–4d Oslo 3PL)' },
-                    { id: 'pre-order', label: `Pre-Order (${siteSettings.preorderBatch})` }
+                    { id: 'in-stock', label: 'In Stock (Ships 2–4 Days)' },
+                  { id: 'pre-order', label: 'Made to Order' }
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -380,8 +380,8 @@ export const ShopPage: React.FC = () => {
                 <div className="space-y-1">
                   {[
                     { id: 'all', label: 'All Items' },
-                    { id: 'in-stock', label: 'In Stock (2–4d Oslo 3PL)' },
-                  { id: 'pre-order', label: `Pre-Order (${siteSettings.preorderBatch})` }
+                  { id: 'in-stock', label: 'In Stock (Ships 2–4 Days)' },
+                    { id: 'pre-order', label: 'Made to Order' }
                   ].map((opt) => (
                     <button
                       key={opt.id}

@@ -16,8 +16,8 @@ export const FaqPage: React.FC = () => {
       a: 'Our Swiss HD lace is manufactured from ultrathin micro-filament threads imported directly from Switzerland. Measuring only 0.03mm in thickness with irregular honeycomb pores, it mimics the natural skin epidermis. When pressed against the forehead, it melts invisibly without requiring thick makeup or lace tint spray.'
     },
     {
-      q: 'Why do you use a Weekly Pre-Order Batch model instead of giant warehouses?',
-      a: 'Mass-market retailers store thousands of pre-made wigs in non-climate-controlled warehouses for months or years, drying out the cuticles and weakening the lace. By consolidating weekly orders on Sundays and manufacturing freshly on demand, we deliver salon-grade fresh hair while eliminating wasteful retail markup.'
+      q: 'Why is my piece made to order?',
+      a: 'Most retailers hold inventory for months before it sells, which ages the hair and dulls its finish. Tanelia finishes pieces to order, so what arrives has been prepared recently and in full — never warehoused.'
     },
     {
       q: 'Can I bleach and dye Tanelia hair?',
@@ -49,7 +49,7 @@ export const FaqPage: React.FC = () => {
             FREQUENTLY ASKED QUESTIONS
           </h1>
           <p className="text-xs sm:text-sm text-stone-600 font-light max-w-lg mx-auto">
-            Everything you need to know about our raw hair origins, Swiss HD lace, and weekly batch ordering.
+            Everything you need to know about our raw hair origins, Swiss HD lace, and made-to-order preparation.
           </p>
         </div>
       </div>

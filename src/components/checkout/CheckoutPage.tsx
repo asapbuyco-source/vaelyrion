@@ -17,8 +17,21 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useStore, buildOrderFromServer } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
+import { shippingCostEuros } from '../../lib/pricing';
+import { track } from '../../lib/analytics';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+const COUNTRY_ISO: Record<string, string> = {
+  'Norway': 'NO',
+  'Sweden': 'SE',
+  'Denmark': 'DK',
+  'United Kingdom': 'GB',
+  'Germany': 'DE',
+  'France': 'FR',
+  'United States': 'US',
+};
+
+const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
 const CheckoutContent: React.FC = () => {
   const { isAuthenticated, isAuthLoading, authUser } = useAuth();
@@ -29,7 +42,8 @@ const CheckoutContent: React.FC = () => {
     clearCart,
     setSelectedOrder,
     savedAddresses,
-    showToast,
+    couponCode,
+    couponDiscount,
     siteSettings
   } = useStore();
 
@@ -52,9 +66,6 @@ const CheckoutContent: React.FC = () => {
 
   // Shipping Method
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
-  
-  // Payment Method
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'apple_pay' | 'klarna'>('card');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -76,9 +87,9 @@ const CheckoutContent: React.FC = () => {
     }
   };
 
-  const freeShipping = cartSubtotal >= 250;
-  const shippingCost = freeShipping ? 0 : (shippingMethod === 'express' ? 25 : 15);
-  const totalAmount = cartSubtotal + shippingCost;
+  const shippingCost = shippingCostEuros(cartSubtotal, shippingMethod);
+  const discount = couponDiscount || 0;
+  const totalAmount = cartSubtotal - discount + shippingCost;
   const hasPreOrder = cart.some(i => i.isPreOrder);
   // The payment API charges EUR. Keep checkout totals in the charged currency
   // even when the storefront currency selector is set to another display currency.
@@ -117,7 +128,7 @@ const CheckoutContent: React.FC = () => {
         });
       }
 
-      // 2. Create Payment Intent
+      // 2. Create Payment Intent (server recalculates totals authoritatively)
       const res = await api.checkout.createPaymentIntent('current', {
         name: formData.name,
         email: formData.email,
@@ -126,7 +137,7 @@ const CheckoutContent: React.FC = () => {
         city: formData.city,
         postalCode: formData.postalCode,
         country: formData.country
-      }, shippingMethod);
+      }, shippingMethod, couponCode || undefined);
 
       // 3. Confirm the card payment with Stripe
       const result = await stripe.confirmCardPayment(res.clientSecret, {
@@ -140,13 +151,14 @@ const CheckoutContent: React.FC = () => {
               line1: formData.address,
               city: formData.city,
               postal_code: formData.postalCode,
-              country: formData.country === 'United States' ? 'US' : 'NO'
+              country: COUNTRY_ISO[formData.country] || 'NO'
             }
           }
         }
       });
 
       if (result.error) {
+        track('payment_failure', { orderId: res.orderId });
         setPaymentError(result.error.message || 'Payment failed. Please try again.');
         setIsSubmitting(false);
         return;
@@ -158,6 +170,8 @@ const CheckoutContent: React.FC = () => {
         return;
       }
 
+      track('payment_success', { orderId: res.orderId, value: res.total, currency: 'EUR' });
+
       // 4. Load the confirmed order from the server (poll briefly for webhook confirmation)
       let serverOrder: any = null;
       for (let attempt = 0; attempt < 4; attempt++) {
@@ -167,15 +181,35 @@ const CheckoutContent: React.FC = () => {
       }
       setSelectedOrder(buildOrderFromServer(serverOrder));
       clearCart();
+      track('purchase', { orderId: res.orderId, orderNumber: res.orderNumber, value: res.total, currency: 'EUR' });
       setCurrentView('order-confirmation');
       
     } catch (err: any) {
       console.error('Checkout failed', err);
+      track('payment_failure');
       setPaymentError(err.message || 'Checkout failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (!stripePublishableKey) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <Lock className="w-12 h-12 text-[#B5935A]" />
+        <h2 className="font-serif text-2xl text-stone-900">Secure Payments Are Being Prepared</h2>
+        <p className="text-xs text-stone-500 font-light max-w-xs">
+          Our payment system is being configured. Please try again shortly, or contact Client Services.
+        </p>
+        <button
+          onClick={() => setCurrentView('contact')}
+          className="bg-[#141414] text-white text-xs uppercase tracking-widest px-8 py-3.5 rounded-xs font-semibold"
+        >
+          Contact Client Services
+        </button>
+      </div>
+    );
+  }
 
   if (isAuthLoading) {
     return (
@@ -402,14 +436,14 @@ const CheckoutContent: React.FC = () => {
 
             </div>
 
-            {/* Step 2: Shipping Method & Batch Schedule Notice */}
+            {/* Step 2: Delivery Method */}
             <div className="bg-white border border-[#141414]/10 rounded-sm p-6 sm:p-8 space-y-4 shadow-xs">
               <div className="flex items-center gap-2.5 border-b border-[#141414]/8 pb-4">
                 <span className="w-6 h-6 rounded-full bg-[#141414] text-white text-xs font-mono font-semibold flex items-center justify-center">
                   2
                 </span>
                 <h3 className="font-serif text-lg font-medium text-stone-900">
-                  Fulfillment & Batch Method
+                  Delivery Method
                 </h3>
               </div>
 
@@ -417,8 +451,8 @@ const CheckoutContent: React.FC = () => {
                 <div className="p-3.5 bg-[#FAF5ED] rounded-xs border border-[#E5DAC8] text-xs text-[#7A5B28] flex items-start gap-2.5">
                   <Calendar className="w-4 h-4 text-[#8E7348] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold block">The Atelier Release:</span>
-                    <span>Orders close Sunday 23:59 CET. Your piece is then finished, inspected in Oslo, and prepared in its magnetic keepsake box.</span>
+                    <span className="font-semibold block">Made to Order:</span>
+                    <span>Your piece is finished by hand, inspected in Oslo, and presented in its keepsake box.</span>
                   </div>
                 </div>
               )}
@@ -442,7 +476,7 @@ const CheckoutContent: React.FC = () => {
                     </span>
                   </div>
                   <span className="font-mono font-semibold text-stone-900">
-                    {freeShipping ? 'FREE' : formatCheckoutPrice(15)}
+                    {shippingCost === 0 ? 'FREE' : formatCheckoutPrice(shippingCost)}
                   </span>
                 </button>
 
@@ -457,14 +491,14 @@ const CheckoutContent: React.FC = () => {
                 >
                   <div className="space-y-1">
                     <span className="font-semibold text-stone-900 block">
-                      Priority Express VIP Freight (DHL Express Direct Line)
+                      Priority Express
                     </span>
                     <span className="text-stone-500 font-light">
-                      Expedited freight slot directly from atelier
+                      Faster dispatch once your piece is prepared
                     </span>
                   </div>
                   <span className="font-mono font-semibold text-stone-900">
-                    {freeShipping ? 'FREE' : formatCheckoutPrice(25)}
+                    {shippingCost === 0 ? 'FREE' : formatCheckoutPrice(25)}
                   </span>
                 </button>
               </div>
@@ -488,69 +522,33 @@ const CheckoutContent: React.FC = () => {
                 </div>
               </div>
 
-              {/* Payment Tabs */}
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                {[
-                  { id: 'card', label: 'Credit / Debit Card' },
-                  { id: 'apple_pay', label: 'Apple Pay / Digital' },
-                  { id: 'klarna', label: 'Klarna Pay Later' }
-                ].map((pm) => (
-                  <button
-                    type="button"
-                    key={pm.id}
-                    onClick={() => {
-                      if (pm.id !== 'card') {
-                        showToast('Payment Method', `${pm.label} will be available soon. Please use a credit or debit card.`, 'info');
-                        return;
-                      }
-                      setPaymentMethod(pm.id as any);
-                    }}
-                    className={`py-3 px-2 text-center rounded-xs border transition-all cursor-pointer ${
-                      paymentMethod === pm.id
-                        ? 'bg-[#141414] text-white border-black font-medium'
-                        : pm.id !== 'card'
-                          ? 'bg-[#FAF8F5] text-stone-400 border-stone-200 cursor-not-allowed'
-                          : 'bg-[#FAF8F5] text-stone-700 border-stone-200 hover:border-stone-400'
-                    }`}
-                  >
-                    {pm.label}
-                  </button>
-                ))}
-              </div>
-
               {/* Stripe Card Element */}
-              {paymentMethod === 'card' && (
-                <div className="p-4 bg-[#FAF8F5] border border-[#141414]/10 rounded-xs space-y-4">
-                  <div>
-                    <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
-                      Card Details
-                    </label>
-                    <div className="bg-white border border-[#141414]/15 px-3.5 py-3.5 rounded-xs focus-within:border-[#B5935A] transition-colors">
-                      <CardElement
-                        options={{
-                          style: {
-                            base: {
-                              fontSize: '14px',
-                              fontFamily: '"Plus Jakarta Sans", sans-serif',
-                              color: '#141414',
-                              '::placeholder': { color: '#A8A29E' },
-                            },
-                            invalid: { color: '#B91C1C' },
+              <div className="p-4 bg-[#FAF8F5] border border-[#141414]/10 rounded-xs space-y-4">
+                <div>
+                  <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
+                    Card Details
+                  </label>
+                  <div className="bg-white border border-[#141414]/15 px-3.5 py-3.5 rounded-xs focus-within:border-[#B5935A] transition-colors">
+                    <CardElement
+                      options={{
+                        style: {
+                          base: {
+                            fontSize: '14px',
+                            fontFamily: '"Plus Jakarta Sans", sans-serif',
+                            color: '#141414',
+                            '::placeholder': { color: '#A8A29E' },
                           },
-                        }}
-                      />
-                    </div>
-                    <p className="text-[11px] text-stone-400 font-light mt-2 flex items-center gap-1">
-                      <Lock className="w-3 h-3" />
-                      256-bit encrypted by Stripe. Card details never touch our servers.
-                    </p>
+                          invalid: { color: '#B91C1C' },
+                        },
+                      }}
+                    />
                   </div>
+                  <p className="text-[11px] text-stone-400 font-light mt-2 flex items-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    256-bit encrypted by Stripe. Card details never touch our servers.
+                  </p>
                 </div>
-              )}
-
-              {paymentMethod === 'apple_pay' && null}
-
-              {paymentMethod === 'klarna' && null}
+              </div>
 
               {paymentError && (
                 <div className="p-3.5 bg-red-50 border border-red-200 rounded-xs text-xs text-red-700 flex items-start gap-2">
@@ -568,7 +566,7 @@ const CheckoutContent: React.FC = () => {
                 {isSubmitting ? (
                   <>
                     <div className="w-4 h-4 border-2 border-[#B5935A] border-t-transparent rounded-full animate-spin"></div>
-                    <span>Securing Batch Allocation...</span>
+                    <span>Securing Your Order...</span>
                   </>
                 ) : (
                   <>
@@ -606,7 +604,7 @@ const CheckoutContent: React.FC = () => {
                           {item.selectedLength} · {item.selectedDensity} · Qty: {item.quantity}
                         </p>
                         <span className="text-[10px] text-[#8E7348] font-mono">
-                          {item.isPreOrder ? `Pre-Order (${siteSettings.preorderBatch})` : 'In Stock Oslo'}
+                          {item.isPreOrder ? 'Made to Order' : 'In Stock Oslo'}
                         </span>
                       </div>
                       <span className="font-mono font-semibold text-stone-900">
@@ -623,21 +621,27 @@ const CheckoutContent: React.FC = () => {
                   <span>Subtotal</span>
                   <span className="font-mono font-medium text-stone-900">{formatCheckoutPrice(cartSubtotal)}</span>
                 </div>
+                {couponCode && discount > 0 && (
+                  <div className="flex justify-between text-[#8E7348]">
+                    <span>Code {couponCode}</span>
+                    <span className="font-mono font-medium">−{formatCheckoutPrice(discount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
-                  <span>Fulfillment & Air Cargo</span>
+                  <span>Delivery</span>
                   <span className="font-mono font-medium text-stone-900">
                     {shippingCost === 0 ? 'FREE' : formatCheckoutPrice(shippingCost)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Import VAT / Customs (Norway & EU)</span>
-                  <span className="text-emerald-700 font-medium">Included ($0)</span>
+                  <span>Duties & VAT</span>
+                  <span className="text-emerald-700 font-medium">Included</span>
                 </div>
                 <div className="flex justify-between text-base font-semibold text-stone-900 pt-3 border-t border-[#141414]/8">
                   <span>Total Amount</span>
                   <span className="font-mono text-lg">{formatCheckoutPrice(totalAmount)}</span>
                 </div>
-                <p className="text-[11px] text-stone-400">Your card will be charged in EUR.</p>
+                <p className="text-[11px] text-stone-400">Your card will be charged in EUR. The amount charged is calculated securely by our payment provider.</p>
               </div>
 
               {/* Trust Box */}

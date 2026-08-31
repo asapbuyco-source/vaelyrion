@@ -86,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
             {/* Primary status badge */}
             {(product.isBestSeller || product.isNew || product.isPreOrder) && (
               <span className="bg-[#141414]/85 text-[#E8DFC8] text-[9.5px] uppercase font-semibold tracking-[0.14em] px-2.5 py-1 rounded-sm backdrop-blur-sm w-fit">
-                {product.isBestSeller ? 'Best Seller' : product.isNew ? 'New Drop' : 'Pre-Order'}
+                {product.isBestSeller ? 'Best Seller' : product.isNew ? 'New Arrival' : 'Made to Order'}
               </span>
             )}
             {/* Discount badge */}
@@ -142,11 +142,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
         {/* Hair Origin & Rating */}
         <div className="flex items-center justify-between text-[11px] text-stone-400 font-light mb-2">
           <span className="truncate max-w-[150px] uppercase tracking-wide text-[10px]">{product.hairOrigin?.split(' ').slice(0, 4).join(' ')}</span>
-          <div className="flex items-center gap-1 shrink-0">
-            <Star className="w-3 h-3 fill-[#B5935A] text-[#B5935A]" />
-            <span className="font-medium text-stone-700">{product.rating}</span>
-            <span className="text-stone-400">({product.reviewCount})</span>
-          </div>
+          {product.reviewCount > 0 && (
+            <div className="flex items-center gap-1 shrink-0">
+              <Star className="w-3 h-3 fill-[#B5935A] text-[#B5935A]" />
+              <span className="font-medium text-stone-700">{product.rating}</span>
+              <span className="text-stone-400">({product.reviewCount})</span>
+            </div>
+          )}
         </div>
 
         {/* Product Title */}

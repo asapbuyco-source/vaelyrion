@@ -39,7 +39,7 @@ export const OrderConfirmationPage: React.FC = () => {
         </div>
 
         <span className="text-xs uppercase tracking-[0.25em] text-[#B5935A] font-semibold block">
-          Order Allocation Confirmed
+          Order Confirmed
         </span>
 
         <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight">
@@ -47,7 +47,7 @@ export const OrderConfirmationPage: React.FC = () => {
         </h1>
 
         <p className="text-xs sm:text-sm text-stone-300 font-light max-w-md mx-auto leading-relaxed">
-          Your order <strong>#{order.orderNumber}</strong> has been secured and registered into this week's batch allocation pool.
+          Your order <strong>#{order.orderNumber}</strong> is confirmed and reserved for you.
         </p>
 
         <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
@@ -56,7 +56,7 @@ export const OrderConfirmationPage: React.FC = () => {
             className="bg-[#B5935A] hover:bg-[#C5A880] text-black text-xs uppercase tracking-widest font-bold py-3 px-6 rounded-xs transition-colors flex items-center gap-2 cursor-pointer shadow-md"
           >
             <Truck className="w-4 h-4" />
-            <span>Track Live Batch Timeline</span>
+            <span>Track Your Order</span>
           </button>
 
           <button
@@ -80,7 +80,7 @@ export const OrderConfirmationPage: React.FC = () => {
               <strong className="font-mono text-stone-900 font-semibold">#{order.orderNumber}</strong>
             </div>
             <div>
-              <span className="text-stone-400 text-[11px] block">Weekly Batch</span>
+              <span className="text-stone-400 text-[11px] block">Order Type</span>
               <strong className="text-[#8E7348] font-medium">{siteSettings.preorderBatch}</strong>
             </div>
             <div>
@@ -97,15 +97,15 @@ export const OrderConfirmationPage: React.FC = () => {
           <div className="bg-[#FAF5ED] p-5 rounded-xs border border-[#E5DAC8] flex items-start gap-4">
             <Sparkles className="w-5 h-5 text-[#8E7348] shrink-0 mt-0.5" />
             <div className="text-xs text-[#7A5B28] space-y-1">
-              <h4 className="font-serif text-sm font-semibold text-stone-900">What Happens Next in the Batch Pipeline:</h4>
+              <h4 className="font-serif text-sm font-semibold text-stone-900">What Happens Next:</h4>
               <p className="font-light leading-relaxed">
-                1. At the weekly release cut-off, customer orders are consolidated for atelier preparation.
+                1. Your piece enters atelier preparation, finished and checked by hand.
               </p>
               <p className="font-light leading-relaxed">
-                2. After single-knot ventilation and quality inspection, units fly to Oslo Gardermoen for customs clearance.
+                2. It then travels to the Tanelia house in Oslo for final inspection.
               </p>
               <p className="font-light leading-relaxed">
-                3. In Oslo, your piece is inspected and prepared in its Tanelia presentation box before dispatch.
+                3. Your piece is presented in its signature Tanelia box before dispatch.
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ export const OrderConfirmationPage: React.FC = () => {
           {/* Ordered Products Itemized */}
           <div className="space-y-4">
             <h3 className="font-serif text-lg font-medium text-stone-900 border-b border-[#141414]/10 pb-3">
-              Allocated Creations ({order.items.reduce((s, i) => s + i.quantity, 0)})
+              Your Pieces ({order.items.reduce((s, i) => s + i.quantity, 0)})
             </h3>
 
             <div className="space-y-4">

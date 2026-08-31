@@ -27,8 +27,8 @@ const formatProduct = (p: any) => {
     price: p.selling_price,
     originalPrice: p.compare_at_price,
     supplierCost: 0,
-    rating: 5.0, // Mock rating
-    reviewCount: 10,
+    rating: Number(p.rating || 0), // real reviews only
+    reviewCount: Number(p.review_count || 0),
     images: productImages.length > 0 ? productImages : [DEFAULT_PRODUCT_IMAGES[category as keyof typeof DEFAULT_PRODUCT_IMAGES] || DEFAULT_PRODUCT_IMAGES.wigs],
     isPreOrder: p.is_preorder,
     estimatedDelivery: '10–18 business days',
@@ -45,7 +45,7 @@ const formatProduct = (p: any) => {
     details: p.details || [],
     careInstructions: p.care_instructions || [],
     isNew: isRecent,
-    isBestSeller: p.selling_price >= 200,
+    isBestSeller: Boolean(p.is_best_seller),
     supplierId: p.supplier_id
   };
 };

@@ -1,4 +1,4 @@
-import { Product, DiscoverArticle, Review, Order } from '../types';
+import { Product, DiscoverArticle } from '../types';
 
 export const MOCK_PRODUCTS: Product[] = [
   {
@@ -10,8 +10,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 420,
     originalPrice: 480,
     supplierCost: 165,
-    rating: 4.95,
-    reviewCount: 128,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288704Xp9vRzsMdgUsmQaX_3483a27a-35e4-469a-a27c-a8669c3694ec.jpg',
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085704652057288705sGng7OjgwW8eKtnh.jpg',
@@ -54,8 +54,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 290,
     originalPrice: 340,
     supplierCost: 110,
-    rating: 4.92,
-    reviewCount: 94,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85',
       'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=85',
@@ -95,8 +95,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 185,
     originalPrice: 215,
     supplierCost: 68,
-    rating: 4.88,
-    reviewCount: 63,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=1200&q=85',
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85'
@@ -134,8 +134,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 460,
     originalPrice: 510,
     supplierCost: 178,
-    rating: 4.98,
-    reviewCount: 172,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065153v1aY413AR8x3UMJ1_9579f0ac-9a49-4d31-a5d7-1c0927f72b21.png',
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065152tq2FNZSPotRRNubJ_a883f996-ea4e-44ac-b083-41e034e27275.png',
@@ -174,8 +174,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 240,
     originalPrice: 280,
     supplierCost: 88,
-    rating: 4.91,
-    reviewCount: 88,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320104320507904WHhs8TJ151sL318C_e6a2c697-f41a-416a-9427-c6c0dd66181e.png',
       'https://cdn.shopify.com/s/files/1/2465/8681/files/208532018898672844850NrUyklchO9ysop_64aa0075-ba7e-4dd8-aaef-1bc7434f0555.webp'
@@ -213,8 +213,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 135,
     originalPrice: 160,
     supplierCost: 45,
-    rating: 4.86,
-    reviewCount: 47,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085705268292820992dfqmuuvWSGHYdU39_230f3642-ec06-4fba-a81c-30bcca57938c.jpg',
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320187267063808XAthZtraG4AWmex5_59fc5448-331b-4270-8cd2-8dfbc8c32be3.png'
@@ -251,8 +251,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 65,
     originalPrice: 85,
     supplierCost: 19,
-    rating: 4.99,
-    reviewCount: 215,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2x_1_55d74548-0357-4f47-8390-65501ff65e04.png',
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2x_308f27c5-3af1-4ca4-938b-657dca2b5404.png'
@@ -289,8 +289,8 @@ export const MOCK_PRODUCTS: Product[] = [
     price: 495,
     originalPrice: 560,
     supplierCost: 195,
-    rating: 4.96,
-    reviewCount: 78,
+    rating: 0,
+    reviewCount: 0,
     images: [
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320188886065155uX2AlAURXsvNKmbi_9bb3263a-0d58-4b95-ad73-44f519c0e731.png',
       'https://cdn.shopify.com/s/files/1/2465/8681/files/2089309686636552192d2C5pGL3NMDHWPYY.png'
@@ -377,194 +377,3 @@ export const MOCK_ARTICLES: DiscoverArticle[] = [
     tags: ['613 Blonde', 'Silk Care', 'Thermal Styling', 'Maintenance']
   }
 ];
-
-export const MOCK_REVIEWS: Review[] = [
-  {
-    id: 'rev-01',
-    author: 'Camilla Thorne',
-    location: 'Oslo, Norway',
-    rating: 5,
-    title: 'The lace completely vanished on my skin',
-    content: 'I have worn luxury hair for over 7 years from London and New York salons, and Tanelia is on an entirely different level. The Sovereign HD melted seamlessly with zero makeup foundation needed. The pre-order took 12 days to arrive at my door in Oslo in the most gorgeous magnetic black box with silk pouch. Incredible.',
-    date: 'August 12, 2026',
-    verifiedPurchase: true,
-    hairLength: '24 inch',
-    hairTexture: 'Body Wave',
-    helpfulCount: 34
-  },
-  {
-    id: 'rev-02',
-    author: 'Soraia V.',
-    location: 'Stockholm, Sweden',
-    rating: 5,
-    title: 'Worth every single day of the pre-order wait',
-    content: 'I was hesitant about waiting 2 weeks for pre-order, but the weekly batch tracking gave me updates every step of the way. Seeing when it left China, arrived in Oslo, and got packed was so reassuring. The hair is thick from root to tip and smells heavenly.',
-    date: 'August 08, 2026',
-    verifiedPurchase: true,
-    hairLength: '26 inch',
-    hairTexture: 'Deep Wave',
-    helpfulCount: 29
-  },
-  {
-    id: 'rev-03',
-    author: 'Isabelle M.',
-    location: 'Copenhagen, Denmark',
-    rating: 5,
-    title: 'Pure raw temple hair — zero tangles',
-    content: 'I dyed this unit to a rich chocolate brown with honey highlights and the cuticle stayed silky smooth. No shedding in the brush. The glueless elastic band means I can take it off at night effortlessly.',
-    date: 'July 29, 2026',
-    verifiedPurchase: true,
-    hairLength: '20 inch',
-    hairTexture: 'Straight',
-    helpfulCount: 18
-  }
-];
-
-export const INITIAL_ORDER_SAMPLE: Order = {
-  id: 'ord-10245',
-  orderNumber: 'VA10245',
-  date: '2026-08-15',
-  customer: {
-    name: 'Astrid Holmsen',
-    email: 'astrid.holmsen@example.no',
-    phone: '+47 982 45 102',
-    address: 'Bygdøy Allé 14B',
-    city: 'Oslo',
-    country: 'Norway',
-    postalCode: '0262'
-  },
-  items: [
-    {
-      id: 'item-01',
-      product: MOCK_PRODUCTS[0],
-      selectedLength: '24 inch',
-      selectedDensity: '200%',
-      selectedLace: '13x6 HD Lace',
-      selectedColor: 'Natural Black (#1B)',
-      unitPrice: 420,
-      quantity: 1,
-      isPreOrder: true
-    }
-  ],
-  subtotal: 420,
-  shippingFee: 0,
-  discount: 0,
-  total: 420,
-  currency: 'EUR',
-  paymentMethod: 'card',
-  paymentStatus: 'paid',
-  orderStatus: 'international_transit',
-  batchId: 'batch-002',
-  trackingNumber: 'VAE-NO-99482103',
-  estimatedDeliveryRange: 'Aug 24 – Aug 28, 2026',
-  trackingEvents: [
-    {
-      step: 'payment_confirmed',
-      title: 'Payment Confirmed',
-      description: 'Secure transaction processed via Stripe Gateway.',
-      location: 'Tanelia Commerce Engine',
-      timestamp: 'Aug 15, 14:22 CET',
-      completed: true,
-      current: false
-    },
-    {
-      step: 'order_received',
-      title: 'Order Allocated to Weekly Batch',
-      description: 'Order registered into Weekly Batch #BATCH-2026-W33.',
-      location: 'Tanelia Operations Hub',
-      timestamp: 'Aug 15, 14:25 CET',
-      completed: true,
-      current: false
-    },
-    {
-      step: 'weekly_batch_created',
-      title: 'Weekly Batch PO Generated',
-      description: 'Consolidated purchase order transmitted to Qingdao atelier.',
-      location: 'Operations · Oslo',
-      timestamp: 'Aug 16, 23:59 CET',
-      completed: true,
-      current: false
-    },
-    {
-      step: 'supplier_processing',
-      title: 'Artisan Custom Handcrafting',
-      description: 'Single-knot ventilation & cuticle alignment inspection in progress.',
-      location: 'Qingdao Atelier, China',
-      timestamp: 'Aug 17, 09:00 CST',
-      completed: true,
-      current: false
-    },
-    {
-      step: 'shipped_china',
-      title: 'Dispatched from Supplier Atelier',
-      description: 'Handed over to International Air Freight.',
-      location: 'Qingdao Airport (TAO), China',
-      timestamp: 'Aug 18, 18:30 CST',
-      completed: true,
-      current: false
-    },
-    {
-      step: 'international_transit',
-      title: 'International Air Transit',
-      description: 'Flight EN-882 in transit toward Scandinavian Hub.',
-      location: 'In Flight · International Air Corridor',
-      timestamp: 'Aug 19, 04:15 CET',
-      completed: true,
-      current: true
-    },
-    {
-      step: 'arrived_norway',
-      title: 'Customs Clearance & Arrival in Norway',
-      description: 'Batch arrives at Gardermoen Cargo & enters bonded transfer.',
-      location: 'Oslo Gardermoen (OSL), Norway',
-      timestamp: 'Pending (Expected Aug 21)',
-      completed: false,
-      current: false
-    },
-    {
-      step: 'fulfillment_center',
-      title: 'Received by Oslo 3PL Center',
-      description: 'Quality QC, argan conditioning & placement into luxury box.',
-      location: 'Tanelia 3PL Center, Oslo',
-      timestamp: 'Pending (Expected Aug 22)',
-      completed: false,
-      current: false
-    },
-    {
-      step: 'preparing_shipment',
-      title: 'Branded Luxury Packaging Sealed',
-      description: 'Silk bonnet, brass comb, authenticity card & ribbon secured.',
-      location: 'Fulfillment Logistics, Oslo',
-      timestamp: 'Pending (Expected Aug 23)',
-      completed: false,
-      current: false
-    },
-    {
-      step: 'shipped_customer',
-      title: 'Dispatched with Posten / Bring Norway',
-      description: 'Local tracking number assigned.',
-      location: 'Posten Hub, Oslo',
-      timestamp: 'Pending (Expected Aug 24)',
-      completed: false,
-      current: false
-    },
-    {
-      step: 'out_for_delivery',
-      title: 'Out for Courier Delivery',
-      description: 'Courier on route to your specified address.',
-      location: 'Oslo West Route',
-      timestamp: 'Pending (Expected Aug 24)',
-      completed: false,
-      current: false
-    },
-    {
-      step: 'delivered',
-      title: 'Delivered',
-      description: 'Package handed to recipient.',
-      location: 'Bygdøy Allé 14B, Oslo',
-      timestamp: 'Pending (Expected Aug 24)',
-      completed: false,
-      current: false
-    }
-  ]
-};

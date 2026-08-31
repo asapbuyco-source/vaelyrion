@@ -31,9 +31,22 @@ export const OrderTrackingPage: React.FC = () => {
 
   if (!order) {
     return (
-      <div className="p-12 text-center">
-        <p>No orders available to track.</p>
-        <button onClick={() => setCurrentView('shop')} className="mt-4 underline text-xs">Shop Collection</button>
+      <div className="bg-[#FAF8F5] min-h-screen pb-24 flex items-center justify-center">
+        <div className="max-w-md w-full p-10 bg-white border border-[#141414]/10 rounded-sm text-center space-y-4 shadow-xs">
+          <div className="w-14 h-14 rounded-full bg-[#FAF5ED] flex items-center justify-center mx-auto">
+            <Truck className="w-6 h-6 text-[#B5935A]" />
+          </div>
+          <h2 className="font-serif text-2xl text-stone-900">No orders to track yet</h2>
+          <p className="text-xs text-stone-500 font-light leading-relaxed">
+            Once you place an order, its journey from atelier to arrival will appear here.
+          </p>
+          <button
+            onClick={() => setCurrentView('shop')}
+            className="inline-block bg-[#141414] text-white text-xs uppercase tracking-widest font-semibold px-8 py-3.5 rounded-xs cursor-pointer"
+          >
+            Shop the Collection
+          </button>
+        </div>
       </div>
     );
   }
@@ -46,7 +59,7 @@ export const OrderTrackingPage: React.FC = () => {
         <div className="max-w-4xl mx-auto text-center space-y-3">
           <div className="flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-[#B5935A]">
             <Truck className="w-4 h-4" />
-            <span>End-to-End Batch Pipeline Transparency</span>
+            <span>The Journey of Your Order</span>
           </div>
 
           <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight">
@@ -54,7 +67,7 @@ export const OrderTrackingPage: React.FC = () => {
           </h1>
 
           <p className="text-xs sm:text-sm text-stone-300 font-light max-w-md mx-auto leading-relaxed">
-            Follow your raw virgin hair from single-knot hand ventilation in Qingdao to unboxing at our Oslo 3PL facility.
+            Follow your piece from atelier preparation to the moment it reaches your door.
           </p>
 
           {/* Quick Tracking Search Form */}
@@ -87,7 +100,7 @@ export const OrderTrackingPage: React.FC = () => {
                     ORDER #{order.orderNumber}
                   </h2>
                   <span className="bg-[#FAF5ED] text-[#8E7348] text-xs font-mono font-semibold px-2.5 py-0.5 rounded-xs border border-[#E8DFC8]">
-                    {order.batchId ? order.batchId.toUpperCase() : 'BATCH #003'}
+                    {order.batchId ? order.batchId.toUpperCase() : 'MADE TO ORDER'}
                   </span>
                 </div>
                 <p className="text-xs text-stone-500 font-light mt-1">
