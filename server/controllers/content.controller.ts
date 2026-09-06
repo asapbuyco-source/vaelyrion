@@ -22,7 +22,7 @@ const formatArticle = (article: any) => ({
 export class ContentController {
   static async listArticles(_req: Request, res: Response) {
     try {
-      const { data, error } = await supabase.from('journal_articles').select('*').eq('status', 'published').order('published_at', { ascending: false }).limit(50);
+      const { data, error } = await supabase.from('journal_articles').select('*').eq('status', 'published').order('published_at', { ascending: false }).limit(200);
       if (error) throw error;
       res.json((data || []).map(formatArticle));
     } catch (error: any) {

@@ -525,8 +525,19 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         articleIdRef.current = match.id;
         setSelectedArticleIdState(match.id);
       } else {
-        setCurrentViewState('discover');
-        window.history.replaceState({}, '', '/journal');
+        // Slug not in the loaded list (e.g. an older article beyond the list limit).
+        // Fetch it directly so deep links always resolve instead of redirecting.
+        api.content.article(pendingArticleSlugRef.current || '')
+          .then((article: any) => {
+            if (!article || !article.slug) throw new Error('not found');
+            setArticles(prev => prev.some(a => a.slug === article.slug) ? prev : [article, ...prev]);
+            articleIdRef.current = article.id;
+            setSelectedArticleIdState(article.id);
+          })
+          .catch(() => {
+            setCurrentViewState('discover');
+            window.history.replaceState({}, '', '/journal');
+          });
       }
     }
   }, [products, articles]);

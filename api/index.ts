@@ -127,6 +127,151 @@ ${urls.map(u => `  <url>
   }
 });
 
+// SPA shell with server-side SEO meta injection (for crawlers that don't execute JS)
+import fs from 'fs';
+import path from 'path';
+
+let spaShellCache: string | null = null;
+
+const getSpaShell = (): string | null => {
+  if (spaShellCache !== null) return spaShellCache;
+  const candidates = [
+    path.join(process.cwd(), 'dist', 'index.html'),
+    path.join(process.cwd(), '..', 'dist', 'index.html'),
+  ];
+  for (const candidate of candidates) {
+    try {
+      if (fs.existsSync(candidate)) {
+        spaShellCache = fs.readFileSync(candidate, 'utf-8');
+        return spaShellCache;
+      }
+    } catch { /* try next */ }
+  }
+  return null;
+};
+
+const escapeHtml = (value: any): string =>
+  String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const injectMeta = (html: string, meta: { title: string; description: string; canonical: string; image?: string; jsonLd?: object }) => {
+  const title = escapeHtml(meta.title);
+  const description = escapeHtml(meta.description);
+  const image = escapeHtml(meta.image || '/brand/tanelia-favicon.png');
+  const jsonLd = meta.jsonLd ? `<script type="application/ld+json">${JSON.stringify(meta.jsonLd)}</script>` : '';
+  return html
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`)
+    .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${description}" />`)
+    .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${title}" />`)
+    .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${description}" />`)
+    .replace('</head>', `<link rel="canonical" href="${escapeHtml(meta.canonical)}" />\n<meta property="og:url" content="${escapeHtml(meta.canonical)}" />\n<meta property="og:image" content="${image}" />\n${jsonLd}\n</head>`);
+};
+
+const serveSpa = async (res: Response, meta: { title: string; description: string; canonical: string; image?: string; jsonLd?: object }) => {
+  const shell = getSpaShell();
+  if (!shell) return res.status(200).send('<!doctype html><html><head><meta charset="utf-8"><title>Tanelia</title></head><body><div id="root"></div></body></html>');
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(injectMeta(shell, meta));
+};
+
+// SEO: server-rendered meta for product pages
+app.get('/products/:slug', async (req: Request, res: Response) => {
+  const slug = String(req.params.slug);
+  const origin = process.env.SITE_URL || 'https://www.tanelia.shop';
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'active')
+      .single();
+    if (error || !data) {
+      return serveSpa(res, {
+        title: 'Tanelia | Single-Donor Hair, Fine Swiss Lace & Care',
+        description: 'Discover Tanelia hair: single-donor wigs, fine Swiss lace, raw bundles, extensions, and considered care prepared in Oslo.',
+        canonical: `${origin}/products/${encodeURIComponent(slug)}`,
+      });
+    }
+    const images = Array.isArray(data.product_images) ? data.product_images.map((img: any) => img.image_url).filter(Boolean) : [];
+    const image = images[0] || '/brand/tanelia-favicon.png';
+    const title = data.seo_title || `${data.name} | Tanelia`;
+    const description = data.seo_description || data.description || `${data.name} — a considered Tanelia creation in single-donor hair.`;
+    await serveSpa(res, {
+      title,
+      description,
+      canonical: `${origin}/products/${encodeURIComponent(data.slug)}`,
+      image,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: data.name,
+        description: data.description || description,
+        image,
+        brand: { '@type': 'Brand', name: 'Tanelia' },
+        sku: data.slug,
+        offers: {
+          '@type': 'Offer',
+          url: `${origin}/products/${encodeURIComponent(data.slug)}`,
+          priceCurrency: 'EUR',
+          price: data.selling_price,
+          availability: data.is_preorder ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
+        },
+      },
+    });
+  } catch (error: any) {
+    return serveSpa(res, {
+      title: 'Tanelia | Single-Donor Hair, Fine Swiss Lace & Care',
+      description: 'Discover Tanelia hair: single-donor wigs, fine Swiss lace, raw bundles, extensions, and considered care prepared in Oslo.',
+      canonical: `${origin}/products/${encodeURIComponent(slug)}`,
+    });
+  }
+});
+
+// SEO: server-rendered meta for journal articles
+app.get('/journal/:slug', async (req: Request, res: Response) => {
+  const slug = String(req.params.slug);
+  const origin = process.env.SITE_URL || 'https://www.tanelia.shop';
+  try {
+    const { data, error } = await supabase
+      .from('journal_articles')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single();
+    if (error || !data) {
+      return serveSpa(res, {
+        title: 'The Tanelia Journal | Hair Craft, Care & Sourcing',
+        description: 'Read the Tanelia Journal for thoughtful guidance on hair craft, lace construction, sourcing, styling, and care.',
+        canonical: `${origin}/journal/${encodeURIComponent(slug)}`,
+      });
+    }
+    const title = data.seo_title || `${data.title} | Tanelia`;
+    const description = data.seo_description || data.excerpt || 'A Tanelia Journal story on hair craft, care, and sourcing.';
+    await serveSpa(res, {
+      title,
+      description,
+      canonical: `${origin}/journal/${encodeURIComponent(data.slug)}`,
+      image: data.cover_image_url || '/brand/tanelia-favicon.png',
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: data.title,
+        description: data.excerpt || description,
+        image: data.cover_image_url || '/brand/tanelia-favicon.png',
+        author: { '@type': 'Organization', name: data.author || 'Tanelia Editorial' },
+        publisher: { '@type': 'Organization', name: 'Tanelia', url: origin },
+        datePublished: data.published_at || undefined,
+        mainEntityOfPage: `${origin}/journal/${encodeURIComponent(data.slug)}`,
+      },
+    });
+  } catch (error: any) {
+    return serveSpa(res, {
+      title: 'The Tanelia Journal | Hair Craft, Care & Sourcing',
+      description: 'Read the Tanelia Journal for thoughtful guidance on hair craft, lace construction, sourcing, styling, and care.',
+      canonical: `${origin}/journal/${encodeURIComponent(slug)}`,
+    });
+  }
+});
+
 // 404 fallback
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: 'Route not found' });
