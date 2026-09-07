@@ -168,7 +168,7 @@ export const ProductDetailPage: React.FC = () => {
             >
               <SmartImage
                 src={product.images[activeImageIdx] || product.images[0]}
-                alt={product.title}
+                alt={`${product.title}${product.textures?.length ? ` - ${product.textures.join(', ')}` : ''}${product.lengths?.length ? ` ${product.lengths.join(', ')}` : ''} | Tanelia hair`}
                 fallbackKind={fallbackFor(product.category)}
                 className="w-full h-full object-cover object-center transition-opacity duration-300 pointer-events-none"
                 draggable={false}

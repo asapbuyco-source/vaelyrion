@@ -80,14 +80,23 @@ app.get('/api/health', async (_req: Request, res: Response) => {
 app.get('/sitemap.xml', async (_req: Request, res: Response) => {
   try {
     const origin = process.env.SITE_URL || 'https://www.tanelia.shop';
-    const [products, articles] = await Promise.all([
-      supabase.from('products').select('slug, updated_at').eq('status', 'active'),
-      supabase.from('journal_articles').select('slug, published_at').eq('status', 'published')
+    const [products, articles, productImages] = await Promise.all([
+      supabase.from('products').select('id, slug, updated_at, name').eq('status', 'active'),
+      supabase.from('journal_articles').select('slug, published_at, title, cover_image_url, excerpt').eq('status', 'published'),
+      supabase.from('product_images').select('product_id, image_url, sort_order').order('sort_order', { ascending: true })
     ]);
     if (products.error) throw products.error;
     if (articles.error) throw articles.error;
+    if (productImages.error) throw productImages.error;
 
-    const staticPages: Array<{ loc: string; priority: string; freq: string; lastmod?: string }> = [
+    const firstImageByProduct = new Map<string, string>();
+    for (const img of (productImages.data || []) as any[]) {
+      if (img.image_url && !firstImageByProduct.has(img.product_id)) {
+        firstImageByProduct.set(img.product_id, img.image_url);
+      }
+    }
+
+    const staticPages: Array<{ loc: string; priority: string; freq: string; lastmod?: string; image?: string; imageTitle?: string; imageCaption?: string }> = [
       { loc: `${origin}/`, priority: '1.0', freq: 'daily' },
       { loc: `${origin}/shop`, priority: '0.8', freq: 'daily' },
       { loc: `${origin}/journal`, priority: '0.7', freq: 'weekly' },
@@ -101,22 +110,32 @@ app.get('/sitemap.xml', async (_req: Request, res: Response) => {
       loc: `${origin}/products/${encodeURIComponent(p.slug)}`,
       priority: '0.8',
       freq: 'weekly',
-      lastmod: p.updated_at || undefined
+      lastmod: p.updated_at || undefined,
+      image: firstImageByProduct.get(p.id),
+      imageTitle: p.name,
+      imageCaption: p.name ? `${p.name} — a Tanelia creation in single-donor hair.` : undefined
     }));
+    const EDITORIAL_FALLBACK_IMAGE = 'https://cdn.shopify.com/s/files/1/2465/8681/files/2085320187267063808XAthZtraG4AWmex5_59fc5448-331b-4270-8cd2-8dfbc8c32be3.png?width=1200';
+
     const articleUrls = (articles.data || []).map((a: any) => ({
       loc: `${origin}/journal/${encodeURIComponent(a.slug)}`,
       priority: '0.6',
       freq: 'monthly',
-      lastmod: a.published_at || undefined
+      lastmod: a.published_at || undefined,
+      image: a.cover_image_url ? `${origin}${a.cover_image_url}` : EDITORIAL_FALLBACK_IMAGE,
+      imageTitle: a.title,
+      imageCaption: a.excerpt || undefined
     }));
 
     const urls = [...staticPages, ...productUrls, ...articleUrls];
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls.map(u => `  <url>
     <loc>${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${new Date(u.lastmod).toISOString()}</lastmod>` : ''}
     <changefreq>${u.freq}</changefreq>
-    <priority>${u.priority}</priority>
+    <priority>${u.priority}</priority>${u.image ? `\n    <image:image>
+      <image:loc>${u.image}</image:loc>${u.imageTitle ? `\n      <image:title>${escapeHtml(u.imageTitle)}</image:title>` : ''}${u.imageCaption ? `\n      <image:caption>${escapeHtml(u.imageCaption)}</image:caption>` : ''}
+    </image:image>` : ''}
   </url>`).join('\n')}
 </urlset>`;
 
@@ -180,7 +199,7 @@ app.get('/products/:slug', async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select('*, product_images(image_url, sort_order)')
       .eq('slug', slug)
       .eq('status', 'active')
       .single();
@@ -205,7 +224,7 @@ app.get('/products/:slug', async (req: Request, res: Response) => {
         '@type': 'Product',
         name: data.name,
         description: data.description || description,
-        image,
+        image: images.length > 0 ? images : image,
         brand: { '@type': 'Brand', name: 'Tanelia' },
         sku: data.slug,
         offers: {

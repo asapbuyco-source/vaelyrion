@@ -67,9 +67,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, animationDela
     >
       {/* Image Frame */}
       <div className="relative overflow-hidden bg-[#EFEAE4]" style={{ borderRadius: '0', aspectRatio: '3/4' }}>
-        <SmartImage
+<SmartImage
           src={activeImage}
-          alt={product.title}
+          alt={`${product.title}${product.textures?.length ? ` - ${product.textures.join(', ')}` : ''}${product.lengths?.length ? ` ${product.lengths.join(', ')}` : ''} | Tanelia hair`}
           fallbackKind={fallbackFor(product.category)}
           className="w-full h-full object-cover object-center transition-transform duration-700 ease-out will-change-transform"
           style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }}
