@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { ArrowRight, ShieldCheck, Truck, RefreshCw, Sparkles } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Truck, RefreshCw, Sparkles, Phone, Facebook, Instagram, MessageCircle } from 'lucide-react';
 import { useStore, ViewType } from '../../context/StoreContext';
+
+const SOCIAL_LINKS = {
+  facebook: 'https://www.facebook.com/taneliashop01/',
+  instagram: 'https://www.instagram.com/taneliehairs',
+  whatsapp: 'https://wa.me/16728720703',
+};
 
 export const Footer: React.FC = () => {
   const { setCurrentView, setFilters, showToast, siteSettings } = useStore();
@@ -257,12 +263,56 @@ export const Footer: React.FC = () => {
                   Bespoke Stylist Concierge
                 </a>
               </li>
-              <li>
+<li>
                 <div className="pt-2 text-[11px] text-stone-400">
                   <p className="text-stone-300 font-medium">Oslo Fulfillment HQ:</p>
                   <p>Tanelia Nordic Logistics Hub</p>
                   <p>Karenslyst Allé 16, 0278 Oslo, Norway</p>
                   <p className="mt-1 text-[#B5935A]">taneliashop17@gmail.com</p>
+                  <a
+                    href="tel:+16728720703"
+                    className="mt-1 block text-[#B5935A] hover:text-white transition-colors"
+                  >
+                    +1 672 872 0703
+                  </a>
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center gap-3 pt-1">
+                  <a
+                    href={SOCIAL_LINKS.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Tanelia on Facebook"
+                    className="w-9 h-9 rounded-full border border-stone-700 hover:border-[#B5935A] hover:bg-[#B5935A]/10 flex items-center justify-center text-stone-300 hover:text-[#B5935A] transition-colors"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={SOCIAL_LINKS.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Tanelia on Instagram"
+                    className="w-9 h-9 rounded-full border border-stone-700 hover:border-[#B5935A] hover:bg-[#B5935A]/10 flex items-center justify-center text-stone-300 hover:text-[#B5935A] transition-colors"
+                  >
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={SOCIAL_LINKS.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Chat with Tanelia on WhatsApp"
+                    className="w-9 h-9 rounded-full border border-stone-700 hover:border-[#B5935A] hover:bg-[#B5935A]/10 flex items-center justify-center text-stone-300 hover:text-[#B5935A] transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="tel:+16728720703"
+                    aria-label="Call Tanelia"
+                    className="w-9 h-9 rounded-full border border-stone-700 hover:border-[#B5935A] hover:bg-[#B5935A]/10 flex items-center justify-center text-stone-300 hover:text-[#B5935A] transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                  </a>
                 </div>
               </li>
             </ul>

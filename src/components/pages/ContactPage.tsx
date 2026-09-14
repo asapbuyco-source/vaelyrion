@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { ArrowRight, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { ArrowRight, Mail, MapPin, Clock, MessageCircle, Phone, Facebook, Instagram } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { api } from '../../lib/api';
+
+const SOCIAL_LINKS = {
+  facebook: 'https://www.facebook.com/taneliashop01/',
+  instagram: 'https://www.instagram.com/taneliehairs',
+  whatsapp: 'https://wa.me/16728720703',
+};
 
 export const ContactPage: React.FC = () => {
   const { showToast } = useStore();
@@ -48,10 +54,27 @@ export const ContactPage: React.FC = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-5 gap-10">
         <div className="lg:col-span-2 space-y-5">
           <div className="luxury-box p-6 space-y-4">
+            <div className="w-11 h-11 bg-[#F4EBDD] flex items-center justify-center"><Phone className="w-5 h-5 text-[#8E7348]" /></div>
+            <h2 className="font-serif text-xl text-stone-900">Call or WhatsApp</h2>
+            <a className="text-sm text-[#8E7348] underline underline-offset-4" href="tel:+16728720703">+1 672 872 0703</a>
+            <a className="block text-sm text-[#8E7348] underline underline-offset-4" href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+            <p className="text-xs text-stone-500 leading-relaxed">Prefer to talk it through? Call us or message on WhatsApp for texture, sizing, and order advice.</p>
+          </div>
+          <div className="luxury-box p-6 space-y-4">
             <div className="w-11 h-11 bg-[#F4EBDD] flex items-center justify-center"><Mail className="w-5 h-5 text-[#8E7348]" /></div>
             <h2 className="font-serif text-xl text-stone-900">Email the house</h2>
             <a className="text-sm text-[#8E7348] underline underline-offset-4" href="mailto:taneliashop17@gmail.com">taneliashop17@gmail.com</a>
             <p className="text-xs text-stone-500 leading-relaxed">For direct assistance, email us and include your order number where relevant.</p>
+          </div>
+          <div className="luxury-box p-6 space-y-4">
+            <div className="w-11 h-11 bg-[#F4EBDD] flex items-center justify-center"><MessageCircle className="w-5 h-5 text-[#8E7348]" /></div>
+            <h2 className="font-serif text-xl text-stone-900">Follow Tanelia</h2>
+            <div className="flex items-center gap-3">
+              <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Tanelia on Facebook" className="w-10 h-10 border border-[#141414]/15 flex items-center justify-center text-[#8E7348] hover:bg-[#141414] hover:text-white transition-colors"><Facebook className="w-4.5 h-4.5" /></a>
+              <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Tanelia on Instagram" className="w-10 h-10 border border-[#141414]/15 flex items-center justify-center text-[#8E7348] hover:bg-[#141414] hover:text-white transition-colors"><Instagram className="w-4.5 h-4.5" /></a>
+              <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Tanelia on WhatsApp" className="w-10 h-10 border border-[#141414]/15 flex items-center justify-center text-[#8E7348] hover:bg-[#141414] hover:text-white transition-colors"><MessageCircle className="w-4.5 h-4.5" /></a>
+            </div>
+            <p className="text-xs text-stone-500 leading-relaxed">New arrivals, private lookbooks, and care notes — first on our channels.</p>
           </div>
           <div className="luxury-box p-6 space-y-4">
             <div className="w-11 h-11 bg-[#F4EBDD] flex items-center justify-center"><MapPin className="w-5 h-5 text-[#8E7348]" /></div>

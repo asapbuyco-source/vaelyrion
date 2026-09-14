@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ShoppingBag, Heart, User, Search, 
-  X, Menu, ChevronDown, Globe
+  X, Menu, ChevronDown, Globe, Phone
 } from 'lucide-react';
 import { useStore, Currency, ViewType } from '../../context/StoreContext';
 import { track } from '../../lib/analytics';
@@ -49,8 +49,11 @@ export const Header: React.FC = () => {
         : 'bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#141414]/6'
     }`}>
       {/* Announcement bar */}
-      <div className="bg-[#171614] text-[#F7F5F0] px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] flex items-center justify-center text-center">
+      <div className="bg-[#171614] text-[#F7F5F0] px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] flex items-center justify-center text-center gap-6">
         <span className="font-light text-[#E8DFC8]">{siteSettings.announcementSecondary}</span>
+        <a href="tel:+16728720703" className="hidden lg:inline-flex items-center gap-1.5 text-[#B5935A] hover:text-white transition-colors">
+          <Phone className="w-3 h-3" /> +1 672 872 0703
+        </a>
       </div>
 
       {/* Main header */}
