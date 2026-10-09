@@ -148,6 +148,7 @@ export interface DiscoverArticle {
   quote?: string;
   tags: string[];
   slug?: string;
+  language?: string;
   seoTitle?: string;
   seoDescription?: string;
 }

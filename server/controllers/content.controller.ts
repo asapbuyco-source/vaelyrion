@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase.js';
+import { languageFromSlug } from '../lib/locale.js';
 
 const formatArticle = (article: any) => ({
   id: article.id,
@@ -15,6 +16,7 @@ const formatArticle = (article: any) => ({
   quote: undefined,
   tags: article.focus_keyword ? [article.focus_keyword] : [],
   slug: article.slug,
+  language: article.language || languageFromSlug(article.slug),
   seoTitle: article.seo_title,
   seoDescription: article.seo_description,
 });

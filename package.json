@@ -13,7 +13,8 @@
         "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\"",
         "seed": "tsx server/seed.ts",
         "scrape": "tsx server/scrape/index.ts",
-        "promote": "tsx server/scrape/promote.ts"
+        "promote": "tsx server/scrape/promote.ts",
+        "media:migrate": "tsx server/media/migrateImages.ts"
     },
     "dependencies": {
         "@google/genai": "^2.4.0",
@@ -42,6 +43,7 @@
         "autoprefixer": "^10.4.21",
         "concurrently": "^8.2.2",
         "esbuild": "^0.25.0",
+        "sharp": "^0.35.5",
         "tailwindcss": "^4.1.14",
         "ts-node": "^10.9.2",
         "tsx": "^4.23.12",

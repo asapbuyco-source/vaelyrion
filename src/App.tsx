@@ -74,6 +74,7 @@ const AppContent: React.FC = () => {
         : fallback.description;
 
     document.title = title;
+    document.documentElement.lang = isArticle ? (selectedArticle.language || 'en') : 'en';
     const descriptionTag = document.querySelector('meta[name="description"]');
     descriptionTag?.setAttribute('content', description);
     const ogTitle = document.querySelector('meta[property="og:title"]');

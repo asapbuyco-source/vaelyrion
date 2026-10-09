@@ -23,6 +23,8 @@ import { supabase } from '../server/config/supabase.js';
 const app = express();
 const port = process.env.PORT || 3001;
 
+const SITE_ORIGIN = (process.env.SITE_URL || 'https://www.tanelia.shop').replace(/\/+$/, '');
+
 app.disable('x-powered-by');
 
 // CORS
@@ -190,29 +192,72 @@ const getSpaShell = (): string | null => {
 const escapeHtml = (value: any): string =>
   String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const injectMeta = (html: string, meta: { title: string; description: string; canonical: string; image?: string; jsonLd?: object }) => {
+// Journal locales are encoded in the slug suffix by the editorial generator
+// (see server/lib/locale.ts). Used for <html lang> and hreflang.
+import { languageFromSlug } from '../server/lib/locale.js';
+
+const OG_LOCALE_BY_LANG: Record<string, string> = {
+  en: 'en_US',
+  no: 'nb_NO',
+  it: 'it_IT',
+  es: 'es_ES',
+  de: 'de_DE',
+  fr: 'fr_FR',
+};
+
+interface MetaInput {
+  title: string;
+  description: string;
+  canonical: string;
+  image?: string;
+  jsonLd?: object;
+  lang?: string;
+  alternates?: Array<{ hreflang: string; href: string }>;
+}
+
+const injectMeta = (html: string, meta: MetaInput) => {
   const title = escapeHtml(meta.title);
   const description = escapeHtml(meta.description);
   const image = escapeHtml(meta.image || '/brand/tanelia-favicon.png');
-  const jsonLd = meta.jsonLd
-    ? `<script type="application/ld+json">${JSON.stringify(meta.jsonLd).replace(/</g, '\\u003c')}</script>`
-    : '';
-  return html
+  const canonical = escapeHtml(meta.canonical);
+  const lang = meta.lang || 'en';
+  const locale = OG_LOCALE_BY_LANG[lang] || 'en_US';
+  const hreflang = (meta.alternates || [{ hreflang: lang, href: meta.canonical }])
+    .map((alt) => `<link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />`)
+    .join('\n');
+
+  let output = html
+    .replace(/<html lang="[^"]*"/, `<html lang="${lang}"`)
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`)
     .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${description}" />`)
     .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${title}" />`)
     .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${description}" />`)
     .replace(/<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${image}" />`)
-    .replace(/<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${image}" />`)
-    .replace('</head>', `<link rel="canonical" href="${escapeHtml(meta.canonical)}" />\n<meta property="og:url" content="${escapeHtml(meta.canonical)}" />\n${jsonLd}\n</head>`);
+    .replace(/<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${image}" />`);
+
+  // Replace the shell's Organization JSON-LD in place so the client (which looks
+  // up #tanelia-structured-data) never ends up with two blocks.
+  if (meta.jsonLd) {
+    const jsonLd = `<script type="application/ld+json" id="tanelia-structured-data">${JSON.stringify(meta.jsonLd).replace(/</g, '\\u003c')}</script>`;
+    output = output.replace(
+      /<script type="application\/ld\+json" id="tanelia-structured-data">[\s\S]*?<\/script>/,
+      jsonLd,
+    );
+  }
+
+  return output.replace(
+    '</head>',
+    `<link rel="canonical" href="${canonical}" />\n<meta property="og:url" content="${canonical}" />\n<meta property="og:locale" content="${locale}" />\n<link rel="alternate" hreflang="x-default" href="${canonical}" />\n${hreflang}\n</head>`,
+  );
 };
 
-const serveSpa = async (res: Response, meta: { title: string; description: string; canonical: string; image?: string; jsonLd?: object }) => {
+const serveSpa = async (res: Response, meta: MetaInput) => {
   const shell = getSpaShell();
   // If the built shell is unavailable in the function bundle, fall back to the
   // deployed SPA root rather than serving a script-less blank page.
   if (!shell) return res.redirect(302, '/');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
   res.send(injectMeta(shell, meta));
 };
 
@@ -289,11 +334,17 @@ app.get('/journal/:slug', async (req: Request, res: Response) => {
     }
     const title = data.seo_title || `${data.title} | Tanelia`;
     const description = data.seo_description || data.excerpt || 'A Tanelia Journal story on hair craft, care, and sourcing.';
+    const lang = data.language || languageFromSlug(data.slug);
+    const canonical = `${origin}/journal/${encodeURIComponent(data.slug)}`;
     await serveSpa(res, {
       title,
       description,
-      canonical: `${origin}/journal/${encodeURIComponent(data.slug)}`,
+      canonical,
       image: data.cover_image_url || '/brand/tanelia-favicon.png',
+      lang,
+      alternates: [
+        { hreflang: lang, href: canonical },
+      ],
       jsonLd: {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
@@ -303,7 +354,8 @@ app.get('/journal/:slug', async (req: Request, res: Response) => {
         author: { '@type': 'Organization', name: data.author || 'Tanelia Editorial' },
         publisher: { '@type': 'Organization', name: 'Tanelia', url: origin },
         datePublished: data.published_at || undefined,
-        mainEntityOfPage: `${origin}/journal/${encodeURIComponent(data.slug)}`,
+        inLanguage: lang,
+        mainEntityOfPage: canonical,
       },
     });
   } catch (error: any) {
@@ -314,6 +366,48 @@ app.get('/journal/:slug', async (req: Request, res: Response) => {
     });
   }
 });
+
+// Bare catalog path — consolidate onto the canonical /shop URL.
+app.get('/products', (_req: Request, res: Response) => {
+  res.redirect(301, '/shop');
+});
+
+// Static SPA pages that deserve server-rendered meta. Without these, a direct
+// request to /shop, /about, /faq, /contact or /journal would fall through to the
+// JSON 404 (the /:path* rewrites route bare paths into this function).
+const STATIC_PAGE_META: Record<string, { title: string; description: string }> = {
+  '/shop': {
+    title: 'Shop the Tanelia Collection | Wigs, Bundles & Fine Lace',
+    description: 'Explore Tanelia single-donor wigs, raw bundles, fine Swiss lace frontals, closures, extensions, and silk care pieces.',
+  },
+  '/journal': {
+    title: 'The Tanelia Journal | Hair Craft, Care & Sourcing',
+    description: 'Read the Tanelia Journal for thoughtful guidance on hair craft, lace construction, sourcing, styling, and care.',
+  },
+  '/about': {
+    title: 'About Tanelia | Hair, Considered',
+    description: 'Learn how Tanelia selects single-donor hair, constructs fine Swiss lace, and prepares each piece in Oslo.',
+  },
+  '/faq': {
+    title: 'Tanelia FAQ | Hair, Lace, Care & Delivery',
+    description: 'Find answers about Tanelia hair origins, Swiss lace, care, release timing, delivery, and returns.',
+  },
+  '/contact': {
+    title: 'Contact Tanelia | Client Services in Oslo',
+    description: 'Contact Tanelia Client Services for help with textures, lace, sizing, delivery, and your order.',
+  },
+};
+
+for (const [route, meta] of Object.entries(STATIC_PAGE_META)) {
+  app.get(route, (_req: Request, res: Response) => {
+    serveSpa(res, {
+      ...meta,
+      canonical: `${SITE_ORIGIN}${route}`,
+      lang: 'en',
+      alternates: [{ hreflang: 'en', href: `${SITE_ORIGIN}${route}` }],
+    });
+  });
+}
 
 // 404 fallback
 app.use((_req: Request, res: Response) => {

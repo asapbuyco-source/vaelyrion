@@ -19,6 +19,22 @@
       "destination": "/api/index.ts"
     },
     {
+      "source": "/shop",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/about",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/faq",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/contact",
+      "destination": "/api/index.ts"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/index.ts"
     },
