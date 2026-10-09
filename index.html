@@ -25,6 +25,22 @@
   <body class="bg-[#FAF8F5] text-[#141414] antialiased selection:bg-[#E8DFC8] selection:text-[#111111]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Tawk.to live chat. The default bubble is hidden — LiveChat.tsx opens the
+         widget from the custom Tanelia launcher after the visitor shares an email. -->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+      Tawk_API.onLoad = function () { Tawk_API.hideWidget(); };
+      Tawk_API.onChatMinimized = function () { Tawk_API.hideWidget(); };
+      (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/6ac84384fc857134ca45d4bd/1k4f4fh10';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
   </body>
 </html>
 

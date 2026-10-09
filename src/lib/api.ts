@@ -120,6 +120,11 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ cartId, addressSnapshot, shippingMethod, couponCode }),
       }),
+    createCryptomusPayment: (addressSnapshot: any, shippingMethod: 'standard' | 'express' = 'standard', couponCode?: string) =>
+      request<{ paymentUrl: string; orderId: string; orderNumber: string; total: number; subtotal: number; discount: number; shippingCost: number }>('/checkout/cryptomus/payment', {
+        method: 'POST',
+        body: JSON.stringify({ addressSnapshot, shippingMethod, couponCode }),
+      }),
     validateCoupon: (code: string, subtotal: number) =>
       request<{ valid: boolean; discount: number; couponId?: string; message?: string }>('/checkout/validate-coupon', {
         method: 'POST',

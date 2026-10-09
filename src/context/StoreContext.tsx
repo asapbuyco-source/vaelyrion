@@ -519,7 +519,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     }
     if (pendingArticleSlugRef.current && articles.length > 0 && articles.some(a => 'slug' in a)) {
-      const match = articles.find(a => 'slug' in a && (a as any).slug === pendingArticleSlugRef.current);
+      const slug = pendingArticleSlugRef.current;
+      const match = articles.find(a => 'slug' in a && (a as any).slug === slug);
       pendingArticleSlugRef.current = null;
       if (match) {
         articleIdRef.current = match.id;
@@ -527,7 +528,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       } else {
         // Slug not in the loaded list (e.g. an older article beyond the list limit).
         // Fetch it directly so deep links always resolve instead of redirecting.
-        api.content.article(pendingArticleSlugRef.current || '')
+        api.content.article(slug)
           .then((article: any) => {
             if (!article || !article.slug) throw new Error('not found');
             setArticles(prev => prev.some(a => a.slug === article.slug) ? prev : [article, ...prev]);
@@ -589,7 +590,10 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           if (res.items && res.items.length > 0) {
             const mappedCart: CartItem[] = res.items.map((item: any) => {
               const prod = item.products;
-              const attrs = item.product_variants?.attributes || {};
+              // Options live on cart_items.options; older rows may only have variant attributes.
+              const attrs = (item.options && typeof item.options === 'object' ? item.options : null)
+                || item.product_variants?.attributes
+                || {};
               return {
                 id: item.id,
                 product: {
@@ -620,10 +624,10 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                   isBestSeller: false,
                   supplierId: ''
                 },
-                selectedLength: attrs.lengths?.[0] || 'Unknown',
-                selectedDensity: attrs.densities?.[0] || 'Unknown',
-                selectedLace: attrs.laceTypes?.[0] || 'Unknown',
-                selectedColor: attrs.colors?.[0] || 'Unknown',
+                selectedLength: attrs.length || attrs.lengths?.[0] || 'Unknown',
+                selectedDensity: attrs.density || attrs.densities?.[0] || 'Unknown',
+                selectedLace: attrs.lace || attrs.laceTypes?.[0] || 'Unknown',
+                selectedColor: attrs.color || attrs.colors?.[0] || 'Unknown',
                 unitPrice: item.unit_price,
                 quantity: item.quantity,
                 isPreOrder: prod.is_preorder
@@ -662,6 +666,37 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
       })
       .catch(() => {});
+  }, []);
+
+  // Handle payment provider redirect returns (Cryptomus sends the customer back
+  // to /checkout?payment=success|cancel&order=<id>).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    const orderId = params.get('order');
+    if (!payment) return;
+
+    if (payment === 'success' && orderId) {
+      setCart([]);
+      window.history.replaceState({}, '', '/order-confirmation');
+      setCurrentViewState('order-confirmation');
+      api.orders.getById(orderId)
+        .then((serverOrder: any) => {
+          setSelectedOrder(buildOrderFromServer(serverOrder));
+          track('purchase', {
+            orderId,
+            orderNumber: serverOrder?.order_number,
+            value: serverOrder?.total,
+            currency: 'EUR',
+          });
+        })
+        .catch(() => {
+          // The webhook may still be confirming; the account page will list it shortly.
+        });
+    } else if (payment === 'cancel' && orderId) {
+      window.history.replaceState({}, '', '/checkout');
+      setCurrentViewState('checkout');
+    }
   }, []);
 
   // Notifications — empty for new customers; server rows may fill this later.

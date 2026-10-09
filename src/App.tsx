@@ -6,6 +6,8 @@ import { Footer } from './components/common/Footer';
 import { CartDrawer } from './components/common/CartDrawer';
 import { ToastContainer } from './components/common/ToastContainer';
 import { MobileBottomNav } from './components/common/MobileBottomNav';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { LiveChat } from './components/common/LiveChat';
 
 // Pages
 import { HomePage } from './components/home/HomePage';
@@ -185,17 +187,22 @@ const AppContent: React.FC = () => {
       {/* Global Interactive Elements */}
       <CartDrawer />
       <ToastContainer />
+
+      {/* Custom live chat launcher (Tawk.to widget opened after email capture) */}
+      <LiveChat />
     </div>
   );
 };
 
 export function App() {
   return (
-    <AuthProvider>
-      <StoreProvider>
-        <AppContent />
-      </StoreProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <StoreProvider>
+          <AppContent />
+        </StoreProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

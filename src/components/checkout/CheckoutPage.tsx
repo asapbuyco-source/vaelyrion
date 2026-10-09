@@ -10,10 +10,13 @@ import {
   Sparkles,
   ShoppingBag,
   UserCheck,
-  AlertCircle
+  AlertCircle,
+  Wallet,
+  ExternalLink
 } from 'lucide-react';
 import { CardElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import type { StripeCardElement } from '@stripe/stripe-js';
 import { useStore, buildOrderFromServer } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
@@ -32,6 +35,11 @@ const COUNTRY_ISO: Record<string, string> = {
 
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
+
+// Cryptomus is enabled by default; set VITE_CRYPTOMUS_ENABLED=false to hide it.
+const cryptomusEnabled = import.meta.env.VITE_CRYPTOMUS_ENABLED !== 'false';
+
+type PaymentMethod = 'stripe' | 'cryptomus';
 
 const CheckoutContent: React.FC = () => {
   const { isAuthenticated, isAuthLoading, authUser } = useAuth();
@@ -67,6 +75,8 @@ const CheckoutContent: React.FC = () => {
   // Shipping Method
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
 
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(stripePublishableKey ? 'stripe' : 'cryptomus');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
@@ -98,15 +108,18 @@ const CheckoutContent: React.FC = () => {
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
-    if (!stripe || !elements) {
-      setPaymentError('Secure card payments are still loading. Please wait a moment and try again.');
-      return;
-    }
 
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
-      setPaymentError('Please enter your card details before continuing.');
-      return;
+    let cardElement: StripeCardElement | null = null;
+    if (paymentMethod === 'stripe') {
+      if (!stripe || !elements) {
+        setPaymentError('Secure card payments are still loading. Please wait a moment and try again.');
+        return;
+      }
+      cardElement = elements.getElement(CardElement);
+      if (!cardElement) {
+        setPaymentError('Please enter your card details before continuing.');
+        return;
+      }
     }
 
     setPaymentError(null);
@@ -128,8 +141,7 @@ const CheckoutContent: React.FC = () => {
         });
       }
 
-      // 2. Create Payment Intent (server recalculates totals authoritatively)
-      const res = await api.checkout.createPaymentIntent('current', {
+      const addressSnapshot = {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -137,12 +149,23 @@ const CheckoutContent: React.FC = () => {
         city: formData.city,
         postalCode: formData.postalCode,
         country: formData.country
-      }, shippingMethod, couponCode || undefined);
+      };
+
+      // 2a. Cryptomus — create an invoice server-side and hand the customer to the hosted page.
+      if (paymentMethod === 'cryptomus') {
+        const res = await api.checkout.createCryptomusPayment(addressSnapshot, shippingMethod, couponCode || undefined);
+        track('begin_checkout', { orderId: res.orderId });
+        window.location.href = res.paymentUrl;
+        return;
+      }
+
+      // 2b. Stripe — create Payment Intent (server recalculates totals authoritatively)
+      const res = await api.checkout.createPaymentIntent('current', addressSnapshot, shippingMethod, couponCode || undefined);
 
       // 3. Confirm the card payment with Stripe
-      const result = await stripe.confirmCardPayment(res.clientSecret, {
+      const result = await stripe!.confirmCardPayment(res.clientSecret, {
         payment_method: {
-          card: cardElement,
+          card: cardElement!,
           billing_details: {
             name: formData.name,
             email: formData.email,
@@ -170,15 +193,37 @@ const CheckoutContent: React.FC = () => {
         return;
       }
 
+      // The card has been charged from this point on. Never surface a "checkout
+      // failed" state here — a webhook/poll hiccup must not invite a retry charge.
       track('payment_success', { orderId: res.orderId, value: res.total, currency: 'EUR' });
 
       // 4. Load the confirmed order from the server (poll briefly for webhook confirmation)
       let serverOrder: any = null;
-      for (let attempt = 0; attempt < 4; attempt++) {
-        serverOrder = await api.orders.getById(res.orderId);
-        if (serverOrder.payment_status === 'paid') break;
-        await new Promise(r => setTimeout(r, 1200));
+      try {
+        for (let attempt = 0; attempt < 4; attempt++) {
+          serverOrder = await api.orders.getById(res.orderId);
+          if (serverOrder.payment_status === 'paid') break;
+          await new Promise(r => setTimeout(r, 1200));
+        }
+      } catch (pollError) {
+        console.warn('Order confirmation polling failed after a successful payment', pollError);
       }
+
+      if (!serverOrder) {
+        serverOrder = {
+          id: res.orderId,
+          order_number: res.orderNumber,
+          status: 'PAID',
+          payment_status: 'paid',
+          subtotal: res.subtotal,
+          discount: res.discount,
+          shipping_cost: res.shippingCost,
+          total: res.total,
+          currency: 'EUR',
+          order_items: []
+        };
+      }
+
       setSelectedOrder(buildOrderFromServer(serverOrder));
       clearCart();
       track('purchase', { orderId: res.orderId, orderNumber: res.orderNumber, value: res.total, currency: 'EUR' });
@@ -193,7 +238,7 @@ const CheckoutContent: React.FC = () => {
     }
   };
 
-  if (!stripePublishableKey) {
+  if (!stripePublishableKey && !cryptomusEnabled) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center space-y-4">
         <Lock className="w-12 h-12 text-[#B5935A]" />
@@ -517,38 +562,100 @@ const CheckoutContent: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2 text-stone-400 text-xs">
-                  <CreditCard className="w-4 h-4" />
-                  <span>Stripe PCI-DSS Level 1</span>
+                  <Lock className="w-4 h-4" />
+                  <span>Encrypted & PCI-DSS compliant</span>
                 </div>
               </div>
 
-              {/* Stripe Card Element */}
-              <div className="p-4 bg-[#FAF8F5] border border-[#141414]/10 rounded-xs space-y-4">
-                <div>
-                  <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
-                    Card Details
-                  </label>
-                  <div className="bg-white border border-[#141414]/15 px-3.5 py-3.5 rounded-xs focus-within:border-[#B5935A] transition-colors">
-                    <CardElement
-                      options={{
-                        style: {
-                          base: {
-                            fontSize: '14px',
-                            fontFamily: '"Plus Jakarta Sans", sans-serif',
-                            color: '#141414',
-                            '::placeholder': { color: '#A8A29E' },
+              {/* Payment Method Selection */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {stripePublishableKey && (
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('stripe')}
+                    className={`p-4 rounded-xs border text-left flex items-start justify-between gap-3 text-xs transition-all cursor-pointer ${
+                      paymentMethod === 'stripe'
+                        ? 'border-[#B5935A] bg-[#FAF5ED] text-stone-900'
+                        : 'border-stone-200 hover:border-stone-400 bg-white text-stone-600'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2.5">
+                      <CreditCard className="w-4 h-4 text-[#8E7348] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-semibold text-stone-900 block">Pay by Card</span>
+                        <span className="text-stone-500 font-light">Visa · Mastercard · Amex via Stripe</span>
+                      </div>
+                    </div>
+                    {paymentMethod === 'stripe' && <Check className="w-4 h-4 text-[#B5935A] shrink-0" />}
+                  </button>
+                )}
+
+                {cryptomusEnabled && (
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('cryptomus')}
+                    className={`p-4 rounded-xs border text-left flex items-start justify-between gap-3 text-xs transition-all cursor-pointer ${
+                      paymentMethod === 'cryptomus'
+                        ? 'border-[#B5935A] bg-[#FAF5ED] text-stone-900'
+                        : 'border-stone-200 hover:border-stone-400 bg-white text-stone-600'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2.5">
+                      <Wallet className="w-4 h-4 text-[#8E7348] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-semibold text-stone-900 block">Cryptomus</span>
+                        <span className="text-stone-500 font-light">Cards & crypto on a secure payment page</span>
+                      </div>
+                    </div>
+                    {paymentMethod === 'cryptomus' && <Check className="w-4 h-4 text-[#B5935A] shrink-0" />}
+                  </button>
+                )}
+              </div>
+
+              {paymentMethod === 'stripe' ? (
+                /* Stripe Card Element */
+                <div className="p-4 bg-[#FAF8F5] border border-[#141414]/10 rounded-xs space-y-4">
+                  <div>
+                    <label className="text-[11px] uppercase tracking-wider text-stone-600 block mb-1">
+                      Card Details
+                    </label>
+                    <div className="bg-white border border-[#141414]/15 px-3.5 py-3.5 rounded-xs focus-within:border-[#B5935A] transition-colors">
+                      <CardElement
+                        options={{
+                          style: {
+                            base: {
+                              fontSize: '14px',
+                              fontFamily: '"Manrope", sans-serif',
+                              color: '#141414',
+                              '::placeholder': { color: '#A8A29E' },
+                            },
+                            invalid: { color: '#B91C1C' },
                           },
-                          invalid: { color: '#B91C1C' },
-                        },
-                      }}
-                    />
+                        }}
+                      />
+                    </div>
+                    <p className="text-[11px] text-stone-400 font-light mt-2 flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      256-bit encrypted by Stripe. Card details never touch our servers.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-stone-400 font-light mt-2 flex items-center gap-1">
+                </div>
+              ) : (
+                /* Cryptomus hosted payment page */
+                <div className="p-4 bg-[#FAF8F5] border border-[#141414]/10 rounded-xs space-y-3">
+                  <div className="flex items-start gap-2.5 text-xs text-stone-600 font-light">
+                    <ExternalLink className="w-4 h-4 text-[#8E7348] shrink-0 mt-0.5" />
+                    <p>
+                      You will be redirected to the Cryptomus secure payment page to complete your order with a
+                      card or cryptocurrency. Your order is reserved for 60 minutes.
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-stone-400 font-light flex items-center gap-1">
                     <Lock className="w-3 h-3" />
-                    256-bit encrypted by Stripe. Card details never touch our servers.
+                    Payment is verified against our server before your order is confirmed.
                   </p>
                 </div>
-              </div>
+              )}
 
               {paymentError && (
                 <div className="p-3.5 bg-red-50 border border-red-200 rounded-xs text-xs text-red-700 flex items-start gap-2">
@@ -560,17 +667,17 @@ const CheckoutContent: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting || !stripe}
+                disabled={isSubmitting || (paymentMethod === 'stripe' && !stripe)}
                 className="w-full bg-[#141414] hover:bg-[#2A2A2A] text-white py-4 sm:py-5 px-6 rounded-xs text-xs sm:text-sm uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xl active:scale-98 disabled:opacity-75 sticky bottom-4 z-20 border border-[#B5935A]/20"
               >
                 {isSubmitting ? (
                   <>
                     <div className="w-4 h-4 border-2 border-[#B5935A] border-t-transparent rounded-full animate-spin"></div>
-                    <span>Securing Your Order...</span>
+                    <span>{paymentMethod === 'cryptomus' ? 'Redirecting to Cryptomus...' : 'Securing Your Order...'}</span>
                   </>
                 ) : (
                   <>
-                    <span>Confirm & Pay</span>
+                    <span>{paymentMethod === 'cryptomus' ? 'Continue to Payment' : 'Confirm & Pay'}</span>
                     <span className="hidden sm:inline">•</span>
                     <span className="font-mono text-[#E8DFC8]">{formatCheckoutPrice(totalAmount)}</span>
                   </>

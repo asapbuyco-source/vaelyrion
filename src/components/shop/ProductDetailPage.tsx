@@ -37,7 +37,7 @@ export const ProductDetailPage: React.FC = () => {
     showToast
   } = useStore();
 
-  const product = selectedProduct || products[0];
+  const product = selectedProduct || (products.length > 0 ? products[0] : null);
 
   useEffect(() => {
     if (product?.id) track('product_view', { productId: product.id });
@@ -45,12 +45,24 @@ export const ProductDetailPage: React.FC = () => {
 
   // Variant States
   const [activeImageIdx, setActiveImageIdx] = useState(0);
-  const [selectedLength, setSelectedLength] = useState<string>(product.lengths[0] || '20 inch');
-  const [selectedDensity, setSelectedDensity] = useState<HairDensity>(product.densities[0] || '180%');
-  const [selectedLace, setSelectedLace] = useState<LaceType>(product.laceTypes[0] || '13x4 HD Swiss Lace');
-  const [selectedColor, setSelectedColor] = useState<HairColor>(product.colors[0] || 'Natural Black (#1B)');
+  const [selectedLength, setSelectedLength] = useState<string>(product?.lengths?.[0] || '');
+  const [selectedDensity, setSelectedDensity] = useState<HairDensity>((product?.densities?.[0] as HairDensity) || '180%');
+  const [selectedLace, setSelectedLace] = useState<LaceType>((product?.laceTypes?.[0] as LaceType) || '13x4 HD Swiss Lace');
+  const [selectedColor, setSelectedColor] = useState<HairColor>((product?.colors?.[0] as HairColor) || 'Natural Black (#1B)');
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'details' | 'unboxing' | 'shipping' | 'care'>('details');
+
+  // Reset variant selections when navigating between products (related items, quick links)
+  useEffect(() => {
+    if (!product) return;
+    setActiveImageIdx(0);
+    setQuantity(1);
+    setSelectedLength(product.lengths?.[0] || '20 inch');
+    setSelectedDensity((product.densities?.[0] as HairDensity) || '180%');
+    setSelectedLace((product.laceTypes?.[0] as LaceType) || '13x4 HD Swiss Lace');
+    setSelectedColor((product.colors?.[0] as HairColor) || 'Natural Black (#1B)');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id]);
 
   // Swipe Gesture State
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -68,18 +80,28 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (!touchStart || !touchEnd || !product) return;
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
     
-    if (isLeftSwipe && activeImageIdx < product.images.length - 1) {
+    if (isLeftSwipe && activeImageIdx < (product.images?.length || 1) - 1) {
       setActiveImageIdx(prev => prev + 1);
     }
     if (isRightSwipe && activeImageIdx > 0) {
       setActiveImageIdx(prev => prev - 1);
     }
   };
+
+  // Loading / not-found guard — deep links render while the catalog is still fetching.
+  if (!product) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4" role="status" aria-live="polite">
+        <div className="h-8 w-8 rounded-full border-2 border-[#B5935A]/30 border-t-[#B5935A] animate-spin" />
+        <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Preparing this piece</p>
+      </div>
+    );
+  }
 
   // Length price calculation — mirrors the server rule (server/lib/pricing.ts)
   const currentUnitPrice = product.price + lengthSurchargeEuros(selectedLength);

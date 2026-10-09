@@ -23,9 +23,23 @@ import { supabase } from '../server/config/supabase.js';
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.disable('x-powered-by');
+
 // CORS
+const allowedOrigins = Array.from(new Set([
+  process.env.FRONTEND_URL,
+  process.env.SITE_URL,
+  'https://www.tanelia.shop',
+  'https://tanelia.shop',
+  'http://localhost:3000',
+].filter(Boolean))) as string[];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Same-origin/server-to-server requests have no Origin header.
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(null, false);
+  },
   credentials: true,
 }));
 
@@ -122,7 +136,9 @@ app.get('/sitemap.xml', async (_req: Request, res: Response) => {
       priority: '0.6',
       freq: 'monthly',
       lastmod: a.published_at || undefined,
-      image: a.cover_image_url ? `${origin}${a.cover_image_url}` : EDITORIAL_FALLBACK_IMAGE,
+      image: a.cover_image_url
+        ? (/^https?:\/\//i.test(a.cover_image_url) ? a.cover_image_url : `${origin}${a.cover_image_url}`)
+        : EDITORIAL_FALLBACK_IMAGE,
       imageTitle: a.title,
       imageCaption: a.excerpt || undefined
     }));
@@ -131,18 +147,20 @@ app.get('/sitemap.xml', async (_req: Request, res: Response) => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls.map(u => `  <url>
-    <loc>${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${new Date(u.lastmod).toISOString()}</lastmod>` : ''}
+    <loc>${escapeHtml(u.loc)}</loc>${u.lastmod ? `\n    <lastmod>${new Date(u.lastmod).toISOString()}</lastmod>` : ''}
     <changefreq>${u.freq}</changefreq>
     <priority>${u.priority}</priority>${u.image ? `\n    <image:image>
-      <image:loc>${u.image}</image:loc>${u.imageTitle ? `\n      <image:title>${escapeHtml(u.imageTitle)}</image:title>` : ''}${u.imageCaption ? `\n      <image:caption>${escapeHtml(u.imageCaption)}</image:caption>` : ''}
+      <image:loc>${escapeHtml(u.image)}</image:loc>${u.imageTitle ? `\n      <image:title>${escapeHtml(u.imageTitle)}</image:title>` : ''}${u.imageCaption ? `\n      <image:caption>${escapeHtml(u.imageCaption)}</image:caption>` : ''}
     </image:image>` : ''}
   </url>`).join('\n')}
 </urlset>`;
 
     res.setHeader('Content-Type', 'application/xml');
+    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400');
     res.send(xml);
   } catch (error: any) {
-    res.status(500).json({ error: error.message || 'Unable to generate sitemap' });
+    console.error('Sitemap generation failed:', error?.message || error);
+    res.status(500).json({ error: 'Unable to generate sitemap' });
   }
 });
 
@@ -176,18 +194,24 @@ const injectMeta = (html: string, meta: { title: string; description: string; ca
   const title = escapeHtml(meta.title);
   const description = escapeHtml(meta.description);
   const image = escapeHtml(meta.image || '/brand/tanelia-favicon.png');
-  const jsonLd = meta.jsonLd ? `<script type="application/ld+json">${JSON.stringify(meta.jsonLd)}</script>` : '';
+  const jsonLd = meta.jsonLd
+    ? `<script type="application/ld+json">${JSON.stringify(meta.jsonLd).replace(/</g, '\\u003c')}</script>`
+    : '';
   return html
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`)
     .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${description}" />`)
     .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${title}" />`)
     .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${description}" />`)
-    .replace('</head>', `<link rel="canonical" href="${escapeHtml(meta.canonical)}" />\n<meta property="og:url" content="${escapeHtml(meta.canonical)}" />\n<meta property="og:image" content="${image}" />\n${jsonLd}\n</head>`);
+    .replace(/<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${image}" />`)
+    .replace(/<meta name="twitter:image" content="[^"]*" \/>/, `<meta name="twitter:image" content="${image}" />`)
+    .replace('</head>', `<link rel="canonical" href="${escapeHtml(meta.canonical)}" />\n<meta property="og:url" content="${escapeHtml(meta.canonical)}" />\n${jsonLd}\n</head>`);
 };
 
 const serveSpa = async (res: Response, meta: { title: string; description: string; canonical: string; image?: string; jsonLd?: object }) => {
   const shell = getSpaShell();
-  if (!shell) return res.status(200).send('<!doctype html><html><head><meta charset="utf-8"><title>Tanelia</title></head><body><div id="root"></div></body></html>');
+  // If the built shell is unavailable in the function bundle, fall back to the
+  // deployed SPA root rather than serving a script-less blank page.
+  if (!shell) return res.redirect(302, '/');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(injectMeta(shell, meta));
 };

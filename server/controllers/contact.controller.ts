@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase.js';
+import { sendAdminNotification, getAdminEmail } from '../lib/email.js';
+import { renderContactNotification } from '../lib/emailTemplates.js';
 
 export class ContactController {
   static async createRequest(req: Request, res: Response) {
@@ -29,37 +31,22 @@ export class ContactController {
         throw error;
       }
 
-      // Send email notification via EmailJS
-      try {
-        const emailjsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            service_id: 'service_6spz37t',
-            template_id: 'template_zm5dgmb',
-            user_id: 'VwG3UpqiiqDYbjQuO',
-            ...(process.env.EMAILJS_PRIVATE_KEY ? { accessToken: process.env.EMAILJS_PRIVATE_KEY } : {}),
-            template_params: {
-              name: name,
-              email: email,
-              message: message
-            }
-          })
-        });
+      // Notify Client Services via the Resend engine. Failure never blocks the enquiry.
+      const { subject, html, text } = renderContactNotification({
+        name,
+        email,
+        message,
+        submittedAt: data.created_at ? new Date(data.created_at).toUTCString() : undefined,
+        supportEmail: getAdminEmail(),
+      });
 
-        if (!emailjsResponse.ok) {
-          const errorText = await emailjsResponse.text();
-          console.error('EmailJS Error:', errorText);
-        }
-      } catch (emailErr) {
-        console.error('Failed to trigger EmailJS:', emailErr);
-      }
+      sendAdminNotification({ subject, html, text, replyTo: email }).catch((emailErr) => {
+        console.error('Failed to send enquiry notification:', emailErr?.message || emailErr);
+      });
 
       res.status(201).json({ id: data.id, message: 'Your enquiry has been received.' });
     } catch (error: any) {
-      res.status(500).json({ error: error.message || 'Unable to submit enquiry.' });
+      res.status(500).json({ error: 'Unable to submit enquiry. Please try again or email us directly.' });
     }
   }
 }
